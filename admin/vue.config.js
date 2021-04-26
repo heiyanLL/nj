@@ -2,7 +2,7 @@ module.exports = {
     pages: {
       ui: {
         // page 的入口
-        entry: "src/views/main.js",
+        entry: "src/views/main/main.js",
         // 模板来源
         template: "public/index.html",
         // 在 dist/index.html 的输出
@@ -16,7 +16,7 @@ module.exports = {
       },
       hh: {
         // page 的入口
-        entry: "src/login/main.js",
+        entry: "src/views/login/main.js",
         // 模板来源
         template: "public/login.html",
         // 在 dist/index.html 的输出
