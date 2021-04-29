@@ -1,0 +1,38 @@
+<template>
+    <div>
+      <el-header>Header</el-header>
+        <el-container>
+            <el-aside width="200px">
+                <Nav />
+            </el-aside>
+            <el-main>
+                <bread-crumb />
+                <router-view />
+            </el-main>
+        </el-container>
+    </div>
+</template>
+<script>
+    import Nav from "./nav";
+    import breadCrumb from "./breadCrumb";
+    export default {
+        components: {
+            breadCrumb,
+            Nav,
+        },
+        data() {
+            return {};
+        },
+    };
+</script>
+<style lang='less' scoped>
+ .el-header {
+        background-color: #b3c0d1;
+        color: #333;
+        text-align: center;
+        line-height: 60px;
+    }
+    .el-aside {
+        height: calc(100vh - 60px);
+    }
+</style>
