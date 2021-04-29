@@ -42,7 +42,7 @@ module.exports = {
       .set("~", resolve("src"))
   },
   css: {
-    extract: true,
+    extract: false,
     loaderOptions: {
       less: {
 

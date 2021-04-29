@@ -20,7 +20,12 @@ const AUDIT_RESULT = [{
   value: 1
 }]
 
+const PAGE_SIZE_LIST = [10,20,50,100]
+const PAGE_SIZE = 10
+
 export default {
   PAY_TYPE,
-  AUDIT_RESULT
+  AUDIT_RESULT,
+  PAGE_SIZE,
+  PAGE_SIZE_LIST
 }

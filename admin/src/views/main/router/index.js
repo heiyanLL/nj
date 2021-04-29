@@ -18,6 +18,14 @@ const router = new VueRouter({
                     meta: {
                         prev: '审核管理'
                     }
+                },
+                {
+                    path:'audit/index/detail',
+                    name: '医保报销',
+                    component: () => import("@/view/audit/detail"),
+                    meta: {
+                        prev: '报销审核'
+                    }
                 }
             ]
         },
