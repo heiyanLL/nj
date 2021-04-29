@@ -49,7 +49,9 @@
             };
         },
         methods: {
-            handleAudit() {},
+            handleAudit() {
+              this.$router.push({path: '/audit/index/detail'})
+            },
         },
     };
 </script>
