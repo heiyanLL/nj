@@ -24,6 +24,7 @@ const router = new VueRouter({
                     name: '医保报销',
                     component: () => import("@/view/audit/detail"),
                     meta: {
+                        notNav: true,
                         prev: '报销审核'
                     }
                 }
@@ -53,6 +54,7 @@ const router = new VueRouter({
                 {
                     path:'user',
                     name: '账号管理',
+                    component: () => import('@/view/user'),
                     meta: {
                         prev: '系统管理'
                     }
@@ -60,6 +62,7 @@ const router = new VueRouter({
                 {
                     path:'group',
                     name: '机构管理',
+                    component: () => import('@/view/user/group'),
                     meta: {
                         prev: '系统管理'
                     }
@@ -75,6 +78,7 @@ const router = new VueRouter({
                 {
                     path:'news',
                     name: '咨询管理',
+                    component: () => import("@/view/content/news"),
                     meta: {
                         prev: '内容发布'
                     }
@@ -89,6 +93,7 @@ const router = new VueRouter({
                 {
                     path:'help',
                     name: '帮助中心',
+                    component: () => import("@/view/content/help"),
                     meta: {
                         prev: '内容发布'
                     }

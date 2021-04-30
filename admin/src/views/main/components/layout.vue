@@ -33,7 +33,7 @@
         line-height: 60px;
     }
     .el-aside {
-        height: calc(100vh - 60px);
+        min-height: calc(100vh - 60px);
     }
     .el-main{
         text-align: left;

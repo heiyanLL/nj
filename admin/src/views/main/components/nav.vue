@@ -11,7 +11,7 @@
             :router="true"
         >
             <el-submenu
-                v-for="(item, index) in menuList"
+                v-for="(item, index) in navList"
                 :key="index"
                 :index="'' + index"
             >
@@ -40,8 +40,23 @@
                 menuList: [],
             };
         },
+        computed: {
+            navList() {
+                return this.menuList.map(item => {
+                    item.children = item.children && item.children.filter(v => {
+                        return v.meta.notNav != true
+                    })
+                    return item
+                })
+            }
+        },
+        filters: {
+            spliceNav(v) {
+                console.log(v)
+            }
+        },
         created() {
-            this.menuList = this.$router.options.routes;
+            this.menuList = this.$router.options.routes
         },
         methods: {
             resolvePath(base, path) {
