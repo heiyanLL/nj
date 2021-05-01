@@ -13,6 +13,15 @@
                 <el-form-item label="地址">
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
+                <el-form-item label="所属街道">
+                    <el-select
+                        v-model="form.region"
+                        placeholder="请选择所属机构"
+                    >
+                        <el-option label="区域一" value="shanghai"></el-option>
+                        <el-option label="区域二" value="beijing"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="联系电话">
                     <el-input v-model="form.name"></el-input>
                 </el-form-item>
@@ -26,26 +35,24 @@
 </template>
 <script>
     export default {
-        name: "dialog",
+        name: "groupDialog",
         props: {
             dialogFormVisible: Boolean,
-            info: Object
+            info: Object,
         },
         data() {
             return {
-                form: {
-
-                },
+                form: {},
             };
         },
         computed: {
-          title() {
-            return this.info ? '机构修改' : '添加机构'
-          }
+            title() {
+                return this.info ? "机构修改" : "添加机构";
+            },
         },
         methods: {
             handleClose() {
-                this.$emit("handleClose")
+                this.$emit("handleClose");
             },
         },
     };

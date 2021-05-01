@@ -13,7 +13,7 @@
             </el-form-item>
         </el-form>
         <Table @handleTable="handleTable"/>
-        <Dialog
+        <groupDialog
             :dialogFormVisible="dialogFormVisible"
             :info="groupInfo"
             @handleClose="dialogFormVisible = false"
@@ -22,11 +22,11 @@
 </template>
 <script>
     import Table from "./components/groupTable"
-    import Dialog from "./components/groupDialog"
+    import groupDialog from "./components/groupDialog"
     export default {
         components: {
             Table,
-            Dialog
+            groupDialog
         },
         data() {
             return {

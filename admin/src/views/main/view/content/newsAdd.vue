@@ -1,18 +1,16 @@
 <template>
     <div>
         <el-form label-width="80px" :model="form">
-            <el-form-item label="标题名称" prop="name">
-                <el-input v-model="form.name"></el-input>
-            </el-form-item>
             <el-form-item label="链接地址" prop="url">
                 <el-input v-model="form.address"></el-input>
             </el-form-item>
-            <el-form-item label="问题解答" prop="answer">
-                <el-input
-                    :rows="10"
-                    type="textarea"
-                    v-model="form.name"
-                ></el-input>
+            <el-form-item label="标题名称" prop="name">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <TinymceEditor
+                   
+                ></TinymceEditor>
             </el-form-item>
             <el-form-item label="缩略图" prop="image">
                 <el-upload
@@ -33,14 +31,18 @@
     </div>
 </template>
 <script>
+    import TinymceEditor from "@/components/tEditor";
     export default {
+        components: {
+            TinymceEditor,
+        },
         data() {
             return {
                 form: {
-                  fileList: []
+                    fileList: [],
                 },
             };
-        },
+        }
     };
 </script>
 <style lang='less' scoped>
