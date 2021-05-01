@@ -27,7 +27,7 @@
 </script>
 <style lang='less' scoped>
  .el-header {
-        background-color: #b3c0d1;
+        background-color: #545c64;
         color: #333;
         text-align: center;
         line-height: 60px;

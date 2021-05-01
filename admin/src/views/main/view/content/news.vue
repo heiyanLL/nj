@@ -19,7 +19,7 @@
             <el-form-item>
                 <el-button type="primary">查询</el-button>
                 <el-button type="info">重置</el-button>
-                <el-button>添加咨询</el-button>
+                <el-button @click="$router.push({path: '/content/news/add'})">添加咨询</el-button>
             </el-form-item>
         </el-form>
         <Table />

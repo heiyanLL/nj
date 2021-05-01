@@ -50,11 +50,6 @@
                 })
             }
         },
-        filters: {
-            spliceNav(v) {
-                console.log(v)
-            }
-        },
         created() {
             this.menuList = this.$router.options.routes
         },

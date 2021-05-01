@@ -22,25 +22,32 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="关键词">
-                <el-input
-                    placeholder="查询账号、姓名等关键词"
-                ></el-input>
+                <el-input placeholder="查询账号、姓名等关键词"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary">查询</el-button>
                 <el-button type="info">重置</el-button>
-                <el-button>添加账号</el-button>
+                <el-button @click="dialogFormVisible = true"
+                    >添加账号</el-button
+                >
             </el-form-item>
         </el-form>
-        <Table />
+        <Table @handleTable="handleTable" />
+        <Dialog
+            :dialogFormVisible="dialogFormVisible"
+            :info="roleInfo"
+            @handleClose="dialogFormVisible = false"
+        />
     </div>
 </template>
 <script>
     import CONST from "~/data/const";
     import Table from "./components/table";
+    import Dialog from "./components/userDialog";
     export default {
         components: {
             Table,
+            Dialog,
         },
         data() {
             return {
@@ -51,10 +58,42 @@
                     group: "",
                     keywords: "",
                 },
+                dialogFormVisible: false,
+                roleInfo: {},
             };
         },
         methods: {
+            handleTable(scope, type) {
+                if (type == "edit") {
+                    this.roleInfo = scope;
+                    this.dialogFormVisible = true;
+                } else if (type == "delete") {
+                    this.$confirm("您确定要删除吗？", "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning",
+                    }).then(() => {
+                        this.$message({
+                            type: "success",
+                            message: "删除成功!",
+                        })
+                    }).catch(() => {
 
+                    })
+                } else {
+                    this.$confirm("您确定要对15951720555账号密码重置吗？", "提示", {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消"
+                    }).then(() => {
+                        this.$message({
+                            type: "success",
+                            message: "重置成功!",
+                        })
+                    }).catch(() => {
+
+                    })
+                }
+            },
         },
     };
 </script>

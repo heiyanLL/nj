@@ -35,6 +35,16 @@ const USER_LIST = [{
   name:"普通用户",
   value:2
 }]
+const ROLE_LIST = [{
+  name: '管理员',
+  value: 1
+},{
+  name: '街道',
+  value: 2
+},{
+  name: '人社局',
+  value: 3
+},]
 
 // 内容模块
 const PUBLISH_STATE = [{
@@ -54,5 +64,6 @@ export default {
   PAGE_SIZE,
   PAGE_SIZE_LIST,
   USER_LIST,
-  PUBLISH_STATE
+  PUBLISH_STATE,
+  ROLE_LIST
 }

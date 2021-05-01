@@ -39,6 +39,7 @@ const router = new VueRouter({
                 {
                     path:'index',
                     name: '统计分析',
+                    component: () => import('@/view/sheet'),
                     meta: {
                         prev: '报表统计'
                     }
@@ -54,7 +55,7 @@ const router = new VueRouter({
                 {
                     path:'user',
                     name: '账号管理',
-                    component: () => import('@/view/user'),
+                    component: () => import('@/view/system'),
                     meta: {
                         prev: '系统管理'
                     }
@@ -62,7 +63,7 @@ const router = new VueRouter({
                 {
                     path:'group',
                     name: '机构管理',
-                    component: () => import('@/view/user/group'),
+                    component: () => import('@/view/system/group'),
                     meta: {
                         prev: '系统管理'
                     }
@@ -86,6 +87,7 @@ const router = new VueRouter({
                 {
                     path:'banner',
                     name: 'banner管理',
+                    component: () => import("@/view/content/news"),
                     meta: {
                         prev: '内容发布'
                     }
@@ -96,6 +98,24 @@ const router = new VueRouter({
                     component: () => import("@/view/content/help"),
                     meta: {
                         prev: '内容发布'
+                    }
+                },
+                {
+                    path:'help/add',
+                    name: '新增帮助',
+                    component: () => import("@/view/content/helpAdd"),
+                    meta: {
+                        notNav: true,
+                        prev: '帮助中心'
+                    }
+                },
+                {
+                    path:'news/add',
+                    name: '添加咨询',
+                    component: () => import("@/view/content/newsAdd"),
+                    meta: {
+                        notNav: true,
+                        prev: '咨询管理'
                     }
                 },
                 {

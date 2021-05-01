@@ -3,37 +3,49 @@
         <el-form :inline="true" size="small" :model="form">
             <el-form-item label="关键词">
                 <el-input
-                    placeholder="查询常见问题名称关键词"
+                    placeholder="查询账号、姓名等关键词"
                 ></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary">查询</el-button>
                 <el-button type="info">重置</el-button>
-                <el-button @click="$router.push({path: '/content/help/add'})">添加帮助</el-button>
+                <el-button @click="dialogFormVisible = true">添加机构</el-button>
             </el-form-item>
         </el-form>
-        <Table @handleTable="handleTable" />
+        <Table @handleTable="handleTable"/>
+        <Dialog
+            :dialogFormVisible="dialogFormVisible"
+            :info="groupInfo"
+            @handleClose="dialogFormVisible = false"
+        />
     </div>
 </template>
 <script>
-    import Table from "./components/helpTable";
+    import Table from "./components/groupTable"
+    import Dialog from "./components/groupDialog"
     export default {
         components: {
             Table,
+            Dialog
         },
         data() {
             return {
+                dialogFormVisible: false,
                 form: {
-                    keywords: "",
+                    keywords: ""
                 },
+                groupInfo:{
+
+                }
             };
         },
         methods: {
-            handleTable(scope) {
-                console.log(scope)
-                this.$confirm("您确定要删除吗？", "提示", {
+            handleTable(scope, type) {
+                if(type == 'delete'){
+                    this.$confirm("您确定要删除吗？", "提示", {
                         confirmButtonText: "确定",
-                        cancelButtonText: "取消"
+                        cancelButtonText: "取消",
+                        type: "warning",
                     }).then(() => {
                         this.$message({
                             type: "success",
@@ -42,6 +54,10 @@
                     }).catch(() => {
 
                     })
+                }else{
+                    this.groupInfo = scope
+                    this.dialogFormVisible = true
+                }
             }
         },
     };

@@ -9,7 +9,7 @@
             </el-table-column>
             <el-table-column prop="date" label="发布时间"> </el-table-column>
             <el-table-column label="操作" width="150">
-                <template>
+                <template slot-scope="scope">
                     <el-button
                         type="text"
                         size="small"
@@ -18,6 +18,7 @@
                     <el-button
                         type="text"
                         size="small"
+                        @click="handleTable(scope)"
                         >删除</el-button
                     >
                 </template>
@@ -47,7 +48,9 @@
             };
         },
         methods: {
-
+            handleTable(scope) {
+                this.$emit("handleTable", scope)
+            }
         },
     };
 </script>
