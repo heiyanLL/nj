@@ -1,8 +1,8 @@
 <template>
     <div>
-        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="待审核" name="auditing"></el-tab-pane>
-            <el-tab-pane label="已审核" name="audited"></el-tab-pane>
+        <el-tabs v-model="verifyStatus" type="card" @tab-click="handleClick">
+            <el-tab-pane label="待审核" name="0"></el-tab-pane>
+            <el-tab-pane label="已审核" name="1"></el-tab-pane>
         </el-tabs>
         <el-form :inline="true" size="small" :model="form" class="demo-form-inline">
             <el-form-item label="报销类型">
@@ -25,7 +25,7 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="审核结果" v-if="activeName == 'audited'">
+            <el-form-item label="审核结果" v-if="verifyStatus == 1">
                 <el-select v-model="form.group" placeholder="请选择审核结果">
                     <el-option
                         v-for="item in resultList"
@@ -57,7 +57,7 @@
         },
         data() {
             return {
-                activeName: "auditing",
+                verifyStatus: 0,
                 typeList: CONST.PAY_TYPE,
                 resultList: CONST.AUDIT_RESULT,
                 form: {
@@ -69,12 +69,18 @@
             };
         },
         created() {
-            this.$api.mock().then(data => {
+            this.$http.mock().then(data => {
                 console.log(data, 111)
             })
         },
         methods: {
             handleClick() {},
+            getAuditList() {
+                let param = {
+                    verifyStatus: this.verifyStatus,
+                }
+                this.$http.describeVerifyList(param)
+            }
         },
     };
 </script>

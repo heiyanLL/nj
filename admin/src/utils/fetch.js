@@ -4,8 +4,6 @@ let loadingInstance = null //这里是loading
 //使用create方法创建axios实例
 export const Service = axios.create({
   timeout: 7000, // 请求超时时间
-  method: 'post',
-
 })
 // 添加请求拦截器
 Service.interceptors.request.use(config => {
@@ -13,6 +11,7 @@ Service.interceptors.request.use(config => {
     lock: true,
     text: 'loading...'
   })
+  console.log(config)
   return config
 })
 // 添加响应拦截器

@@ -1,5 +1,4 @@
 import Mock from 'mockjs'
-console.log(Mock, 111)
 
 Mock.mock('/menu', 'post', {
   // /post|get/i 匹配post和get模式 也可以用'post'或'get'
