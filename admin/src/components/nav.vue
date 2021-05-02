@@ -11,7 +11,7 @@
             :router="true"
         >
             <el-submenu
-                v-for="(item, index) in navList"
+                v-for="(item, index) in menuList"
                 :key="index"
                 :index="'' + index"
             >
@@ -32,26 +32,17 @@
     </div>
 </template>
 <script>
+    import CONST from '@/data/const'
     export default {
         name: "Nav",
         data() {
             return {
                 isCollapse: false,
-                menuList: [],
+                menuList: CONST.NAV,
             };
         },
-        computed: {
-            navList() {
-                return this.menuList.map(item => {
-                    item.children = item.children && item.children.filter(v => {
-                        return v.meta.notNav != true
-                    })
-                    return item
-                })
-            }
-        },
         created() {
-            this.menuList = this.$router.options.routes
+            // this.menuList = this.$router.options.routes
         },
         methods: {
             resolvePath(base, path) {

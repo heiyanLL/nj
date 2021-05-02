@@ -41,7 +41,7 @@
     </div>
 </template>
 <script>
-    import CONST from "~/data/const";
+    import CONST from "@/data/const";
     export default {
         name: "dialog",
         props: {

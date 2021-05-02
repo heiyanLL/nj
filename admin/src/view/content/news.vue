@@ -26,7 +26,7 @@
     </div>
 </template>
 <script>
-    import CONST from "~/data/const";
+    import CONST from "@/data/const";
     import Table from "./components/table";
     export default {
         components: {

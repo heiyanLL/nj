@@ -4,6 +4,7 @@ Vue.use(VueRouter)
 const LAYOUT = () => import('@/components/layout')
 
 const router = new VueRouter({
+    mode: 'history',
     routes: [
         {
             path:'/',
@@ -16,7 +17,7 @@ const router = new VueRouter({
                     name: '报销审核',
                     component: () => import("@/view/audit/index"),
                     meta: {
-                        prev: '审核管理'
+                        bread: [{name: '审核管理'}]
                     }
                 },
                 {
@@ -24,11 +25,17 @@ const router = new VueRouter({
                     name: '医保报销',
                     component: () => import("@/view/audit/detail"),
                     meta: {
-                        notNav: true,
-                        prev: '报销审核'
+                        bread: [{name: '审核管理'} , {name: '报销审核', src: '/audit/index'}]
                     }
                 }
             ]
+        },
+        {
+            path: '/login',
+            name: '登陆',
+            component: () => import("@/view/login"),
+            meta: {
+            }
         },
         {
             path:'/sheet',
@@ -41,7 +48,7 @@ const router = new VueRouter({
                     name: '统计分析',
                     component: () => import('@/view/sheet'),
                     meta: {
-                        prev: '报表统计'
+                        bread: [{name: '报表统计'}]
                     }
                 }
             ]
@@ -57,7 +64,7 @@ const router = new VueRouter({
                     name: '账号管理',
                     component: () => import('@/view/system'),
                     meta: {
-                        prev: '系统管理'
+                        bread: [{name: '系统管理'}]
                     }
                 },
                 {
@@ -65,7 +72,7 @@ const router = new VueRouter({
                     name: '机构管理',
                     component: () => import('@/view/system/group'),
                     meta: {
-                        prev: '系统管理'
+                        bread: [{name: '系统管理'}]
                     }
                 }
             ]
@@ -81,7 +88,7 @@ const router = new VueRouter({
                     name: '咨询管理',
                     component: () => import("@/view/content/news"),
                     meta: {
-                        prev: '内容发布'
+                        bread: [{name: '内容发布'}]
                     }
                 },
                 {
@@ -89,7 +96,7 @@ const router = new VueRouter({
                     name: 'banner管理',
                     component: () => import("@/view/content/news"),
                     meta: {
-                        prev: '内容发布'
+                        bread: [{name: '内容发布'}]
                     }
                 },
                 {
@@ -97,7 +104,7 @@ const router = new VueRouter({
                     name: '帮助中心',
                     component: () => import("@/view/content/help"),
                     meta: {
-                        prev: '内容发布'
+                        bread: [{name: '内容发布'}]
                     }
                 },
                 {
@@ -105,8 +112,7 @@ const router = new VueRouter({
                     name: '新增帮助',
                     component: () => import("@/view/content/helpAdd"),
                     meta: {
-                        notNav: true,
-                        prev: '帮助中心'
+                        bread: [{name: '内容发布'}, {name: '帮助中心',src: '/content/help'}]
                     }
                 },
                 {
@@ -114,15 +120,14 @@ const router = new VueRouter({
                     name: '添加咨询',
                     component: () => import("@/view/content/newsAdd"),
                     meta: {
-                        notNav: true,
-                        prev: '咨询管理'
+                        bread: [{name: '内容发布'}, {name: '咨询管理', src: '/content/news'}]
                     }
                 },
                 {
                     path:'public',
                     name: '公告',
                     meta: {
-                        prev: '内容发布'
+                        bread: [{name: '内容发布'}]
                     }
                 }
             ]

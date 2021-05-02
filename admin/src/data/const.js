@@ -1,3 +1,64 @@
+const NAV = [
+  {
+      path:'/',
+      name:'审核管理',
+      children: [
+          {
+              path:'audit/index',
+              name: '报销审核'
+          }
+      ]
+  },
+  {
+      path:'/sheet',
+      name:'报表统计',
+      children: [
+          {
+              path:'index',
+              name: '统计分析',
+          }
+      ]
+  },
+  {
+      path:'/system',
+      name:'系统管理',
+      children: [
+          {
+              path:'user',
+              name: '账号管理',
+          },
+          {
+              path:'group',
+              name: '机构管理',
+          }
+      ]
+  },
+  {
+      path:'/content',
+      name:'内容发布',
+      children: [
+          {
+              path:'news',
+              name: '咨询管理'
+          },
+          {
+              path:'banner',
+              name: 'banner管理'
+          },
+          {
+              path:'help',
+              name: '帮助中心',
+          },
+          {
+              path:'public',
+              name: '公告',
+              meta: {
+                  prev: '内容发布'
+              }
+          }
+      ]
+  }
+] 
 const PAY_TYPE = [{
   name: '全部',
   value: ''
@@ -59,6 +120,7 @@ const PUBLISH_STATE = [{
 }]
 
 export default {
+  NAV,
   PAY_TYPE,
   AUDIT_RESULT,
   PAGE_SIZE,

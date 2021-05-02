@@ -41,7 +41,7 @@
     </div>
 </template>
 <script>
-    import CONST from "~/data/const";
+    import CONST from "@/data/const";
     import Table from "./components/table";
     import Dialog from "./components/userDialog";
     export default {

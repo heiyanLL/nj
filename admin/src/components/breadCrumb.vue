@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-breadcrumb separator="/">
-            <el-breadcrumb-item v-for="item in bread" :key="item.name">{{item.name}}</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="item in bread" :key="item.name"><router-link :to="item.src || ''">{{item.name}}</router-link></el-breadcrumb-item>
         </el-breadcrumb>
     </div>
 </template>
@@ -15,11 +15,11 @@
         },
         watch: {
             $route(to) {
-                this.bread = to.matched
+                this.bread = to.meta && [...to.meta.bread, {name: to.name}] || []
             }
         },
         created() {
-          this.bread = this.$route.matched
+          this.bread = this.$route.meta && [...this.$route.meta.bread, {name: this.$route.name}] || []
         }
     };
 </script>

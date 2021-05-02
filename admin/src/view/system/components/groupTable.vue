@@ -3,26 +3,19 @@
         <el-table :data="tableData" stripe border style="width: 100%">
             <el-table-column prop="index" label="序号" width="180">
             </el-table-column>
-            <el-table-column prop="ID" label="登录账号" width="180">
+            <el-table-column prop="name" label="机构名称" width="180">
             </el-table-column>
-            <el-table-column prop="name" label="姓名"> </el-table-column>
-            <el-table-column prop="group" label="所属机构">
+            <el-table-column prop="address" label="地址"> </el-table-column>
+            <el-table-column prop="phone" label="联系电话">
             </el-table-column>
-            <el-table-column prop="role" label="用户角色"> </el-table-column>
             <el-table-column prop="date" label="创建时间"> </el-table-column>
             <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
                     <el-button
                         type="text"
                         size="small"
-                        @click="handleTable(scope, 'edit')"
+                         @click="handleTable(scope, 'edit')"
                         >修改</el-button
-                    >
-                    <el-button
-                        type="text"
-                        size="small"
-                        @click="handleTable(scope, 'reset')"
-                        >重置密码</el-button
                     >
                     <el-button
                         type="text"
@@ -45,7 +38,7 @@
     </div>
 </template>
 <script>
-    import CONST from "~/data/const";
+    import CONST from "@/data/const";
     export default {
         name: "Table",
         data() {
@@ -58,7 +51,7 @@
         },
         methods: {
             handleTable(scope, type) {
-                this.$emit("handleTable", scope, type)
+                this.$emit('handleTable', scope, type)
             }
         },
     };

@@ -3,22 +3,21 @@
         <el-table :data="tableData" stripe border style="width: 100%">
             <el-table-column prop="index" label="序号" width="70">
             </el-table-column>
-            <el-table-column prop="question" label="常见问题">
+            <el-table-column prop="name" label="标题名称" width="180">
             </el-table-column>
-            <el-table-column prop="answer" label="问题解答">
+            <el-table-column prop="url" label="链接地址" width="180">
             </el-table-column>
+            <el-table-column prop="image" label="缩略图">
+                <template>
+                    <el-button type="text" size="small">查看</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column prop="state" label="发布状态"> </el-table-column>
             <el-table-column prop="date" label="发布时间"> </el-table-column>
             <el-table-column label="操作" width="150">
                 <template slot-scope="scope">
-                    <el-button
-                        type="text"
-                        size="small"
-                        >修改</el-button
-                    >
-                    <el-button
-                        type="text"
-                        size="small"
-                        @click="handleTable(scope)"
+                    <el-button type="text" size="small">修改</el-button>
+                    <el-button type="text" size="small" @click="handleTable(scope)"
                         >删除</el-button
                     >
                 </template>
@@ -36,7 +35,7 @@
     </div>
 </template>
 <script>
-    import CONST from "~/data/const";
+    import CONST from "@/data/const";
     export default {
         name: "Table",
         data() {
@@ -49,14 +48,25 @@
         },
         methods: {
             handleTable(scope) {
-                this.$emit("handleTable", scope)
-            }
+                console.log(scope)
+                this.$confirm("您确定要删除吗？", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                })
+                    .then(() => {
+                        this.$message({
+                            type: "success",
+                            message: "删除成功!",
+                        });
+                    })
+                    .catch(() => {});
+            },
         },
     };
 </script>
 <style lang='less' scoped>
-.el-pagination{
-  margin-top: 30px;
-  text-align: right;
-}
+    .el-pagination {
+        margin-top: 30px;
+        text-align: right;
+    }
 </style>
