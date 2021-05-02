@@ -68,6 +68,11 @@
                 },
             };
         },
+        created() {
+            this.$api.mock().then(data => {
+                console.log(data, 111)
+            })
+        },
         methods: {
             handleClick() {},
         },
