@@ -119,7 +119,7 @@
                     <div class="attr">上传产检及分娩发票<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="twotips">
                         1、如在江北新区17家医疗机构就诊，可上传缴费凭条；<br/>
-                        2、查看<a href="">17家医疗机构</a>和<a href="">缴费凭证示例</a>
+                        2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a>
                     </div>
                     <div class="upfile">
                         <div class="operation-div">
@@ -198,7 +198,7 @@
                     <div class="attr">计生费用发票<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="twotips">
                         1、如在江北新区17家医疗机构就诊，可上传缴费凭条；<br/>
-                        2、查看<a href="">17家医疗机构</a>和<a href="">缴费凭证示例</a>
+                        2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a>
                     </div>
                     <div class="upfile">
                         <div class="operation-div">
@@ -446,12 +446,7 @@ export default {
 </script>
 
 <style lang="less">
-.toptitle{
-    width:14.04rem;
-    height:1.5rem;
-    line-height:1.5rem;
-    margin:0 auto;
-}
+
 .midtitle{
     height:2rem;
     padding-left:0.48rem;
@@ -460,12 +455,6 @@ export default {
     margin-top:0.24rem;
     background:#FFF;
 }
-.twotips{
-    width:14.04rem;
-    margin:0 auto;
-    a{
-        color:red;
-    }
-}
+
 
 </style>

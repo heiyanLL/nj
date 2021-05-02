@@ -1,11 +1,11 @@
 <template>
     <div class="jumin">
-        <div class="toptitle">职工医保报销</div>
         <div class="ifself" v-if="!selfshenb && !othershenb">
             <a href="javascript:;" @click="selfshenb=true">自己申报</a>
             <a href="javascript:;" @click="othershenb=true">帮别人申报</a>
         </div>
         <template v-if="selfshenb || othershenb">
+            <div class="toptitle">职工医保报销</div>
             <div class="step-list">
                 <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div>
                 <div :class="['step',curstep=='2'?'cur':'']"><em>2</em>提交报销资料</div>
@@ -53,9 +53,9 @@
 
             </template>
             <template v-if="curstep=='2'">
-                <div class="question-bar">
+                <div class="question-bar" style="margin-bottom:0.48rem;">
                     <div class="attr"><em>*</em>就医类型</div>
-                    <div class="answer-list">
+                    <div class="answer-list ipt">
                         <div class="radio-btn" @click="visitType='2'"><em :class="['round',visitType=='2'?'cur':'']"></em>住院</div>
                         <div class="radio-btn" @click="visitType='1'"><em :class="['round',visitType=='1'?'cur':'']"></em>门诊</div>
                     </div>
@@ -63,6 +63,7 @@
                 <template v-if="visitType=='1'">
                     <div class="question-bar">
                         <div class="attr"><em>*</em>上传缴费凭条（请确保上传的图像清晰）</div>
+                        <a href="javascript:;" class="desctip">缴费凭条实例</a>
                         <div class="upfile">
                             <div class="operation-div">
                                 <img class="shoImg" :src="imgDefault">
@@ -74,11 +75,12 @@
                             <!-- 显示上传图片的区域 -->
                             
                         </div>
-                        <a href="javascript:;">缴费凭条实例</a>
-                        <div class="tip">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div>
+                        
+                        <div class="twotips">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div>
                     </div>
                     <div class="question-bar">
                         <div class="attr">如门慢门特需上传病例（请确保上传的图像清晰）</div>
+                        <a href="javascript:;"  class="desctip">缴费凭条实例</a>
                         <div class="upfile">
                             <div class="operation-div">
                                 <img class="shoImg" :src="imgDefault">
@@ -90,12 +92,13 @@
                             <!-- 显示上传图片的区域 -->
                             
                         </div>
-                        <a href="javascript:;">缴费凭条实例</a>
+                        
                     </div>
                 </template>
                 <template v-if="visitType=='2'">
                     <div class="question-bar">
                         <div class="attr"><em>*</em>上传缴费凭条（请确保上传的图像清晰）</div>
+                        <a href="javascript:;" class="desctip">缴费凭条实例</a>
                         <div class="upfile">
                             <div class="operation-div">
                                 <img class="shoImg" :src="imgDefault">
@@ -107,8 +110,7 @@
                             <!-- 显示上传图片的区域 -->
                             
                         </div>
-                        <a href="javascript:;">缴费凭条实例</a>
-                        <div class="tip">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div>
+                        <div class="twotips">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div>
                     </div>
 
                     <div class="question-bar">

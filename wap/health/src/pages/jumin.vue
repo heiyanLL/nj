@@ -1,11 +1,12 @@
 <template>
     <div class="jumin">
-        <div class="toptitle">居民医保报销</div>
+        
         <div class="ifself" v-if="!selfshenb && !othershenb">
             <a href="javascript:;" @click="selfshenb=true">自己申报</a>
             <a href="javascript:;" @click="othershenb=true">帮别人申报</a>
         </div>
         <template v-if="selfshenb || othershenb">
+            <div class="toptitle">居民医保报销</div>
             <div class="step-list">
                 <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div>
                 <div :class="['step',curstep=='2'?'cur':'']"><em>2</em>提交报销资料</div>
@@ -81,7 +82,7 @@
                 <div class="question-bar" v-if="visitHospitalArea=='2'">
                     <div class="attr"><em>*</em>就医类型</div>
                     <!-- {{visitType}} -->
-                    <div class="answer-list">
+                    <div class="answer-list ipt">
                         <div class="radio-btn" @click="visitType='2'"><em :class="['round',visitType=='2'?'cur':'']"></em>住院</div>
                         <div class="radio-btn" @click="visitType='1'"><em :class="['round',visitType=='1'?'cur':'']"></em>门诊</div>
                     </div>
