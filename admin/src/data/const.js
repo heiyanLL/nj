@@ -64,13 +64,13 @@ const PAY_TYPE = [{
   value: ''
 },{
   name: '居民医保报销',
-  value: 1
+  value: 0
 },{
   name: '职工医保报销',
-  value: 2
+  value: 1
 },{
   name: '生育报销',
-  value: 3
+  value: 2
 }]
 
 const AUDIT_RESULT = [{

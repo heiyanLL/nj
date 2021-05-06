@@ -1,11 +1,5 @@
 import fetch from '@/utils/fetch'
  export default{
-     mock() {
-         return fetch({
-             url: '/menu',
-             method: 'POST'
-         })
-     },
      /**审核 */
      // 查询审核列表
      describeVerifyList(param) {

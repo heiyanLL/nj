@@ -62,7 +62,21 @@
                 roleInfo: {},
             };
         },
+        created() {
+            this.queryAccountList()
+        },
         methods: {
+            queryAccountList() {
+                let param = {
+                    accountName: 'admin',
+                    orgName: '',
+                    accountRole: '',
+                    param: '',
+                    limit: 1,
+                    offset: 10
+                }
+                this.$http.queryAccountList(param)
+            },
             handleTable(scope, type) {
                 if (type == "edit") {
                     this.roleInfo = scope;

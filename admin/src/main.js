@@ -4,7 +4,7 @@ import ElementUI from 'element-ui'
 import router from './router'
 import store from './store'
 import api from './api'
-import './api/mock.js'
+// import './api/mock.js'
 import * as echarts from 'echarts'
 import 'element-ui/lib/theme-chalk/index.css'
 

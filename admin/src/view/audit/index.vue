@@ -69,15 +69,19 @@
             };
         },
         created() {
-            this.$http.mock().then(data => {
-                console.log(data, 111)
-            })
+            this.getAuditList()
         },
         methods: {
             handleClick() {},
             getAuditList() {
                 let param = {
+                    loginAccount: 'admin',
                     verifyStatus: this.verifyStatus,
+                    reimburseType: this.form.type,
+                    personStreet: '',
+                    limit: 1,
+                    offset: 10,
+                    param: ''
                 }
                 this.$http.describeVerifyList(param)
             }
