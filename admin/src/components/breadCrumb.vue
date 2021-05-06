@@ -25,6 +25,10 @@
 </script>
 <style lang='less' scoped>
 /deep/ .el-breadcrumb{
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    background: #fff;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 30px;
 }
 </style>

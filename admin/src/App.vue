@@ -15,6 +15,7 @@
     html {
         margin: 0;
         font-size: 14px;
+        // background: #f0f2f5;
     }
     h1,p{
         margin: 0;

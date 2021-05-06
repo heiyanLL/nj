@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-tabs v-model="verifyStatus" type="card" @tab-click="handleClick">
+        <el-tabs v-model="verifyStatus" @tab-click="handleClick">
             <el-tab-pane label="待审核" name="0"></el-tab-pane>
             <el-tab-pane label="已审核" name="1"></el-tab-pane>
         </el-tabs>

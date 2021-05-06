@@ -3,9 +3,9 @@
     <el-menu
       :default-active="active"
       class="el-menu-vertical-demo"
-      background-color="#545c64"
-      text-color="#ffffff"
-      active-text-colo="#1989fa"
+      background-color="#4b83f3"
+      text-color="#c1d4ff"
+      active-text-colo="#FFFFFF"
       :collapse="isCollapse"
       :unique-opene="true"
       :router="true"
@@ -58,6 +58,12 @@ export default {
   height: 100%;
   /deep/ .el-menu {
     height: 100%;
+  }
+  .el-menu-item.is-active{
+    color: #fff;
+  }
+  /deep/ .el-icon-arrow-down:before{
+    color: #fff;
   }
 }
 </style>
