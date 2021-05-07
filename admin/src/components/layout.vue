@@ -23,28 +23,73 @@
       </el-aside>
       <el-main>
         <bread-crumb />
-        <router-view class="content-box"/>
+        <router-view class="content-box" />
       </el-main>
     </el-container>
+    <el-dialog title="修改密码" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+      <el-form :model="form">
+        <el-form-item label="原密码" label-width="100px">
+          <el-input v-model="form.oldPass" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" label-width="100px">
+          <el-input v-model="form.newPassC" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认新密码" label-width="100px">
+          <el-input v-model="form.newPass" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateAccountPass"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import Nav from "./nav";
 import breadCrumb from "./breadCrumb";
+import { mapState } from "vuex";
 export default {
   components: {
     breadCrumb,
     Nav,
   },
+  computed: {
+    ...mapState(["user"]),
+  },
   data() {
-    return {};
+    return {
+      dialogFormVisible: false,
+      form: {
+        oldPass: '',
+        newPass: '',
+        newPassC: ''
+      }
+    }
   },
   methods: {
     handleQuit(command) {
       if (command == "quit") {
         this.$router.push({ path: "/login" });
+      }else if(command == 'edit') {
+        this.dialogFormVisible = true
       }
     },
+    async updateAccountPass() {
+      let param = {
+        loginAccount: this.user.loginAccount,
+        newPass: this.form.newPass
+      }
+      let res = await this.$http.updateAccountPass(param)
+      if(res && res.result && res.result.success) {
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+      }
+    }
   },
 };
 </script>
@@ -87,15 +132,15 @@ export default {
 }
 .el-aside {
   min-height: calc(100vh - 74px);
-  /deep/ .el-submenu{
-      min-width: 200px;
+  /deep/ .el-submenu {
+    min-width: 200px;
   }
 }
 .el-main {
   text-align: left;
   padding: 0;
-  .content-box{
-      padding: 0 20px;
+  .content-box {
+    padding: 0 20px;
   }
 }
 </style>

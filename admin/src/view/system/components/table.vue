@@ -17,19 +17,19 @@
           <el-button
             type="text"
             size="small"
-            @click="handleTable(scope, 'edit')"
+            @click="handleTable(scope.row, 'edit')"
             >修改</el-button
           >
           <el-button
             type="text"
             size="small"
-            @click="handleTable(scope, 'reset')"
+            @click="handleTable(scope.row, 'reset')"
             >重置密码</el-button
           >
           <el-button
             type="text"
             size="small"
-            @click="handleTable(scope, 'delete')"
+            @click="handleTable(scope.row, 'delete')"
             >删除</el-button
           >
         </template>
@@ -54,24 +54,21 @@ import { dateFormat } from "@/utils/tool";
 export default {
   name: "Table",
   props: {
-    accountList: Array,
-    offset: Number
+    accountList: Array
   },
   data() {
     return {
       currentPage: 1,
-      pageSizeList: CONST.PAGE_SIZE_LIST
+      pageSizeList: CONST.PAGE_SIZE_LIST,
+      offset: CONST.PAGE_SIZE
     };
-  },
-  created() {
-
   },
   methods: {
     handleTable(scope, type) {
       this.$emit("handleTable", scope, type);
     },
     handleListChange() {
-      this.$emit("handleListChange", this.currentPage, this.offset);
+      this.$emit("handleListChange", this.currentPage);
     },
     formatter(row) {
       return dateFormat("YYYY-mm-dd HH:MM", row.createTime);

@@ -30,12 +30,12 @@
       <el-form-item>
         <el-button type="primary" @click="handleQuery">查询</el-button>
         <el-button type="info" @click="handleReset">重置</el-button>
-        <el-button @click="dialogFormVisible = true">添加账号</el-button>
+        <el-button @click="addAccount">添加账号</el-button>
       </el-form-item>
     </el-form>
     <Table
+      ref="table"
       :accountList="accountList"
-      :offset="offset"
       @handleTable="handleTable"
       @handleListChange="handleListChange"
     />
@@ -72,7 +72,6 @@ export default {
       accountList: [],
       roleInfo: {},
       limit: 0,
-      offset: CONST.PAGE_SIZE,
     };
   },
   created() {
@@ -84,7 +83,7 @@ export default {
         loginAccount: this.user.loginAccount,
         ...this.form,
         limit: this.limit,
-        offset: this.offset,
+        offset: this.$refs.table.offset,
       };
       let res = await this.$http.queryAccountList(param);
       if (res && res.accountList) {
@@ -100,16 +99,19 @@ export default {
         };
       }
       this.limit = 0;
-      this.offset = CONST.PAGE_SIZE;
+      this.$refs.table.offset = CONST.PAGE_SIZE
       this.queryAccountList();
     },
     handleReset(e) {
       this.handleQuery(e, "reset");
     },
-    handleListChange(limit, offset) {
+    handleListChange(limit) {
       this.limit = limit - 1;
-      this.offset = offset;
       this.queryAccountList();
+    },
+    addAccount() {
+      this.roleInfo = {};
+      this.dialogFormVisible = true;
     },
     handleTable(scope, type) {
       if (type == "edit") {
