@@ -88,7 +88,7 @@ const PAGE_SIZE = 10
 // 系统模块
 const USER_LIST = [{
   name:"全部",
-  value:0
+  value:''
 },{
   name:"管理员",
   value:1

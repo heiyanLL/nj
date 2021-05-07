@@ -12,7 +12,6 @@ Service.interceptors.request.use(config => {
     lock: true,
     text: 'loading...'
   })
-  console.log(config)
   return config
 })
 // 添加响应拦截器
