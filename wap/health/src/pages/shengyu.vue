@@ -2,8 +2,8 @@
     <div class="jumin">
         <div class="toptitle">生育医保报销</div>
         <div class="step-list">
-            <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div>
-            <div :class="['step',curstep=='2'?'cur':'']"><em>2</em>提交报销资料</div>
+            <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div><span></span>   
+            <div :class="['step',curstep=='2'?'cur':'']"><em>2</em>提交报销资料</div><span></span>
             <div class="step"><em>3</em>申报完成</div>
         </div>
         <template v-if="curstep == '1'">
@@ -90,7 +90,7 @@
                 <div class="midtitle" v-if="reimbursePeopleSex=='2'&&declareType=='1'">津贴及营养费、分娩费用报销</div>
             
                 <div class="question-bar">
-                    <div class="attr"><em>*</em>上传结婚证或离婚证<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none"><em>*</em>上传结婚证或离婚证<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="upfile">
                         <div class="operation-div">
                             <img class="shoImg" :src="imgDefault">
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr">上传出院小结或者门诊病历<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none">上传出院小结或者门诊病历<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="upfile">
                         <div class="operation-div">
                             <img class="shoImg" :src="imgDefault">
@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <div class="question-bar" v-if="reimbursePeopleSex=='1'&&declareType=='1'&&declareTypeTwo=='1' || reimbursePeopleSex=='2'&&declareType=='1'">
-                    <div class="attr">上传产检及分娩发票<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none">上传产检及分娩发票<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="twotips">
                         1、如在江北新区17家医疗机构就诊，可上传缴费凭条；<br/>
                         2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a>
@@ -135,7 +135,7 @@
                 </div>
                     
                 <div class="question-bar" v-if="reimbursePeopleSex=='1'&&declareType=='1'&&declareTypeTwo=='1'">
-                    <div class="attr">上传女方无业证明或者创业就业登记证<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none">上传女方无业证明或者创业就业登记证<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="upfile">
                         <div class="operation-div">
                             <img class="shoImg" :src="imgDefault">
@@ -149,7 +149,7 @@
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr">上传准生证<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none">上传准生证<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="upfile">
                         <div class="operation-div">
                             <img class="shoImg" :src="imgDefault">
@@ -167,7 +167,7 @@
             <template v-if="declareType=='2'">
                 <div class="midtitle">计生手术报销</div>
                 <div class="question-bar">
-                    <div class="attr"><em>*</em>上传结婚证或离婚证<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none"><em>*</em>上传结婚证或离婚证<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="upfile">
                         <div class="operation-div">
                             <img class="shoImg" :src="imgDefault">
@@ -181,7 +181,7 @@
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr">上传出院小结或者门诊病历<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none">上传出院小结或者门诊病历<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="upfile">
                         <div class="operation-div">
                             <img class="shoImg" :src="imgDefault">
@@ -195,7 +195,7 @@
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr">计生费用发票<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none">计生费用发票<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="twotips">
                         1、如在江北新区17家医疗机构就诊，可上传缴费凭条；<br/>
                         2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a>

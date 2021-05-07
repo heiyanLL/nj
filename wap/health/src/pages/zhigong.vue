@@ -7,32 +7,32 @@
         <template v-if="selfshenb || othershenb">
             <div class="toptitle">职工医保报销</div>
             <div class="step-list">
-                <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div>
-                <div :class="['step',curstep=='2'?'cur':'']"><em>2</em>提交报销资料</div>
+                <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div><span></span>
+                <div :class="['step',curstep=='2'?'cur':'']"><em>2</em>提交报销资料</div><span></span>
                 <div class="step"><em>3</em>申报完成</div>
             </div>
             <template v-if="curstep == '1'">
                 <div class="question-bar">
                     <div class="attr"><em>*</em>报销人</div>
                     <div class="answer-list ipt">
-                        <input type="text" v-if="selfshenb" placeholder="请输入报销人姓名" maxlength="10" v-model="selfname" />
-                        <input type="text" v-if="othershenb" placeholder="请输入报销人姓名" maxlength="10" v-model="othername" />
+                        <input type="text" v-if="selfshenb" placeholder="请输入报销人姓名" maxlength="10" v-model="reimbursePeople" />
+                        <input type="text" v-if="othershenb" placeholder="请输入报销人姓名" maxlength="10" v-model="reimbursePeople" />
                     </div>
                 </div>
 
                 <div class="question-bar">
                     <div class="attr"><em>*</em>报销人身份证号</div>
                     <div class="answer-list ipt">
-                        <input type="text" placeholder="请输入报销人身份证号" maxlength="10" v-model="idcardno" />
+                        <input type="text" placeholder="请输入报销人身份证号" maxlength="10" v-model="reimburseCardNo" />
                     </div>
                 </div>
                 <div class="question-bar" v-if="selfshenb">
                     <div class="attr"><em>*</em>手机号</div>
-                    <div class="answer-list ipt"><input type="text" placeholder="请输入手机号" maxlength="10" v-model="selftel" /></div>
+                    <div class="answer-list ipt"><input type="text" placeholder="请输入手机号" maxlength="10" v-model="reimbursePhone" /></div>
                 </div>
                 <div class="question-bar" v-if="othershenb">
                     <div class="attr"><em>*</em>与报销人关系</div>
-                    <div class="answer-list ipt"><input type="text" placeholder="请输入与报销人关系" maxlength="10" v-model="relation" /></div>
+                    <div class="answer-list ipt"><input type="text" placeholder="请输入与报销人关系" maxlength="10" v-model="reimburseRelate" /></div>
                 </div>
 
                 <div class="question-bar">
@@ -46,14 +46,14 @@
                 <div class="question-bar" v-if="visitHospitalArea=='1'">
                     <div class="attr"><em>*</em>就诊医院</div>
                     <input type="hidden" :name="'su_id'+'visitHospitalName'" :id="'suId'+'visitHospitalName'" v-model="visitHospitalName" />
-                    <div class="answer-list" :id="'showGeneral'+'visitHospitalName'" @click="showModelOne('visitHospitalName')">{{visitHospitalName}}</div>
+                    <div class="answer-list" :id="'showGeneral'+'visitHospitalName'" @click="showModelOne('visitHospitalName')">{{visitHospitalName || '请选择就诊医院'}}</div>
                 </div>
 
                 <div :class="['next-step',btncurornot()]" @click="clicknextStep()">下一步</div>
 
             </template>
             <template v-if="curstep=='2'">
-                <div class="question-bar" style="margin-bottom:0.48rem;">
+                <div class="question-bar">
                     <div class="attr"><em>*</em>就医类型</div>
                     <div class="answer-list ipt">
                         <div class="radio-btn" @click="visitType='2'"><em :class="['round',visitType=='2'?'cur':'']"></em>住院</div>
@@ -62,7 +62,7 @@
                 </div>
                 <template v-if="visitType=='1'">
                     <div class="question-bar">
-                        <div class="attr"><em>*</em>上传缴费凭条（请确保上传的图像清晰）</div>
+                        <div class="attr bottom-none"><em>*</em>上传缴费凭条<span>（请确保上传的图像清晰）</span></div>
                         <a href="javascript:;" class="desctip">缴费凭条实例</a>
                         <div class="upfile">
                             <div class="operation-div">
@@ -79,7 +79,7 @@
                         <div class="twotips">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div>
                     </div>
                     <div class="question-bar">
-                        <div class="attr">如门慢门特需上传病例（请确保上传的图像清晰）</div>
+                        <div class="attr bottom-none">如门慢门特需上传病例<span>（请确保上传的图像清晰）</span></div>
                         <a href="javascript:;"  class="desctip">缴费凭条实例</a>
                         <div class="upfile">
                             <div class="operation-div">
@@ -97,7 +97,7 @@
                 </template>
                 <template v-if="visitType=='2'">
                     <div class="question-bar">
-                        <div class="attr"><em>*</em>上传缴费凭条（请确保上传的图像清晰）</div>
+                        <div class="attr bottom-none"><em>*</em>上传缴费凭条<span>（请确保上传的图像清晰）</span></div>
                         <a href="javascript:;" class="desctip">缴费凭条实例</a>
                         <div class="upfile">
                             <div class="operation-div">
@@ -114,7 +114,7 @@
                     </div>
 
                     <div class="question-bar">
-                        <div class="attr"><em>*</em>上传出院记录（请确保上传的图像清晰）</div>
+                        <div class="attr bottom-none"><em>*</em>上传出院记录<span>（请确保上传的图像清晰）</span></div>
                         <div class="upfile">
                             <div class="operation-div">
                                 <img class="shoImg" :src="imgDefault">
@@ -191,11 +191,10 @@ export default {
             curstep:'1',
             selfshenb:false,
             othershenb:false,
-            selftel:'',
-            idcardno:'',
-            selfname:'',
-            othername:'',
-            relation:'',
+            reimbursePhone:'',
+            reimburseCardNo:'',
+            reimbursePeople:'',
+            reimburseRelate:'',
             visitHospitalArea:'',   //1南京2异地
             visitHospitalName:'',
             locatepics:'',
@@ -240,7 +239,7 @@ export default {
         btncurornot(){
             let str = ''
             if(this.selfshenb){
-                if(this.selfname&&this.idcardno&&this.selftel){
+                if(this.reimbursePeople&&this.reimburseCardNo&&this.reimbursePhone){
                     if(this.visitHospitalArea == '1'){
                         if(this.visitHospitalName){
                             str = 'cur'
@@ -250,7 +249,7 @@ export default {
                     }
                 }
             }else if(this.othershenb){
-                if(this.othername&&this.idcardno&&this.relation){
+                if(this.reimbursePeople&&this.reimburseCardNo&&this.reimburseRelate){
                     if(this.visitHospitalArea == '1'){
                         if(this.visitHospitalName){
                             str = 'cur'

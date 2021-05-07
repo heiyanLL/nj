@@ -2,9 +2,10 @@
         <div class="swipe" :ref="swipeOpts.name"  :id="swipeOpts.name" >
             <ul class="swipe-ul" autoexpo="true"> 
                 <li v-for="(value,idx) in swipeData" :key="idx" class="lazybox">
-                    <a :href="value.linkUrl">
-                        <img v-if="idx==0" :src="value.picUrl">
-                        <img v-if="idx!=0" :data-src2="value.picUrl">
+                    <!-- :href="value.newsLink"  -->
+                    <a href="javacript:;" @click.stop.prevent="$router.push({path:'/everydetail/1_'+value.medicalNewsId})">
+                        <img v-if="idx==0" :src="value.newsPic">
+                        <img v-if="idx!=0" :data-src2="value.newsPic">
                     </a>
                 </li>
             </ul>
@@ -71,19 +72,19 @@ export default {
 <style>
 /*轮播*/
 .banner {
-    width: 14.04rem;
-    height: 4rem;
-    margin-top:0.48rem;
+    width: 13.8rem;
+    height: 5.84rem;
+    margin-top:1.2rem;
     overflow: hidden;
-    margin: 0 auto;
+    margin: 1.2rem auto 0;
     position: relative;
     
 }
 .banner .swipe {
     position: relative;
     overflow: hidden;
-    width: 14.04rem;
-    height: 4rem;
+    width: 13.8rem;
+    height: 5.84rem;
 }
 
 .banner .swipe img {
@@ -97,7 +98,7 @@ export default {
 
 .banner .swipe li img {
     width:100%;
-    height: 4rem;
+    height:5.84rem;
     display:block;
     position: absolute;
     bottom: 0;
@@ -111,7 +112,7 @@ export default {
 
 .banner .swipe li a {
     width:100%;
-    height:4rem;
+    height:5.84rem;
     font-size:0;
     display: block;
     border-radius:0.48rem;

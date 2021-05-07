@@ -34,15 +34,18 @@ export default new VueRouter({
             name: 'shengyu',
             component: resolve => require(['@/pages/shengyu'], resolve)
         },{
-            path: '/bxdetail',//   /bxdetail/:id
+            path: '/bxdetail/:id',
             name: 'bxdetail',
             component: resolve => require(['@/pages/bxdetail'], resolve)
         },{
-            path: '/bxsuccess',
+            path: '/bxsuccess/:id',
             component: resolve => require(['@/pages/bxsuccess'], resolve)
         },{
             path: '/helpcenter',
             component: resolve => require(['@/pages/helpcenter'], resolve)
+        },{
+            path: '/everydetail/:id',
+            component: resolve => require(['@/pages/everydetail'], resolve)
         }
         
     ],

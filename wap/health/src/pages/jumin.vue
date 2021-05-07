@@ -8,8 +8,8 @@
         <template v-if="selfshenb || othershenb">
             <div class="toptitle">居民医保报销</div>
             <div class="step-list">
-                <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div>
-                <div :class="['step',curstep=='2'?'cur':'']"><em>2</em>提交报销资料</div>
+                <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div><span></span>
+                <div :class="['step',curstep=='2'?'cur':'']"><em>2</em>提交报销资料</div><span></span>
                 <div class="step"><em>3</em>申报完成</div>
             </div>
             <template v-if="curstep == '1'">
@@ -22,29 +22,29 @@
                 </div>
 
                 <div class="question-bar" v-if="othershenb">
-                    <div class="attr"><em>*</em>报销人社保卡</div>
+                    <div class="attr bottom-none"><em>*</em>报销人社保卡</div>
                     <div class="upfile">
                         <div class="operation-div">
                             <img class="shoImg" :src="imgDefault">
                         </div>
-                        <div class="file-wrap">
+                        <div class="file-wrap shebaoka">
                             <input ref="uploadInput" type="file" class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event)"/>
                         </div>
-                        <!-- {{othercard}} -->
+                        <!-- {{reimbursePeopleSocial}} -->
                         <!-- 显示上传图片的区域 -->
                         
                     </div>
                 </div>
 
                 <div class="question-bar" v-if="othershenb">
-                    <div class="attr"><em>*</em>与报销人关系</div>
-                    <div class="answer-list ipt"><input type="text" placeholder="请输入与报销人关系" maxlength="10" v-model="relation" /></div>
+                    <div class="attr border-1px"><em>*</em>与报销人关系</div>
+                    <div class="answer-list ipt"><input type="text" placeholder="请输入与报销人关系" maxlength="10" v-model="reimburseRelate" /></div>
                 </div>
 
                 <div class="question-bar">
                     <div class="attr"><em>*</em>所在街道</div>
                     <input type="hidden" :name="'su_id'+'personStreet'" :id="'suId'+'personStreet'" v-model="personStreet" />
-                    <div class="answer-list" :id="'showGeneral'+'personStreet'" @click="showModelOne('personStreet')">{{personStreet}}</div>
+                    <div class="answer-list" :id="'showGeneral'+'personStreet'" @click="showModelOne('personStreet')">{{personStreet || '请输入所在街道'}}</div>
                 </div>
 
                 <div class="question-bar">
@@ -58,7 +58,7 @@
                 <div class="question-bar" v-if="visitHospitalArea=='1'">
                     <div class="attr"><em>*</em>就诊医院</div>
                     <input type="hidden" :name="'su_id'+'visitHospitalName'" :id="'suId'+'visitHospitalName'" v-model="visitHospitalName" />
-                    <div class="answer-list" :id="'showGeneral'+'visitHospitalName'" @click="showModelOne('visitHospitalName')">{{visitHospitalName}}</div>
+                    <div class="answer-list" :id="'showGeneral'+'visitHospitalName'" @click="showModelOne('visitHospitalName')">{{visitHospitalName || '请输入就诊医院'}}</div>
                 </div>
 
                 <div :class="['next-step',btncurornot()]" @click="clicknextStep()">下一步</div>
@@ -66,7 +66,7 @@
             </template>
             <template v-if="curstep=='2'">
                 <div class="question-bar" v-if="visitHospitalArea=='1'">
-                    <div class="attr"><em>*</em>上传缴费凭条</div>
+                    <div class="attr bottom-none"><em>*</em>上传缴费凭条</div>
                     <div class="upfile">
                         <div class="operation-div">
                             <img class="shoImg" :src="imgDefault">
@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="question-bar" v-if="visitHospitalArea=='2'">
-                    <div class="attr"><em>*</em>就医类型</div>
+                    <div class="attr border-1px"><em>*</em>就医类型</div>
                     <!-- {{visitType}} -->
                     <div class="answer-list ipt">
                         <div class="radio-btn" @click="visitType='2'"><em :class="['round',visitType=='2'?'cur':'']"></em>住院</div>
@@ -89,7 +89,7 @@
                 </div>
                 <template v-if="visitHospitalArea=='2'">
                     <div class="question-bar">
-                        <div class="attr"><em>*</em>上传发票（请确保上传的图像清晰）</div>
+                        <div class="attr bottom-none"><em>*</em>上传发票<span>（请确保上传的图像清晰）</span></div>
                         <div class="upfile">
                             <div class="operation-div">
                                 <img class="shoImg" :src="imgDefault">
@@ -104,7 +104,7 @@
                     </div>
 
                     <div class="question-bar">
-                        <div class="attr"><em>*</em>上传费用说明（请确保上传的图像清晰）</div>
+                        <div class="attr bottom-none"><em>*</em>上传费用说明<span>（请确保上传的图像清晰）</span></div>
                         <div class="upfile">
                             <div class="operation-div">
                                 <img class="shoImg" :src="imgDefault">
@@ -119,7 +119,7 @@
                     </div>    
 
                     <div class="question-bar" v-if="visitType=='2'">
-                        <div class="attr"><em>*</em>上传出院小结（请确保上传的图像清晰）</div>
+                        <div class="attr bottom-none"><em>*</em>上传出院小结<span>（请确保上传的图像清晰）</span></div>
                         <div class="upfile">
                             <div class="operation-div">
                                 <img class="shoImg" :src="imgDefault">
@@ -134,8 +134,8 @@
                     </div>
                 </template>
                 
-                <div class="question-bar">
-                    <div class="attr"><em>*</em>报销支付方式</div>
+                <div class="question-bar mb24">
+                    <div class="attr bottom-none"><em>*</em>报销支付方式</div>
                     <div class="pay-method">
                         <div :class="['shebao method',reimbursePayType=='1'?'cur':'']" @click="clickshebao()">社保卡</div>
                         <div :class="['yinhang method',reimbursePayType=='2'?'cur':'']" @click="reimbursePayType='2'">银行卡</div>
@@ -143,13 +143,13 @@
                 </div>
                 <template v-if="reimbursePayType=='2'">
                     <div class="question-bar">
-                        <div class="attr"><em>*</em>开户行</div>
-                        <div class="answer-list ipt" @click="showModelTwo">
+                        <div class="attr"><em>*</em>开户行地址</div>
+                        <div class="answer-list" @click="showModelTwo">
                             <!-- bankCountry -->
                             <!-- bankCity -->
                             <input type="hidden" name="contact_province_code" data-id="0001" id="contact_province_code" value="" data-province-name="">  
                             <input type="hidden" name="contact_city_code" id="contact_city_code" value="" data-city-name=""/>
-                            <span data-city-code="510100" data-province-code="510000" data-district-code="510105" id="show_contact"></span> 
+                            <span data-city-code="510100" data-province-code="510000" data-district-code="510105" id="show_contact">{{bankCountry+bankCity || "请选择开户行地址"}}</span> 
                         </div>
                     </div>
                     <div class="question-bar">
@@ -195,8 +195,8 @@ export default {
             othershenb:false,
             selfname:'',
             othername:'',
-            othercard:'',
-            relation:'',
+            reimbursePeopleSocial:'',
+            reimburseRelate:'',
             personStreet:'',
             visitHospitalArea:'',   //1南京2异地
             visitHospitalName:'',
@@ -256,7 +256,7 @@ export default {
                     }
                 }
             }else if(this.othershenb){
-                if(this.othername&&this.othercard&&this.relation){
+                if(this.othername&&this.reimbursePeopleSocial&&this.reimburseRelate){
                     if(this.visitHospitalArea == '1'){
                         if(this.visitHospitalName){
                             str = 'cur'

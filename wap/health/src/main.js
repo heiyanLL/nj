@@ -14,25 +14,20 @@ Vue.config.productionTip = false
     // 方法
 Vue.prototype.utils = utils
 
-    // map对象
-Vue.prototype.map = map
-    // errorcode
-    // Vue.prototype.Error_status = Error_status
+Vue.prototype.$axios = axios;
 
-// hosts
-Vue.prototype.hosts = {}  //TODO:
+Vue.prototype.map = map
+Vue.prototype.hosts = hosts  
 Vue.config.devtools = true
     // axios interceptor
-axios.defaults.withCredentials = true
-axios.interceptors.request.use(config => {
-    config.withCredentials = true
-    return config
-}, error => {
-    console.log(error)
-    return Pomise.reject(error)
-})
-
-
+// axios.defaults.withCredentials = true
+// axios.interceptors.request.use(config => {
+//     config.withCredentials = true
+//     return config
+// }, error => {
+//     console.log(error)
+//     return Pomise.reject(error)
+// })
 
 for(let item in filters){
     Vue.filter(item,filters[item])
