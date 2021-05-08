@@ -16,9 +16,17 @@ import fetch from '@/utils/fetch'
          })
      },
      /**报表 */
+     // 周月年数据查询
      countVerifyparamsOnPhase(param) {
          return fetch({
             url: '/medical/verify/countVerifyparamsOnPhase',
+            params: param
+         })
+     },
+     // 时间段数据查询
+     countVerifyData(param) {
+         return fetch({
+            url: '/medical/verify/countVerifyData',
             params: param
          })
      },
@@ -42,7 +50,8 @@ import fetch from '@/utils/fetch'
      updateOrInsertAccount(param) {
         return fetch({
             url: '/medical/account/updateOrInsertAccount',
-            params: param
+            method: 'post',
+            data: param
         })
      },
      // 删除用户
@@ -64,7 +73,8 @@ import fetch from '@/utils/fetch'
      updateOrInsertOrg(param) {
         return fetch({
             url: '/medical/org/updateOrInsertOrg',
-            params: param
+            method: 'post',
+            data: param
         })
      },
      // 删除机构

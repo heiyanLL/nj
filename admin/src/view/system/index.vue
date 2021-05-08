@@ -2,17 +2,17 @@
   <div>
     <el-form :inline="true" size="small" :model="form">
       <el-form-item label="所属机构">
-        <el-select v-model="form.orgName" placeholder="请选择所属街道">
+        <el-select v-model="form.orgName" :clearable="true" placeholder="请选择所属机构">
           <el-option
-            v-for="item in typeList"
-            :key="item.name"
-            :label="item.name"
-            :value="item.value"
+            v-for="item in orgList"
+            :key="item.medicalOrganizationId"
+            :label="item.orgName"
+            :value="item.medicalOrganizationId"
           ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="用户角色">
-        <el-select v-model="form.accountRole" placeholder="请选择用户角色">
+        <el-select v-model="form.accountRole" :clearable="true" placeholder="请选择用户角色">
           <el-option
             v-for="item in userList"
             :key="item.name"
@@ -24,7 +24,7 @@
       <el-form-item label="关键词">
         <el-input
           v-model="form.param"
-          placeholder="查询账号、姓名等关键词"
+          placeholder=""
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -42,6 +42,7 @@
     <Dialog
       :dialogFormVisible="dialogFormVisible"
       :info="roleInfo"
+      :orgList="orgList"
       @handleClose="dialogFormVisible = false"
     />
   </div>
@@ -61,8 +62,8 @@ export default {
   },
   data() {
     return {
-      typeList: CONST.PAY_TYPE,
-      userList: CONST.USER_LIST,
+      orgList: [],
+      userList: CONST.ROLE_LIST,
       form: {
         orgName: "",
         accountRole: "",
@@ -74,8 +75,9 @@ export default {
       limit: 0,
     };
   },
-  created() {
-    this.queryAccountList();
+  mounted() {
+    this.queryAccountList()
+    this.queryOrgList()
   },
   methods: {
     async queryAccountList() {
@@ -88,6 +90,18 @@ export default {
       let res = await this.$http.queryAccountList(param);
       if (res && res.accountList) {
         this.accountList = res.accountList;
+      }
+    },
+    async queryOrgList() {
+      let param = {
+        loginAccount: this.user.loginAccount,
+        limit: 0,
+        offset:  100,
+        param: ''
+      }
+      let res = await this.$http.queryOrgList(param);
+      if (res && res.orgList) {
+        this.orgList = res.orgList;
       }
     },
     handleQuery(e, reset) {

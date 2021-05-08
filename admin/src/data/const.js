@@ -86,19 +86,6 @@ const PAGE_SIZE = 10
 
 
 // 系统模块
-const USER_LIST = [{
-  name: "全部",
-  value: ''
-}, {
-  name: '管理员',
-  value: "1"
-}, {
-  name: '街道',
-  value: "2"
-}, {
-  name: '人社局',
-  value: "3"
-}]
 const ROLE_LIST = [{
   name: '管理员',
   value: "1"
@@ -128,7 +115,6 @@ export default {
   AUDIT_RESULT,
   PAGE_SIZE,
   PAGE_SIZE_LIST,
-  USER_LIST,
   PUBLISH_STATE,
   ROLE_LIST
 }

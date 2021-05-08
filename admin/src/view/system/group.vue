@@ -10,7 +10,7 @@
       <el-form-item>
         <el-button type="primary" @click="handleQuery">查询</el-button>
         <el-button type="info" @click="handleReset">重置</el-button>
-        <el-button @click="dialogFormVisible = true">添加机构</el-button>
+        <el-button @click="addOrg">添加机构</el-button>
       </el-form-item>
     </el-form>
     <Table
@@ -23,6 +23,7 @@
       :dialogFormVisible="dialogFormVisible"
       :info="groupInfo"
       @handleClose="dialogFormVisible = false"
+      @updateOrInsertOrg="updateOrInsertOrg"
     />
   </div>
 </template>
@@ -54,14 +55,14 @@ export default {
     this.queryOrgList();
   },
   methods: {
-    queryOrgList() {
+    async queryOrgList() {
       let param = {
         loginAccount: this.user.loginAccount,
         limit: this.limit,
         offset:  this.$refs.table.offset,
-        ...this.form,
-      };
-      let res = this.$http.queryOrgList(param);
+        ...this.form
+      }
+      let res = await this.$http.queryOrgList(param);
       if (res && res.orgList) {
         this.orgList = res.orgList;
       }
@@ -83,7 +84,18 @@ export default {
       this.limit = limit - 1;
       this.queryOrgList();
     },
+    addOrg() {
+      this.groupInfo = {}
+      this.dialogFormVisible = true
+    },
+    updateOrInsertOrg() {
+      this.dialogFormVisible = false
+      this.limit = 0;
+      this.$refs.table.offset = CONST.PAGE_SIZE;
+      this.queryOrgList();
+    },
     handleTable(scope, type) {
+      console.log(scope)
       if (type == "delete") {
         this.$confirm("您确定要删除吗？", "提示", {
           confirmButtonText: "确定",
@@ -91,12 +103,14 @@ export default {
           type: "warning",
         })
           .then(() => {
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
+            this.$http.deleteOrg({orgId: scope.medicalOrganizationId}).then(res => {
+              if(res && res.result && res.result.success) {
+                this.$message.success("删除成功!")
+                this.queryOrgList()
+              }
+            })
           })
-          .catch(() => {});
+          .catch(() => {})
       } else {
         this.groupInfo = scope;
         this.dialogFormVisible = true;
