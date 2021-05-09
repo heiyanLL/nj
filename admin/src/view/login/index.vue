@@ -54,6 +54,8 @@ export default {
       if (res && res.result && res.result.success) {
         this.SET_USER(res.accountList[0]);
         this.$router.push({ path: "/" });
+      }else {
+        this.$message.error('登陆失败，请稍后')
       }
     },
   },
