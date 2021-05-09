@@ -40,7 +40,9 @@
       :page-sizes="pageSizeList"
       :page-size.sync="offset"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="0"
+      :total="total"
+      @size-change="handleListChange"
+      @current-change="handleListChange"
     >
     </el-pagination>
   </div>
@@ -52,6 +54,7 @@ export default {
   name: "Table",
   props: {
     info: Array,
+    total: Number
   },
   data() {
     return {
@@ -67,6 +70,9 @@ export default {
     formatter(row) {
       return dateFormat("YYYY-mm-dd HH:MM", row.publishTime);
     },
+    handleListChange() {
+      this.$emit("handleListChange", this.currentPage);
+    }
   },
 };
 </script>

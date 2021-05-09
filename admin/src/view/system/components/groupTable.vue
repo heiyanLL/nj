@@ -7,7 +7,7 @@
       <el-table-column prop="orgAddress" label="地址"> </el-table-column>
       <el-table-column prop="street" label="所属街道"> </el-table-column>
       <el-table-column prop="orgPhone" label="联系电话"> </el-table-column>
-      <el-table-column prop="date" label="创建时间"> </el-table-column>
+      <el-table-column prop="createTime" :formatter="formatter" label="创建时间"> </el-table-column>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-button
@@ -40,6 +40,7 @@
 </template>
 <script>
 import CONST from "@/data/const";
+import { dateFormat } from "@/utils/tool";
 export default {
   name: "Table",
   props: {
@@ -59,6 +60,9 @@ export default {
     },
     handleListChange() {
       this.$emit("handleListChange", this.currentPage);
+    },
+    formatter(row) {
+      return dateFormat("YYYY-mm-dd HH:MM", row.createTime);
     }
   },
 };

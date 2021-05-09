@@ -1,3 +1,4 @@
+const BASE_UPLOAD = 'http://121.196.42.224:8080/medical/help/downloadFile?medicalPicId='
 const NAV = [
   {
     path: '/',
@@ -114,5 +115,6 @@ export default {
   PAGE_SIZE,
   PAGE_SIZE_LIST,
   PUBLISH_STATE,
-  ROLE_LIST
+  ROLE_LIST,
+  BASE_UPLOAD
 }

@@ -35,6 +35,7 @@ function _debounce(fn, wait = 500) {
 }
 
 function dateFormat(fmt, date) {
+    if(!date) return
     date = new Date(date)
     let ret;
     const opt = {

@@ -29,7 +29,13 @@
         >
       </el-form-item>
     </el-form>
-    <Table ref="table" :info="helpList" @handleTable="handleTable" />
+    <Table
+      ref="table"
+      :info="helpList"
+      :total="total"
+      @handleTable="handleTable"
+      @handleListChange="handleListChange"
+    />
   </div>
 </template>
 <script>
@@ -47,6 +53,7 @@ export default {
         param: "",
       },
       limit: 0,
+      total: 0,
       helpList: [],
     };
   },
@@ -63,6 +70,7 @@ export default {
       let res = await this.$http.queryHelpList(param);
       if (res && res.helpList) {
         this.helpList = res.helpList;
+        this.total = res.size;
       }
     },
     handleTable(scope) {
@@ -76,11 +84,15 @@ export default {
             .then((res) => {
               if (res && res.result && res.result.success) {
                 this.$message.success("删除成功!");
-                this.queryHelpList()
+                this.queryHelpList();
               }
             });
         })
         .catch(() => {});
+    },
+    handleListChange(limit) {
+      this.limit = limit - 1;
+      this.queryHelpList();
     },
   },
 };

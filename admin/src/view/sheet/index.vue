@@ -20,9 +20,9 @@
       >
       <el-col :span="2"
         ><el-button
-          :class="{ isActive: dateType == '1' }"
+          :class="{ isActive: dateType == '2' }"
           size="small"
-          @click="handleDate($event, '1')"
+          @click="handleDate($event, '2')"
           >本年</el-button
         ></el-col
       >
@@ -86,20 +86,13 @@ export default {
         },
         series: [
           {
-            name: "访问来源",
+            name: "报销类型",
             type: "pie",
             radius: ["40%", "70%"],
             avoidLabelOverlap: false,
             label: {
               show: false,
               position: "center",
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: "40",
-                fontWeight: "bold",
-              },
             },
             labelLine: {
               show: false,
@@ -108,8 +101,7 @@ export default {
               { value: 1048, name: "搜索引擎" },
               { value: 735, name: "直接访问" },
               { value: 580, name: "邮件营销" },
-              { value: 484, name: "联盟广告" },
-              { value: 300, name: "视频广告" },
+              { value: 484, name: "联盟广告" }
             ],
           },
         ],
@@ -124,37 +116,38 @@ export default {
     this.chartType = this.$echarts.init(document.getElementById("chart-type"));
     this.chartAmount.setOption(this.option);
     this.chartType.setOption(this.optionType);
-    this.countVerifyparamsOnPhase()
+    this.countVerifyDataOnPhase();
   },
   methods: {
     handleDate(e, type) {
       if (type) {
         this.dateType = type;
         this.date = "";
-        this.countVerifyparamsOnPhase()
-      }else{
-          this.countVerifyData()
+        this.countVerifyDataOnPhase();
+      } else {
+        this.dateType = "";
+        this.countVerifyData();
       }
     },
     async countVerifyData() {
       let param = {
         loginAccount: this.user.loginAccount,
-        reimburseType: '',
+        reimburseType: "",
         beginTime: this.date[0],
-        endTime: this.date[1]
-      }
-      let res = await this.$http.countVerifyData(param)
-      console.log(res)
+        endTime: this.date[1],
+      };
+      let res = await this.$http.countVerifyData(param);
+      console.log(res);
     },
-    async countVerifyparamsOnPhase() {
-        let param = {
+    async countVerifyDataOnPhase() {
+      let param = {
         loginAccount: this.user.loginAccount,
-        reimburseType: '',
-        timeType: this.dateType
-      }
-      let res = await this.$http.countVerifyparamsOnPhase(param)
-      console.log(res)
-    }
+        reimburseType: "",
+        timeType: this.dateType,
+      };
+      let res = await this.$http.countVerifyDataOnPhase(param);
+      console.log(res);
+    },
   },
 };
 </script>

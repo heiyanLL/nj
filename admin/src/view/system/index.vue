@@ -145,7 +145,7 @@ export default {
         })
           .then(() => {
             this.$http
-              .deleteAccountById({ medicalAccountId: scope.medicalAccountId })
+              .deleteAccountById({ medicalAccountId: scope.medicalAccountId,loginAccount: this.user.loginAccount })
               .then((res) => {
                 if (res && res.result && res.result.success) {
                   this.$message.success("删除成功!");

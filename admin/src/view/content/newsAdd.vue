@@ -17,6 +17,7 @@
           :file-list="form.newsPic"
           list-type="picture"
           limit="1"
+          name="files"
           accept="image/jpg, image/jpeg, image/png"
         >
           <el-button size="small" type="primary">点击上传</el-button>

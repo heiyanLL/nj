@@ -5,7 +5,12 @@
       <el-table-column prop="loginAccount" label="登录账号"> </el-table-column>
       <el-table-column prop="accountName" label="姓名"> </el-table-column>
       <el-table-column prop="orgName" label="所属机构"> </el-table-column>
-      <el-table-column prop="accountRole" label="用户角色"> </el-table-column>
+      <el-table-column
+        prop="accountRole"
+        :formatter="formatter"
+        label="用户角色"
+      >
+      </el-table-column>
       <el-table-column
         prop="createTime"
         :formatter="formatter"
@@ -50,18 +55,19 @@
 </template>
 <script>
 import CONST from "@/data/const";
+import { findIndex } from "loadsh"
 import { dateFormat } from "@/utils/tool";
 export default {
   name: "Table",
   props: {
     accountList: Array,
-    total: Number
+    total: Number,
   },
   data() {
     return {
       currentPage: 1,
       pageSizeList: CONST.PAGE_SIZE_LIST,
-      offset: CONST.PAGE_SIZE
+      offset: CONST.PAGE_SIZE,
     };
   },
   methods: {
@@ -71,8 +77,13 @@ export default {
     handleListChange() {
       this.$emit("handleListChange", this.currentPage);
     },
-    formatter(row) {
-      return dateFormat("YYYY-mm-dd HH:MM", row.createTime);
+    formatter(row, col) {
+      if (col.property == "createTime") {
+        return dateFormat("YYYY-mm-dd HH:MM", row.createTime);
+      } else {
+        let index = findIndex(CONST.ROLE_LIST, ['value', row.accountRole])
+        return CONST.ROLE_LIST[index] && CONST.ROLE_LIST[index].name || ''
+      }
     },
   },
 };

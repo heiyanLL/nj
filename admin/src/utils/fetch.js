@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '@/router'
 import { Message, Loading } from 'element-ui'
 let loadingInstance = null //这里是loading
 //使用create方法创建axios实例
@@ -17,7 +18,9 @@ Service.interceptors.request.use(config => {
 // 添加响应拦截器
 Service.interceptors.response.use(response => {
   loadingInstance.close()
-  // console.log(response)
+  if(response.data.result && response.data.result.code == '05') {
+    router.replace({path: '/login'})
+  }
   return response.data
 }, error => {
   console.log('TCL: error', error)

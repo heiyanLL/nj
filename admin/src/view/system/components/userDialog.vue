@@ -47,7 +47,7 @@
 import CONST from "@/data/const";
 import { mapState } from "vuex";
 export default {
-  name: "dialog",
+  name: "userDialog",
   props: {
     dialogFormVisible: Boolean,
     info: Object,
@@ -60,7 +60,7 @@ export default {
         loginAccount: "",
         orgList: [],
         accountName: "",
-        accountRole: "",
+        accountRole: "1",
         medicalOrganizationId: ''
       },
     };
@@ -69,7 +69,7 @@ export default {
     info: {
       handler(v) {
         let orgList = this.orgList;
-        this.form = { ...v, orgList };
+        this.form = { ...this.form, ...v, orgList };
       },
       deep: true,
     },

@@ -17,9 +17,9 @@ import fetch from '@/utils/fetch'
      },
      /**报表 */
      // 周月年数据查询
-     countVerifyparamsOnPhase(param) {
+     countVerifyDataOnPhase(param) {
          return fetch({
-            url: '/medical/verify/countVerifyparamsOnPhase',
+            url: '/medical/verify/countVerifyDataOnPhase',
             params: param
          })
      },
