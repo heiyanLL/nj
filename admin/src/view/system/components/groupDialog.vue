@@ -75,8 +75,6 @@ export default {
       };
       let res = await this.$http.updateOrInsertOrg(param)
       if(res && res.result && res.result.success) {
-        let msg =  this.form.medicalOrganizationId ? '修改成功' : '新增成功'
-        this.$message.success(msg);
         this.$emit("updateOrInsertOrg");
       }
     },

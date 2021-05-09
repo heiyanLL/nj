@@ -11,7 +11,7 @@
           <el-input v-model="form.loginAccount" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属机构">
-          <el-select v-model="form.orgList" placeholder="请选择所属机构">
+          <el-select v-model="form.medicalOrganizationId" placeholder="请选择所属机构">
             <el-option
               v-for="item in orgList"
               :key="item.medicalOrganizationId"
@@ -61,6 +61,7 @@ export default {
         orgList: [],
         accountName: "",
         accountRole: "",
+        medicalOrganizationId: ''
       },
     };
   },
@@ -85,14 +86,17 @@ export default {
     },
     async updateOrInsertAccount() {
       let param = {
-        medicalAccountId: this.info.medicalAccountId || "",
-        loginAccount: this.info.loginAccount,
-        accountName: this.info.accountName,
-        orgId: "",
-        orgName: this.info.orgName,
-        accountRole: this.info.accountRole,
+        medicalAccountId: this.form.medicalAccountId || "",
+        loginAccount: this.form.loginAccount,
+        accountName: this.form.accountName,
+        orgId: this.form.medicalOrganizationId,
+        orgName: this.form.orgName,
+        accountRole: this.form.accountRole,
       };
-      let res = this.$http.updateOrInsertAccount(param);
+      let res = await this.$http.updateOrInsertAccount(param)
+      if(res && res.result && res.result.success) {
+        this.$emit('updateOrInsertAccount')
+      }
       console.log(res);
     },
   },

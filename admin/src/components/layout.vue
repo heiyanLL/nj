@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="12"><div class="icon-header-box"></div></el-col>
         <el-col :span="12" class="user-info-box">
-          <span>所属结构：顶山街道</span>
+          <span>所属机构：{{user.orgName}}</span>
           <el-dropdown @command="handleQuit">
             <span class="el-dropdown-link">
               下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>

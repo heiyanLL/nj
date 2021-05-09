@@ -2,7 +2,11 @@
   <div>
     <el-form :inline="true" size="small" :model="form">
       <el-form-item label="所属机构">
-        <el-select v-model="form.orgName" :clearable="true" placeholder="请选择所属机构">
+        <el-select
+          v-model="form.orgName"
+          :clearable="true"
+          placeholder="请选择所属机构"
+        >
           <el-option
             v-for="item in orgList"
             :key="item.medicalOrganizationId"
@@ -12,7 +16,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="用户角色">
-        <el-select v-model="form.accountRole" :clearable="true" placeholder="请选择用户角色">
+        <el-select
+          v-model="form.accountRole"
+          :clearable="true"
+          placeholder="请选择用户角色"
+        >
           <el-option
             v-for="item in userList"
             :key="item.name"
@@ -22,10 +30,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="关键词">
-        <el-input
-          v-model="form.param"
-          placeholder=""
-        ></el-input>
+        <el-input v-model="form.param" placeholder=""></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleQuery">查询</el-button>
@@ -43,6 +48,7 @@
       :dialogFormVisible="dialogFormVisible"
       :info="roleInfo"
       :orgList="orgList"
+      @updateOrInsertAccount="updateOrInsertAccount"
       @handleClose="dialogFormVisible = false"
     />
   </div>
@@ -95,8 +101,8 @@ export default {
     async queryOrgList() {
       let param = {
         loginAccount: this.user.loginAccount,
-        limit: 0,
-        offset:  100,
+        limit: this.limit,
+        offset:  this.offset,
         param: ''
       }
       let res = await this.$http.queryOrgList(param);
@@ -105,15 +111,7 @@ export default {
       }
     },
     handleQuery(e, reset) {
-      if (reset) {
-        this.form = {
-          orgName: "",
-          accountRole: "",
-          param: "",
-        };
-      }
-      this.limit = 0;
-      this.$refs.table.offset = CONST.PAGE_SIZE
+      if (reset) this.initParam()
       this.queryAccountList();
     },
     handleReset(e) {
@@ -127,6 +125,11 @@ export default {
       this.roleInfo = {};
       this.dialogFormVisible = true;
     },
+    updateOrInsertAccount() {
+      this.dialogFormVisible = false;
+      this.initParam()
+      this.queryOrgList()
+    },
     handleTable(scope, type) {
       if (type == "edit") {
         this.roleInfo = scope;
@@ -138,14 +141,16 @@ export default {
           type: "warning",
         })
           .then(() => {
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
+            this.$http.deleteAccountById({medicalAccountId: scope.medicalAccountId}).then(res => {
+              if(res && res.result && res.result.success) {
+                this.$message.success("删除成功!")
+                this.queryAccountList()
+              }
+            })
           })
           .catch(() => {});
       } else {
-        this.$confirm("您确定要对15951720555账号密码重置吗？", "提示", {
+        this.$confirm(`您确定要对 ${scope.accountName} 账号密码重置吗？`, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
         })
@@ -158,6 +163,15 @@ export default {
           .catch(() => {});
       }
     },
+    initParam() {
+      this.limit = 0;
+      this.form = {
+        orgName: "",
+        accountRole: "",
+        param: "",
+      }
+      this.$refs.table.offset = CONST.PAGE_SIZE
+    }
   },
 };
 </script>
