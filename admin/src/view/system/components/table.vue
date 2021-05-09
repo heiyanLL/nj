@@ -41,7 +41,7 @@
       :page-sizes="pageSizeList"
       :page-size.sync="offset"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="accountList.length"
+      :total="total"
       @size-change="handleListChange"
       @current-change="handleListChange"
     >
@@ -54,7 +54,8 @@ import { dateFormat } from "@/utils/tool";
 export default {
   name: "Table",
   props: {
-    accountList: Array
+    accountList: Array,
+    total: Number
   },
   data() {
     return {

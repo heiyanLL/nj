@@ -2,6 +2,7 @@ const NAV = [
   {
     path: '/',
     name: '审核管理',
+    icon: 'el-icon-s-order',
     children: [
       {
         path: 'audit/index',
@@ -11,7 +12,8 @@ const NAV = [
   },
   {
     path: '/sheet',
-    name: '报表统计',
+    name: '报销统计',
+    icon: 'el-icon-s-data',
     children: [
       {
         path: 'index',
@@ -22,6 +24,7 @@ const NAV = [
   {
     path: '/system',
     name: '系统管理',
+    icon: 'el-icon-s-platform',
     children: [
       {
         path: 'user',
@@ -36,10 +39,11 @@ const NAV = [
   {
     path: '/content',
     name: '内容发布',
+    icon: 'el-icon-s-claim',
     children: [
       {
         path: 'news',
-        name: '咨询管理'
+        name: '资讯管理'
       },
       {
         path: 'banner',
@@ -60,17 +64,14 @@ const NAV = [
   }
 ]
 const PAY_TYPE = [{
-  name: '全部',
-  value: ''
+  name: '职工医保报销',
+  value: '0'
 }, {
   name: '居民医保报销',
-  value: 0
-}, {
-  name: '职工医保报销',
-  value: 1
+  value: '1'
 }, {
   name: '生育报销',
-  value: 2
+  value: '2'
 }]
 
 const AUDIT_RESULT = [{
@@ -99,14 +100,11 @@ const ROLE_LIST = [{
 
 // 内容模块
 const PUBLISH_STATE = [{
-  name: "全部",
+  name: "隐藏",
   value: 0
 }, {
   name: "显示",
   value: 1
-}, {
-  name: "隐藏",
-  value: 2
 }]
 
 export default {

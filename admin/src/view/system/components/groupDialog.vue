@@ -14,7 +14,7 @@
           <el-input v-model="form.orgAddress"></el-input>
         </el-form-item>
         <el-form-item label="所属街道">
-          <el-input v-model="form.orgStreet"></el-input>
+          <el-input v-model="form.street"></el-input>
         </el-form-item>
         <el-form-item label="联系电话">
           <el-input v-model="form.orgPhone"></el-input>
@@ -40,7 +40,7 @@ export default {
       form: {
         orgName: '',
         orgAddress: '',
-        orgStreet: '',
+        street: '',
         orgPhone: '',
       },
     };
@@ -71,7 +71,7 @@ export default {
         orgName: this.form.orgName,
         orgPhone: this.form.orgPhone,
         orgAddress: this.form.orgAddress,
-        orgStreet: this.form.orgStreet,
+        street: this.form.street,
       };
       let res = await this.$http.updateOrInsertOrg(param)
       if(res && res.result && res.result.success) {

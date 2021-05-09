@@ -36,7 +36,7 @@
             }
         },
         data() {
-            // let that = this;
+            let that = this;
             return {
                 tinymceId: this.id || 'vue-tinymce'+ Date.parse(new Date()),
                 myValue :this.value,
@@ -54,22 +54,22 @@
                     height: 500,
                     //隐藏下方版本toolbar
                     statusbar: false,
-                    images_upload_url: '/demo/upimg.php',
-                    images_upload_base_path: '/demo',
+                    // images_upload_url: '/medical/help/uploadPictures',
+                    // images_upload_base_path: '',
                     //图片上传
-                    // images_upload_handler: function (blobInfo, success, failure) {
-                        //文件上传的formData传递，忘记为什么要用这个了
-                        // let formData = new FormData();
-                        // formData.append('file', blobInfo.blob(), blobInfo.filename());
-                        // //上传的api,和后端配合，返回的是图片的地址，然后加上公共的图片前缀
-                        // that.$api.system.uploadImage(formData).then(res=>{
-                        //     var url = Global.baseUrlImg + res;
-                        //     console.log(url)
-                        //     success(url)
-                        // }).catch(res => {
-                        //     failure('图片上传失败')
-                        // });
-                    // }
+                    images_upload_handler: function (blobInfo, success, failure) {
+                        // 文件上传的formData传递
+                        let formData = new FormData();
+                        formData.append('files', blobInfo.blob(), blobInfo.filename());
+                        //上传的api,和后端配合，返回的是图片的地址，然后加上公共的图片前缀
+                        that.$http.uploadPictures(formData).then(res=>{
+                            let base ="http://121.196.42.224:8080/medical/help/downloadFile?medicalPicId="
+                            let src = base + res.picIds[0]
+                            success(src)
+                        }).catch(res => {
+                            failure('图片上传失败:' + res)
+                        });
+                    }
                 }
             }
         },

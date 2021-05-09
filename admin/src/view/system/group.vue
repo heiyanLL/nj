@@ -16,6 +16,7 @@
     <Table
       ref="table"
       :orgList="orgList"
+      :total="total"
       @handleTable="handleTable"
       @handleListChange="handleListChange"
     />
@@ -40,6 +41,7 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
+      total: 0,
       form: {
         param: "",
       },
@@ -65,6 +67,7 @@ export default {
       let res = await this.$http.queryOrgList(param);
       if (res && res.orgList) {
         this.orgList = res.orgList;
+        this.total = res.size;
       }
     },
     handleQuery(e, reset) {

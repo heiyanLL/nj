@@ -41,6 +41,7 @@
     <Table
       ref="table"
       :accountList="accountList"
+      :total="total"
       @handleTable="handleTable"
       @handleListChange="handleListChange"
     />
@@ -69,6 +70,7 @@ export default {
   data() {
     return {
       orgList: [],
+      total: 0,
       userList: CONST.ROLE_LIST,
       form: {
         orgName: "",
@@ -82,8 +84,8 @@ export default {
     };
   },
   mounted() {
-    this.queryAccountList()
-    this.queryOrgList()
+    this.queryAccountList();
+    this.queryOrgList();
   },
   methods: {
     async queryAccountList() {
@@ -96,22 +98,23 @@ export default {
       let res = await this.$http.queryAccountList(param);
       if (res && res.accountList) {
         this.accountList = res.accountList;
+        this.total = res.size
       }
     },
     async queryOrgList() {
       let param = {
         loginAccount: this.user.loginAccount,
         limit: this.limit,
-        offset:  this.offset,
-        param: ''
-      }
+        offset: this.offset,
+        param: "",
+      };
       let res = await this.$http.queryOrgList(param);
       if (res && res.orgList) {
         this.orgList = res.orgList;
       }
     },
     handleQuery(e, reset) {
-      if (reset) this.initParam()
+      if (reset) this.initParam();
       this.queryAccountList();
     },
     handleReset(e) {
@@ -127,8 +130,8 @@ export default {
     },
     updateOrInsertAccount() {
       this.dialogFormVisible = false;
-      this.initParam()
-      this.queryOrgList()
+      this.initParam();
+      this.queryOrgList();
     },
     handleTable(scope, type) {
       if (type == "edit") {
@@ -141,19 +144,25 @@ export default {
           type: "warning",
         })
           .then(() => {
-            this.$http.deleteAccountById({medicalAccountId: scope.medicalAccountId}).then(res => {
-              if(res && res.result && res.result.success) {
-                this.$message.success("删除成功!")
-                this.queryAccountList()
-              }
-            })
+            this.$http
+              .deleteAccountById({ medicalAccountId: scope.medicalAccountId })
+              .then((res) => {
+                if (res && res.result && res.result.success) {
+                  this.$message.success("删除成功!");
+                  this.queryAccountList();
+                }
+              });
           })
           .catch(() => {});
       } else {
-        this.$confirm(`您确定要对 ${scope.accountName} 账号密码重置吗？`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-        })
+        this.$confirm(
+          `您确定要对 ${scope.accountName} 账号密码重置吗？`,
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+          }
+        )
           .then(() => {
             this.$message({
               type: "success",
@@ -169,9 +178,9 @@ export default {
         orgName: "",
         accountRole: "",
         param: "",
-      }
-      this.$refs.table.offset = CONST.PAGE_SIZE
-    }
+      };
+      this.$refs.table.offset = CONST.PAGE_SIZE;
+    },
   },
 };
 </script>

@@ -5,7 +5,7 @@
       <el-table-column prop="orgName" label="机构名称">
       </el-table-column>
       <el-table-column prop="orgAddress" label="地址"> </el-table-column>
-      <el-table-column prop="orgStreet" label="所属街道"> </el-table-column>
+      <el-table-column prop="street" label="所属街道"> </el-table-column>
       <el-table-column prop="orgPhone" label="联系电话"> </el-table-column>
       <el-table-column prop="date" label="创建时间"> </el-table-column>
       <el-table-column label="操作" width="150">
@@ -27,11 +27,11 @@
     </el-table>
     <el-pagination
       background
-      :current-page="currentPage"
+      :current-page.sync="currentPage"
       :page-sizes="pageSizeList"
       :page-size.sync="offset"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="orgList.length"
+      :total="total"
       @size-change="handleListChange"
       @current-change="handleListChange"
     >
@@ -44,6 +44,7 @@ export default {
   name: "Table",
   props: {
     orgList: Array,
+    total: Number
   },
   data() {
     return {

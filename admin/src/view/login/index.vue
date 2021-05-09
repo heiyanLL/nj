@@ -29,6 +29,7 @@
 </template>
 <script>
 import { mapMutations } from "vuex";
+import { encrypt } from "@/utils/tool";
 export default {
   data() {
     return {
@@ -38,13 +39,21 @@ export default {
       },
     };
   },
+  computed: {
+    formEncrypt() {
+      return {
+        loginAccount: this.form.loginAccount,
+        passWord: encrypt(this.form.passWord),
+      }
+    }
+  },
   methods: {
-    ...mapMutations(['SET_USER']),
+    ...mapMutations(["SET_USER"]),
     async handleLogin() {
-      let res = await this.$http.login(this.form);
+      let res = await this.$http.login(this.formEncrypt);
       if (res && res.result && res.result.success) {
-        this.SET_USER(res.accountList[0])
-        this.$router.push({path: '/'})
+        this.SET_USER(res.accountList[0]);
+        this.$router.push({ path: "/" });
       }
     },
   },

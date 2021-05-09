@@ -8,127 +8,160 @@ const router = new VueRouter({
     routes: [
         {
             path: '/',
-            name: '审核管理',
+            name: 'audit',
             redirect: '/audit/index',
             component: LAYOUT,
+            meta: {
+                title: '审核管理'
+            },
             children: [
                 {
                     path: 'audit/index',
-                    name: '报销审核',
+                    name: 'auditIndex',
                     component: () => import("@/view/audit/index"),
                     meta: {
-                        bread: [{ name: '审核管理' }]
+                        bread: [{ title: '审核管理' }],
+                        title: '报销审核'
                     }
                 },
                 {
                     path: 'audit/index/detail',
-                    name: '医保报销',
+                    name: 'auditDetails',
                     component: () => import("@/view/audit/detail"),
                     meta: {
-                        bread: [{ name: '审核管理' }, { name: '报销审核', src: '/audit/index' }]
+                        bread: [{ title: '审核管理' }, { title: '报销审核', src: '/audit/index' }],
+                        title: '审核详情'
                     }
                 }
             ]
         },
         {
             path: '/login',
-            name: '登陆',
+            name: 'login',
             component: () => import("@/view/login"),
             meta: {
-                isLogin: true
+                isLogin: true,
+                title: '登录'
             }
         },
         {
             path: '/sheet',
-            name: '报表统计',
+            name: 'sheet',
             component: LAYOUT,
             redirect: '/sheet/index',
+            meta: {
+                title: '报销统计'
+            },
             children: [
                 {
                     path: 'index',
-                    name: '统计分析',
+                    name: 'sheetIndex',
                     component: () => import('@/view/sheet'),
                     meta: {
-                        bread: [{ name: '报表统计' }]
+                        bread: [{ title: '报销统计' }],
+                        title: '统计分析'
                     }
                 }
             ]
         },
         {
             path: '/system',
-            name: '系统管理',
+            name: 'system',
             component: LAYOUT,
             redirect: '/system/user',
+            meta: {
+                title: '系统管理'
+            },
             children: [
                 {
                     path: 'user',
-                    name: '账号管理',
+                    name: 'user',
                     component: () => import('@/view/system'),
                     meta: {
-                        bread: [{ name: '系统管理' }]
+                        bread: [{ title: '系统管理' }],
+                        title: '账号管理'
                     }
                 },
                 {
                     path: 'group',
-                    name: '机构管理',
+                    name: 'group',
                     component: () => import('@/view/system/group'),
                     meta: {
-                        bread: [{ name: '系统管理' }]
+                        bread: [{ title: '系统管理' }],
+                        title: '机构管理'
                     }
                 }
             ]
         },
         {
             path: '/content',
-            name: '内容发布',
+            name: 'content',
             component: LAYOUT,
             redirect: '/content/news',
+            meta: {
+                title: '内容发布'
+            },
             children: [
                 {
                     path: 'news',
-                    name: '咨询管理',
+                    name: 'news',
                     component: () => import("@/view/content/news"),
                     meta: {
-                        bread: [{ name: '内容发布' }]
+                        bread: [{ title: '内容发布' }],
+                        title: '资讯管理'
                     }
                 },
                 {
                     path: 'banner',
-                    name: 'banner管理',
+                    name: 'banner',
                     component: () => import("@/view/content/news"),
                     meta: {
-                        bread: [{ name: '内容发布' }]
+                        bread: [{ title: '内容发布' }],
+                        title: 'banner管理'
                     }
                 },
                 {
                     path: 'help',
-                    name: '帮助中心',
+                    name: 'help',
                     component: () => import("@/view/content/help"),
                     meta: {
-                        bread: [{ name: '内容发布' }]
+                        bread: [{ title: '内容发布' }],
+                        title: '帮助中心'
                     }
                 },
                 {
                     path: 'help/add',
-                    name: '新增帮助',
+                    name: 'helpAdd',
                     component: () => import("@/view/content/helpAdd"),
                     meta: {
-                        bread: [{ name: '内容发布' }, { name: '帮助中心', src: '/content/help' }]
+                        bread: [{ title: '内容发布' }, { title: '帮助中心', src: '/content/help' }],
+                        title: '添加帮助'
                     }
                 },
                 {
                     path: 'news/add',
-                    name: '添加咨询',
+                    name: 'newsAdd',
                     component: () => import("@/view/content/newsAdd"),
                     meta: {
-                        bread: [{ name: '内容发布' }, { name: '咨询管理', src: '/content/news' }]
+                        bread: [{ title: '内容发布' }, { title: '资讯管理', src: '/content/news' }],
+                        title: '添加资讯'
+                    }
+                },
+                {
+                    path: 'banner/add',
+                    name: 'bannerAdd',
+                    component: () => import("@/view/content/newsAdd"),
+                    meta: {
+                        bread: [{ title: '内容发布' }, { title: 'banner管理', src: '/content/banner' }],
+                        title: '添加banner'
                     }
                 },
                 {
                     path: 'public',
-                    name: '公告',
+                    name: 'public',
                     meta: {
-                        bread: [{ name: '内容发布' }]
+                        bread: [{ name: '内容发布' }],
+                        title: '公告'
                     }
                 }
             ]

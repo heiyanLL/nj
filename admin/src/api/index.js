@@ -87,9 +87,9 @@ import fetch from '@/utils/fetch'
      /**内容 */
      /**咨询与banner */
      // 资讯与banner列表查询
-     queryNewsList(param) {
+     describeNewsList(param) {
          return fetch({
-            url: '/medical/news/queryNewsList',
+            url: '/medical/news/describeNewsList',
             params: param
          })
      },
@@ -108,10 +108,11 @@ import fetch from '@/utils/fetch'
          })
      },
      // 资讯新增/修改
-     updateOrInsertnews(param) {
+     updateOrInsertNews(param) {
          return fetch({
-            url: '/medical/news/updateOrInsertnews',
-            params: param
+            url: '/medical/news/updateOrInsertNews',
+            method: 'post',
+            data: param
          })
      },
      // 删除资讯
@@ -133,7 +134,8 @@ import fetch from '@/utils/fetch'
      updateOrInsertHelp(param) {
          return fetch({
             url: '/medical/help/updateOrInsertHelp',
-            params: param
+            method: 'post',
+            data: param
          })
      },
      // 删除帮助中心数据
@@ -155,7 +157,8 @@ import fetch from '@/utils/fetch'
      uploadPictures(param) {
          return fetch({
             url: '/medical/help/uploadPictures',
-            params: param
+            method: 'POST',
+            data: param
          })
      },
 

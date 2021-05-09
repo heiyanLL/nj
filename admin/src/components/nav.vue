@@ -16,7 +16,7 @@
         :index="'' + index"
       >
         <template slot="title">
-          <i class="el-icon-location"></i>
+          <i :class="item.icon"></i>
           <span slot="title">{{ item.name }}</span>
         </template>
         <template v-if="item.children">
@@ -63,6 +63,9 @@ export default {
     color: #fff;
   }
   /deep/ .el-icon-arrow-down:before{
+    color: #fff;
+  }
+  /deep/ .el-submenu__title i{
     color: #fff;
   }
 }

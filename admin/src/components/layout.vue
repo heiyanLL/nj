@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="12"><div class="icon-header-box"></div></el-col>
         <el-col :span="12" class="user-info-box">
-          <span>所属机构：{{user.orgName}}</span>
+          <span>所属机构：{{ user.orgName }}</span>
           <el-dropdown @command="handleQuit">
             <span class="el-dropdown-link">
               下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
@@ -26,7 +26,11 @@
         <router-view class="content-box" />
       </el-main>
     </el-container>
-    <el-dialog title="修改密码" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+    <el-dialog
+      title="修改密码"
+      :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
+    >
       <el-form :model="form">
         <el-form-item label="原密码" label-width="100px">
           <el-input v-model="form.oldPass" autocomplete="off"></el-input>
@@ -40,9 +44,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateAccountPass"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="updateAccountPass">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -63,33 +65,33 @@ export default {
     return {
       dialogFormVisible: false,
       form: {
-        oldPass: '',
-        newPass: '',
-        newPassC: ''
-      }
-    }
+        oldPass: "",
+        newPass: "",
+        newPassC: "",
+      },
+    };
   },
   methods: {
     handleQuit(command) {
       if (command == "quit") {
         this.$router.push({ path: "/login" });
-      }else if(command == 'edit') {
-        this.dialogFormVisible = true
+      } else if (command == "edit") {
+        this.dialogFormVisible = true;
       }
     },
     async updateAccountPass() {
       let param = {
         loginAccount: this.user.loginAccount,
-        newPass: this.form.newPass
-      }
-      let res = await this.$http.updateAccountPass(param)
-      if(res && res.result && res.result.success) {
+        newPass: this.form.newPass,
+      };
+      let res = await this.$http.updateAccountPass(param);
+      if (res && res.result && res.result.success) {
         this.$message({
-          message: '修改成功',
-          type: 'success'
-        })
+          message: "修改成功",
+          type: "success",
+        });
       }
-    }
+    },
   },
 };
 </script>
@@ -127,6 +129,7 @@ export default {
       display: inline-block;
       background: url("~@/assets/icon-header.png") no-repeat;
       background-size: 100% 100%;
+      vertical-align: middle;
     }
   }
 }
