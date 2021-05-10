@@ -55,7 +55,7 @@ export default {
         publishStatus: "",
         param: "",
       },
-      limit: 0,
+      limit: 1,
       total: 0,
     };
   },
@@ -80,11 +80,11 @@ export default {
       }
     },
     handleListChange(limit) {
-      this.limit = limit - 1;
+      this.limit = limit;
       this.describeNewsList();
     },
     initParam() {
-      this.limit = 0;
+      this.limit = 1;
       this.form = {
         publishStatus: "",
         param: "",

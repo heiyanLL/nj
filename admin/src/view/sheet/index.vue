@@ -98,10 +98,9 @@ export default {
               show: false,
             },
             data: [
-              { value: 1048, name: "搜索引擎" },
-              { value: 735, name: "直接访问" },
-              { value: 580, name: "邮件营销" },
-              { value: 484, name: "联盟广告" }
+              { value: 1048, name: "居民医保报销" },
+              { value: 735, name: "职工医保报销" },
+              { value: 580, name: "生育医保报销" }
             ],
           },
         ],

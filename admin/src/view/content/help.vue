@@ -52,7 +52,7 @@ export default {
         reimburseType: "",
         param: "",
       },
-      limit: 0,
+      limit: 1,
       total: 0,
       helpList: [],
     };
@@ -91,7 +91,7 @@ export default {
         .catch(() => {});
     },
     handleListChange(limit) {
-      this.limit = limit - 1;
+      this.limit = limit;
       this.queryHelpList();
     },
   },

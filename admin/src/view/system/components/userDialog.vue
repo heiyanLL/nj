@@ -97,7 +97,6 @@ export default {
       if(res && res.result && res.result.success) {
         this.$emit('updateOrInsertAccount')
       }
-      console.log(res);
     },
   },
 };

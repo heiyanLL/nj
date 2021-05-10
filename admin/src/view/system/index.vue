@@ -80,7 +80,7 @@ export default {
       dialogFormVisible: false,
       accountList: [],
       roleInfo: {},
-      limit: 0,
+      limit: 1,
     };
   },
   mounted() {
@@ -121,7 +121,7 @@ export default {
       this.handleQuery(e, "reset");
     },
     handleListChange(limit) {
-      this.limit = limit - 1;
+      this.limit = limit;
       this.queryAccountList();
     },
     addAccount() {
@@ -131,7 +131,7 @@ export default {
     updateOrInsertAccount() {
       this.dialogFormVisible = false;
       this.initParam();
-      this.queryOrgList();
+      this.queryAccountList();
     },
     handleTable(scope, type) {
       if (type == "edit") {
@@ -164,16 +164,21 @@ export default {
           }
         )
           .then(() => {
-            this.$message({
-              type: "success",
-              message: "重置成功!",
-            });
+            let param = {
+              loginAccount: this.user.loginAccount,
+              operationAccount: scope.loginAccount
+            }
+            this.$http.initializationPassWord(param).then(res => {
+              if(res && res.result && res.result.success) {
+                this.$message.success("重置成功")
+              }
+            })
           })
           .catch(() => {});
       }
     },
     initParam() {
-      this.limit = 0;
+      this.limit = 1;
       this.form = {
         orgName: "",
         accountRole: "",

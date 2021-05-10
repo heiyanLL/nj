@@ -56,10 +56,7 @@ const NAV = [
       },
       {
         path: 'public',
-        name: '公告',
-        meta: {
-          prev: '内容发布'
-        }
+        name: '公告'
       }
     ]
   }

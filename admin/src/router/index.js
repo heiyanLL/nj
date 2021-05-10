@@ -18,7 +18,7 @@ const router = new VueRouter({
                 {
                     path: 'audit/index',
                     name: 'auditIndex',
-                    component: () => import("@/view/audit/index"),
+                    component: () => import(/* webpackChunkName: "audit" */ "@/view/audit/index"),
                     meta: {
                         bread: [{ title: '审核管理' }],
                         title: '报销审核'
@@ -27,7 +27,7 @@ const router = new VueRouter({
                 {
                     path: 'audit/index/detail',
                     name: 'auditDetails',
-                    component: () => import("@/view/audit/detail"),
+                    component: () => import(/* webpackChunkName: "audit" */ "@/view/audit/detail"),
                     meta: {
                         bread: [{ title: '审核管理' }, { title: '报销审核', src: '/audit/index' }],
                         title: '审核详情'
@@ -38,7 +38,7 @@ const router = new VueRouter({
         {
             path: '/login',
             name: 'login',
-            component: () => import("@/view/login"),
+            component: () => import(/* webpackChunkName: "login" */ "@/view/login"),
             meta: {
                 isLogin: true,
                 title: '登录'
@@ -56,7 +56,7 @@ const router = new VueRouter({
                 {
                     path: 'index',
                     name: 'sheetIndex',
-                    component: () => import('@/view/sheet'),
+                    component: () => import(/* webpackChunkName: "sheet" */ '@/view/sheet'),
                     meta: {
                         bread: [{ title: '报销统计' }],
                         title: '统计分析'
@@ -76,7 +76,7 @@ const router = new VueRouter({
                 {
                     path: 'user',
                     name: 'user',
-                    component: () => import('@/view/system'),
+                    component: () => import(/* webpackChunkName: "system" */ '@/view/system'),
                     meta: {
                         bread: [{ title: '系统管理' }],
                         title: '账号管理'
@@ -85,7 +85,7 @@ const router = new VueRouter({
                 {
                     path: 'group',
                     name: 'group',
-                    component: () => import('@/view/system/group'),
+                    component: () => import(/* webpackChunkName: "system" */ '@/view/system/group'),
                     meta: {
                         bread: [{ title: '系统管理' }],
                         title: '机构管理'
@@ -105,7 +105,7 @@ const router = new VueRouter({
                 {
                     path: 'news',
                     name: 'news',
-                    component: () => import("@/view/content/news"),
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/news"),
                     meta: {
                         bread: [{ title: '内容发布' }],
                         title: '资讯管理'
@@ -114,7 +114,7 @@ const router = new VueRouter({
                 {
                     path: 'banner',
                     name: 'banner',
-                    component: () => import("@/view/content/news"),
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/news"),
                     meta: {
                         bread: [{ title: '内容发布' }],
                         title: 'banner管理'
@@ -123,7 +123,7 @@ const router = new VueRouter({
                 {
                     path: 'help',
                     name: 'help',
-                    component: () => import("@/view/content/help"),
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/help"),
                     meta: {
                         bread: [{ title: '内容发布' }],
                         title: '帮助中心'
@@ -132,7 +132,7 @@ const router = new VueRouter({
                 {
                     path: 'help/add',
                     name: 'helpAdd',
-                    component: () => import("@/view/content/helpAdd"),
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/helpAdd"),
                     meta: {
                         bread: [{ title: '内容发布' }, { title: '帮助中心', src: '/content/help' }],
                         title: '添加帮助'
@@ -141,7 +141,7 @@ const router = new VueRouter({
                 {
                     path: 'news/add',
                     name: 'newsAdd',
-                    component: () => import("@/view/content/newsAdd"),
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/newsAdd"),
                     meta: {
                         bread: [{ title: '内容发布' }, { title: '资讯管理', src: '/content/news' }],
                         title: '添加资讯'
@@ -150,7 +150,7 @@ const router = new VueRouter({
                 {
                     path: 'banner/add',
                     name: 'bannerAdd',
-                    component: () => import("@/view/content/newsAdd"),
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/newsAdd"),
                     meta: {
                         bread: [{ title: '内容发布' }, { title: 'banner管理', src: '/content/banner' }],
                         title: '添加banner'
@@ -159,8 +159,9 @@ const router = new VueRouter({
                 {
                     path: 'public',
                     name: 'public',
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/notice"),
                     meta: {
-                        bread: [{ name: '内容发布' }],
+                        bread: [{ title: '内容发布' }],
                         title: '公告'
                     }
                 }
