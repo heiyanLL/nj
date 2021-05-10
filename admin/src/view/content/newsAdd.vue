@@ -44,7 +44,7 @@ export default {
         newsType: this.$route.name == "newsAdd" ? "0" : "1",
         newsTitle: "",
         newsLink: "",
-        newsHtml: "",
+        newsText: "",
         newsPic: [],
       },
       debounce: _debounce(this.editorInput),
@@ -56,7 +56,7 @@ export default {
       console.log(res)
     },
     editorInput(v) {
-      this.form.newsHtml = v;
+      this.form.newsText = v;
     },
     onSubmit() {
         this.updateOrInsertNews()

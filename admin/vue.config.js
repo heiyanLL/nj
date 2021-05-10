@@ -29,8 +29,12 @@ module.exports = {
     }
   },
   chainWebpack: config => {
+    // 移除 prefetch 插件
+    config.plugins.delete('prefetch')
+
     // 修复HMR
     config.resolve.symlinks(true);
+    // 别名设置
     config.resolve.alias
       .set("@", resolve("src"))
   },
