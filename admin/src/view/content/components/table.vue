@@ -7,7 +7,7 @@
       </el-table-column>
       <el-table-column prop="image" label="缩略图">
         <template>
-          <el-button type="text" size="small">查看</el-button>
+          <el-button type="text" size="small" @click="previewImage">查看</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -90,6 +90,9 @@ export default {
     },
     handleListChange() {
       this.$emit("handleListChange", this.currentPage);
+    },
+    previewImage() {
+      this.$Preview()
     },
     handleTable(scope, type) {
       switch (type) {
