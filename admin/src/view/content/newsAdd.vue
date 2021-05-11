@@ -14,11 +14,12 @@
         <el-upload
           class="upload-demo"
           action="/medical/help/uploadPictures"
-          :file-list="form.newsPic"
+          :file-list="fileList"
           list-type="picture"
-          limit="1"
+          :limit="1"
           name="files"
           accept="image/jpg, image/jpeg, image/png"
+          :on-success="handleImageSuccess"
         >
           <el-button size="small" type="primary">点击上传</el-button>
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
@@ -33,6 +34,7 @@
 <script>
 import { _debounce } from "@/utils/tool";
 import TinymceEditor from "@/components/tEditor";
+import CONST from '@/data/const';
 export default {
   components: {
     TinymceEditor,
@@ -45,22 +47,51 @@ export default {
         newsTitle: "",
         newsLink: "",
         newsText: "",
-        newsPic: [],
+        newsPic: "",
       },
-      debounce: _debounce(this.editorInput),
+      fileList: [],
+      debounce: _debounce(this.editorInput, 300),
     };
+  },
+  created() {
+    this.form.medicalNewsId = this.$route.params.id || ''
+    this.queryNewsData()
   },
   methods: {
     async updateOrInsertNews() {
-      let res = await this.$http.updateOrInsertNews(this.form);
+      let res = await this.$http.updateOrInsertNews({
+        ...this.form
+      });
+      if (res && res.result && res.result.success) {
+        let path =
+          this.$route.name == "newsAdd" ? "/content/news" : "/content/banner";
+        this.$router.push({ path: path });
+      }
+    },
+    async queryNewsData() {
+      if(!this.form.medicalNewsId) return
+      let res = await this.$http.queryNewsData({medicalNewsId: this.form.medicalNewsId})
+      if(res && res.medicalNew) {
+        res = res.medicalNew
+        this.form.newsTitle = res.newsTitle
+        this.form.newsLink = res.newsLink
+        this.form.newsText = res.newsText
+        this.form.newsPic = res.newsPic
+      }
       console.log(res)
     },
     editorInput(v) {
       this.form.newsText = v;
     },
+    handleImageSuccess(response, file, fileList) {
+      if(response?.picIds) {
+        this.form.newsPic = CONST.BASE_UPLOAD + response.picIds[0]
+      }
+      console.log(response, file, fileList)
+    },
     onSubmit() {
-        this.updateOrInsertNews()
-    }
+      this.updateOrInsertNews();
+    },
   },
 };
 </script>

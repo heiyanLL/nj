@@ -5,6 +5,7 @@ const LAYOUT = () => import('@/components/layout')
 
 const router = new VueRouter({
     mode: 'history',
+    base: '/jiangbei-medical/mage/dist/',
     routes: [
         {
             path: '/',
@@ -148,12 +149,30 @@ const router = new VueRouter({
                     }
                 },
                 {
+                    path: 'news/add/:id',
+                    name: 'newsAdd',
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/newsAdd"),
+                    meta: {
+                        bread: [{ title: '内容发布' }, { title: '资讯管理', src: '/content/news' }],
+                        title: '添加资讯'
+                    }
+                },
+                {
                     path: 'banner/add',
                     name: 'bannerAdd',
                     component: () => import(/* webpackChunkName: "content" */ "@/view/content/newsAdd"),
                     meta: {
                         bread: [{ title: '内容发布' }, { title: 'banner管理', src: '/content/banner' }],
                         title: '添加banner'
+                    }
+                },
+                {
+                    path: 'banner/add/:id',
+                    name: 'bannerAdd',
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/newsAdd"),
+                    meta: {
+                        bread: [{ title: '内容发布' }, { title: 'banner管理', src: '/content/banner' }],
+                        title: '编辑banner'
                     }
                 },
                 {

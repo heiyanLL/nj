@@ -66,17 +66,18 @@ export default {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: url("~@/assets/11.jpeg");
+  background: url("~@/assets/home.png");
+  background-size: cover;
   .el-form {
     width: 300px;
     height: 300px;
     padding: 50px;
     position: absolute;
     border-radius: 12px;
-    left: 50%;
+    right: 200px;
     top: 50%;
     background: #fff;
-    transform: translate(-50%, -50%);
+    transform: translate(0, -50%);
     .el-button {
       width: 100%;
       margin-top: 50px;

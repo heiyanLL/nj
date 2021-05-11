@@ -117,8 +117,11 @@ export default {
               }
             });
           break;
-        case "edit":
+        case "edit":{
+          let path = scope.newsType == 1 ? `/content/banner/add/${scope.medicalNewsId}` : `/content/news/add/${scope.medicalNewsId}`
+          this.$router.push({path: path})
           break;
+        }
         case "delete": {
           this.$confirm("您确定要删除吗？", "提示", {
             confirmButtonText: "确定",

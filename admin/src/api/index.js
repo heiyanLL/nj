@@ -114,6 +114,13 @@ export default {
             params: param
         })
     },
+    // 资讯与banner详情查询
+    queryNewsData(param) {
+        return fetch({
+            url: '/medical/news/queryNewsData',
+            params: param
+        })
+    },
     // 置顶
     newsTop(param) {
         return fetch({
