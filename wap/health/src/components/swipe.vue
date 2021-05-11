@@ -1,19 +1,18 @@
 <template>
-        <div class="swipe" :ref="swipeOpts.name"  :id="swipeOpts.name" >
-            <ul class="swipe-ul" autoexpo="true"> 
-                <li v-for="(value,idx) in swipeData" :key="idx" class="lazybox">
-                    <!-- :href="value.newsLink"  -->
-                    <a href="javacript:;" @click.stop.prevent="$router.push({path:'/everydetail/1_'+value.medicalNewsId})">
-                        <img v-if="idx==0" :src="value.newsPic">
-                        <img v-if="idx!=0" :data-src2="value.newsPic">
-                    </a>
-                </li>
-            </ul>
-            <ul class="trigger" :ref="swipeOpts.name+'Trigger'" v-show="swipeData.length>1">
-                <li   class="cur" ></li>
-                <li   v-for="(value,idx) in swipeData" v-if="idx!=0" :key="idx"></li>
-            </ul>
-        </div>
+    <div class="swipe" :ref="swipeOpts.name"  :id="swipeOpts.name" >
+        <ul class="swipe-ul" autoexpo="true"> 
+            <li v-for="(value,idx) in swipeData" :key="idx" class="lazybox">
+                <a href="javacript:;" @click.stop.prevent="gotodetail(value)">
+                    <img v-if="idx==0" :src="value.newsPic | imageUrl">
+                    <img v-if="idx!=0" :data-src2="value.newsPic | imageUrl">
+                </a>
+            </li>
+        </ul>
+        <ul class="trigger" :ref="swipeOpts.name+'Trigger'" v-show="swipeData.length>1">
+            <li   class="cur" ></li>
+            <li   v-for="(value,idx) in swipeData" v-if="idx!=0" :key="idx"></li>
+        </ul>
+    </div>
 </template>
 
 <script>
@@ -36,15 +35,19 @@ export default {
 		
 	},
 	mounted () {
-        let _this=this
-		setTimeout(function(){
-            if(_this.swipeData.length>1){
-                _this.swipe(_this.swipeOpts.name,_this.swipeOpts.auto);
-            }
-			
-		},0)
+        let _this = this
+        setTimeout(()=>{
+            _this.swipe(_this.swipeOpts.name,_this.swipeOpts.auto);
+        },100)
 	},
 	methods: {
+        gotodetail(value){
+            if(value.newsLink){
+                window.location.href = value.newsLink
+            }else{
+                this.$router.push({path:'/everydetail/1_'+value.medicalNewsId})
+            }
+        },
 		swipe(el,auto) {
                 let _this=this
                 let lis= _this.$refs[el+"Trigger"].querySelectorAll("li")
@@ -61,7 +64,6 @@ export default {
                             idx=idx-lis.length
                         }
                         lis[idx].classList.add("cur")
-
                     }
                 }); 
 			}
@@ -95,7 +97,9 @@ export default {
     margin: 0;
     overflow: hidden;
 }
-
+.banner .swipe li{
+    height:5.84rem;
+}
 .banner .swipe li img {
     width:100%;
     height:5.84rem;

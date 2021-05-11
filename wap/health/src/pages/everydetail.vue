@@ -67,6 +67,10 @@ export default {
                         medicalNewsId:id
                     }
                 }).then(res => {
+                    console.log(id,'--资讯banner详情-->',res)
+                    _this.title = res.data.medicalNew.newsTitle
+                    _this.time = res.data.medicalNew.publishTime
+                    _this.content = res.data.medicalNew.newsText
                     resolve(res)
                 }).catch(e => {
                     console.log(e)
@@ -93,5 +97,6 @@ export default {
 }
 .content{
     font-size:0.58rem;
+    margin-top:0.24rem;
 }
 </style>

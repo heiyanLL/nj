@@ -1,5 +1,6 @@
 <template>
     <div class="jumin">
+        <div class="loagMask2" v-if="loading"><div class="mask-loading fixedLoading"></div></div>
         <div class="toptitle">生育医保报销</div>
         <div class="step-list">
             <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div><span></span>   
@@ -27,11 +28,11 @@
             <div class="toptitle">生育或计生手术当月所在参保单位</div>
             <div class="question-bar">
                 <div class="attr"><em>*</em>参保单位</div>
-                <div class="answer-list ipt"><input type="text" placeholder="请输入参保单位"/></div>
+                <div class="answer-list ipt"><input type="text" placeholder="请输入参保单位" v-model="reimburseUnit"/></div>
             </div>
             <div class="question-bar">
                 <div class="attr"><em>*</em>单位社保代码</div>
-                <div class="answer-list ipt"><input type="text" placeholder="请输入单位社保代码" /></div>
+                <div class="answer-list ipt"><input type="text" placeholder="请输入单位社保代码" v-model="companySocialCode" /></div>
             </div>
             <div class="question-bar">
                 <div class="attr"><em>*</em>报销人</div>
@@ -39,7 +40,7 @@
             </div>
             <div class="question-bar">
                 <div class="attr"><em>*</em>报销人身份证号</div>
-                <div class="answer-list ipt"><input type="text" placeholder="请输入报销人身份证号" v-model="selftel" /></div>
+                <div class="answer-list ipt"><input type="text" placeholder="请输入报销人身份证号" v-model="reimburseCardNo" /></div>
             </div>
             <div class="question-bar">
                 <div class="attr"><em>*</em>性别</div>
@@ -82,84 +83,86 @@
                         <div class="radio-btn" @click="birthBabyNo='1'"><em :class="['round',birthBabyNo=='1'?'cur':'']"></em>一胎</div>
                     </div>
                 </div>
-            
                 <!-- 男，生育 -->
                 <!-- 配偶无保险 -->
-                <div class="midtitle" v-if="reimbursePeopleSex=='1'&&declareType=='1'&&declareTypeTwo=='1'">护理假津贴、男职工配偶分娩报销</div>   
-                <div class="midtitle" v-if="reimbursePeopleSex=='1'&&declareType=='1'&&declareTypeTwo=='2'">护理假津贴</div>
-                <div class="midtitle" v-if="reimbursePeopleSex=='2'&&declareType=='1'">津贴及营养费、分娩费用报销</div>
+                <div class="midtitle" v-if="reimbursePeopleSex=='1'&&declareTypeTwo=='1'">护理假津贴、男职工配偶分娩报销</div>   
+                <div class="midtitle" v-if="reimbursePeopleSex=='1'&&declareTypeTwo=='2'">护理假津贴</div>
+                <div class="midtitle" v-if="reimbursePeopleSex=='2'">津贴及营养费、分娩费用报销</div>
             
                 <div class="question-bar">
                     <div class="attr bottom-none"><em>*</em>上传结婚证或离婚证<span class="a1">（请确保上传的图像清晰）</span></div>
                     <div class="upfile">
                         <div class="operation-div">
-                            <img class="shoImg" :src="imgDefault">
+                            <div class="img-wrap" v-for="(v,i) in marriageCertificate" :key="i">
+                                <em class="close" @click="deletesth('marriageCertificate',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event)"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'marriageCertificate')"/>
                         </div>
-                        <!-- {{marriageCertificate}} -->
-                        <!-- 显示上传图片的区域 -->
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr bottom-none">上传出院小结或者门诊病历<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none"><em>*</em>上传出院小结或者门诊病历</div>
                     <div class="upfile">
                         <div class="operation-div">
-                            <img class="shoImg" :src="imgDefault">
+                            <div class="img-wrap" v-for="(v,i) in medicalRecord" :key="i">
+                                <em class="close" @click="deletesth('medicalRecord',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event)"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'medicalRecord')"/>
                         </div>
-                        <!-- {{medicalRecord}} -->
-                        <!-- 显示上传图片的区域 -->
                     </div>
                 </div>
-                <div class="question-bar" v-if="reimbursePeopleSex=='1'&&declareType=='1'&&declareTypeTwo=='1' || reimbursePeopleSex=='2'&&declareType=='1'">
-                    <div class="attr bottom-none">上传产检及分娩发票<span class="a1">（请确保上传的图像清晰）</span></div>
+                <div class="question-bar" v-if="reimbursePeopleSex=='1'&&declareTypeTwo=='1' || reimbursePeopleSex=='2'">
+                    <div class="attr bottom-none"><em>*</em>上传产检及分娩发票</div>
                     <div class="twotips">
                         1、如在江北新区17家医疗机构就诊，可上传缴费凭条；<br/>
-                        2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a>
+                        <!-- 2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a> -->
+                        2、查看<a href="" class="desctip">缴费凭证示例</a>
                     </div>
                     <div class="upfile">
                         <div class="operation-div">
-                            <img class="shoImg" :src="imgDefault">
+                            <div class="img-wrap" v-for="(v,i) in childbirthReceipt" :key="i">
+                                <em class="close" @click="deletesth('childbirthReceipt',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event)"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'childbirthReceipt')"/>
                         </div>
-                        <!-- {{childbirthReceipt}} -->
-                        <!-- 显示上传图片的区域 -->
-                        
                     </div>
                 </div>
                     
-                <div class="question-bar" v-if="reimbursePeopleSex=='1'&&declareType=='1'&&declareTypeTwo=='1'">
-                    <div class="attr bottom-none">上传女方无业证明或者创业就业登记证<span class="a1">（请确保上传的图像清晰）</span></div>
+                <div class="question-bar" v-if="reimbursePeopleSex=='1'&&declareTypeTwo=='1'">
+                    <div class="attr bottom-none"><em>*</em>上传女方无业证明或者创业就业登记证</div>
                     <div class="upfile">
                         <div class="operation-div">
-                            <img class="shoImg" :src="imgDefault">
+                            <div class="img-wrap" v-for="(v,i) in womanCertificate" :key="i">
+                                <em class="close" @click="deletesth('womanCertificate',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event)"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'womanCertificate')"/>
                         </div>
-                        <!-- {{womanCertificate}} -->
-                        <!-- 显示上传图片的区域 -->
-                       
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr bottom-none">上传准生证<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none">上传准生证</div>
                     <div class="upfile">
                         <div class="operation-div">
-                            <img class="shoImg" :src="imgDefault">
+                            <div class="img-wrap" v-for="(v,i) in pregnancyPermit" :key="i">
+                                <em class="close" @click="deletesth('pregnancyPermit',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event)"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'pregnancyPermit')"/>
                         </div>
-                        <!-- {{pregnancyPermit}} -->
-                        <!-- 显示上传图片的区域 -->
-                        
                     </div>
                 </div>
             </template>
@@ -167,54 +170,55 @@
             <template v-if="declareType=='2'">
                 <div class="midtitle">计生手术报销</div>
                 <div class="question-bar">
-                    <div class="attr bottom-none"><em>*</em>上传结婚证或离婚证<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none"><em>*</em>上传结婚证或离婚证</div>
                     <div class="upfile">
                         <div class="operation-div">
-                            <img class="shoImg" :src="imgDefault">
+                            <div class="img-wrap" v-for="(v,i) in marriageCertificate" :key="i">
+                                <em class="close" @click="deletesth('marriageCertificate',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event)"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'marriageCertificate')"/>
                         </div>
-                        <!-- {{marriageCertificate}} -->
-                        <!-- 显示上传图片的区域 -->
-                       
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr bottom-none">上传出院小结或者门诊病历<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none"><em>*</em>上传出院小结或者门诊病历</div>
                     <div class="upfile">
                         <div class="operation-div">
-                            <img class="shoImg" :src="imgDefault">
+                            <div class="img-wrap" v-for="(v,i) in medicalRecord" :key="i">
+                                <em class="close" @click="deletesth('medicalRecord',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event)"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'medicalRecord')"/>
                         </div>
-                        <!-- {{medicalRecord}} -->
-                        <!-- 显示上传图片的区域 -->
-                        
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr bottom-none">计生费用发票<span class="a1">（请确保上传的图像清晰）</span></div>
+                    <div class="attr bottom-none"><em>*</em>计生费用发票</div>
                     <div class="twotips">
                         1、如在江北新区17家医疗机构就诊，可上传缴费凭条；<br/>
-                        2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a>
+                        <!-- 2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a> -->
+                        2、查看<a href="" class="desctip">缴费凭证示例</a>
                     </div>
                     <div class="upfile">
                         <div class="operation-div">
-                            <img class="shoImg" :src="imgDefault">
+                            <div class="img-wrap" v-for="(v,i) in birthPaymenReceipt" :key="i">
+                                <em class="close" @click="deletesth('birthPaymenReceipt',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event)"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'birthPaymenReceipt')"/>
                         </div>
-                        <!-- {{}} -->
-                        <!-- 显示上传图片的区域 -->
-                        
                     </div>
                 </div>
             </template>
             
-            <div :class="['next-step']" @click="submit()">提交</div>
+            <div :class="['next-step',btncurornot2()]" @click="submit()">提交</div>
         </template>
         <div class="play-info pophvm" v-if="popbox2">
             <div class="content2">
@@ -239,14 +243,15 @@ export default {
     },
     data() {
       return {
+            loading:false,
             curstep:'1',
             applyName:'',
             applyCard:'',
             applyPhone:'',
-            // 参保单位
-            // 参保社保代码
+            reimburseUnit:'',
+            companySocialCode:'',
             reimbursePeople:'',
-            // 报销人身份证号
+            reimburseCardNo:'',
             reimbursePeopleSex:'',
             declareType:'',
             declareTypeTwo:'',
@@ -256,15 +261,8 @@ export default {
             childbirthReceipt:'',
             womanCertificate:'',
             pregnancyPermit:'',
-            // 计生费用发票
+            birthPaymenReceipt:'',
             birthHospitalName:'',
-            birthHospitalName:'',
-            questionList:{
-                hospital:[
-                    {'id': '104000000020', 'value': '医院1'},
-                    {'id': '104000000010', 'value': '医院2'}
-                ]
-            },
             popbox2:false
         }
     },
@@ -281,8 +279,45 @@ export default {
         
     },
     methods: {
-        clickshebao(){
-           
+        submit(){
+            let _this = this
+            _this.loading = true
+            _this.$axios.post(`${_this.hosts.szjb1}/medical/reimburse/reimburseSubmit`,{       
+                wechatId:window.privateInfo.openid,
+                reimburseCardNo:_this.reimburseCardNo,
+                reimbursePhone:_this.reimbursePhone,
+                reimburseRelate:_this.reimburseRelate,
+                reimburseType:'2',
+                reimburseKind:(_this.selfshenb?'0':'1'),   
+                reimbursePeople:_this.reimbursePeople,
+                visitHospitalArea:_this.visitHospitalArea&&(_this.visitHospitalArea-1),
+                visitHospitalName:_this.visitHospitalName,
+                paymentPic:_this.paymentPic&&_this.paymentPic.join(','),
+                visitEndRecord:_this.visitEndRecord&&_this.visitEndRecord.join(','),
+                visitType:_this.visitType&&(_this.visitType-1),
+                reimbursePayType:_this.reimbursePayType&&(_this.reimbursePayType-1),
+                bankCountry:_this.bankCountry,
+                bankCity:_this.bankCity,
+                bankName:_this.bankName,
+                backNo:_this.backNo
+            }).then(res => {
+                _this.loading = false
+                if(res&&res.data&&res.data.result&&res.data.result.code=='00' && res.data.medicalVerifyId){
+                    _this.$router.push({path:'/bxsuccess/'+res.data.medicalVerifyId})
+                }else{
+                    Wap.AlertBox({
+                        type:"mini",
+                        msg:"网络异常，请稍后再试~"
+                    })
+                }
+            }).catch(e => {
+                _this.loading = false
+                console.log(e)
+                Wap.AlertBox({
+                    type:"mini",
+                    msg:"网络异常，请稍后再试~"
+                })
+            })
         },
         btncurornot(){
             let str = ''
@@ -300,146 +335,57 @@ export default {
             }
             return str
         },
+        btncurornot2(){
+            let str = ''
+            if(this.declareType && this.declareType == '1'){
+                if(this.birthHospitalName && this.birthBabyNo && this.marriageCertificate && this.medicalRecord){
+                    if(this.reimbursePeopleSex == '2' && this.childbirthReceipt && this.childbirthReceipt.length){
+                        str = 'cur'
+                    }
+                    if(this.reimbursePeopleSex=='1'){
+                        if(this.declareTypeTwo == '1' && this.childbirthReceipt && this.childbirthReceipt.length && this.womanCertificate && this.womanCertificate.length || this.declareTypeTwo == '2'){
+                            str = 'cur'
+                        }
+                    }
+                }
+            }else if(this.declareType && this.declareType == '2'){
+                if(this.marriageCertificate && this.marriageCertificate.length && this.medicalRecord && this.medicalRecord.length && this.birthPaymenReceipt && this.birthPaymenReceipt.length){
+                    str = 'cur'
+                }
+            }
+            return str
+        },
         clicknextStep(){
             if(this.btncurornot()){
                 this.curstep = '2' 
             }
         },
-        selectImg(e){
-            const imgFile = e.target.files[0];
-            console.log(imgFile)
+        deletesth(attr,i){
+            this[attr].splice(i,1)
+        },
+        selectImg(e,attr){
+            let _this = this
+            let imgFile = e.target.files;
+          
+            let formData = new FormData();
+            for(var key in imgFile){
+                formData.append('files', imgFile[key]);
+            }
             if (imgFile){ 
-                this.operationShow = true
-                if(this.checkFile(imgFile)){
-                    this.upload(imgFile);
-                }
-            }
-        },
-        checkFile(file){
-            // var suffix = /\.[^\.]+$/.exec($('#' + e.target.id).val());
-            // var f = $('#' + e.target.id)[0] && $('#' + e.target.id)[0].files && $('#' + e.target.id)[0].files[0];
-            // var size = f && f.size;
-            // if (!(/(\.|\/)(jpg|jpeg|png)$/i.test(suffix[0]))) {
-            //     $('#' + e.target.id).val('');
-            //     // util.toaster('图片格式不正确,请重新上传');
-            //     Wap.AlertBox({
-            //         type:"mini",
-            //         msg:"图片格式不正确,请重新上传"
-            //     })
-            // } else if (size > 2 * 1024 * 1024) {
-            //     $('#' + e.target.id).val('');
-            //     Wap.AlertBox({
-            //         type:"mini",
-            //         msg:"图片大小应不超过2M"
-            //     })
-            //     //util.toaster('图片大小应不超过2M');
-            // } 
-
-            if (file === null || file === undefined) {
-                alert("请选择您要上传的文件！");
-                return false;
-            }else{
-                return true;
-            }
-            let size = Math.floor(file.size / 1024);
-            // 这个条件还得改
-            if (size!=0) {
-                return true;
-            }else{
-                return false
-            }
-        },
-        upload(file){
-            try {
-                let self = this;
-                var result='';
-                //执行上传操作
-                var xhr = new XMLHttpRequest();
-                xhr.open("post", ApiUrl+"/member/image/upload", true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
-                        if (xhr.status == 200) {
-                            let returnData = $.parseJSON(xhr.responseText);
-                            if (!returnData) throw new Error("上传失败SERVER");
-                            if (!returnData.code) throw new Error("上传失败SERVER")
-                            if (returnData.code == 200) {
-                                alert("上传成功")
-                                //显示图片地址
-                                self.$emit('change-img',returnData.name);
-                                self.defaultImg = returnData.url;
-                            } else {
-                                alert("上传失败SERVER")
-                            }
-                            console.log(""+returnDate)
-                        } else {
-                            alert("上传失败")
+                _this.loading = true
+                _this.$axios.post(`${_this.hosts.szjb1}/medical/help/uploadPictures`,formData).then(res => {
+                    if(res&&res.data.picIds&&res.data.picIds.length){
+                        _this.loading = false
+                        if(_this[attr]){
+                            _this[attr] = _this[attr].concat(res.data.picIds)
+                        }else{
+                            _this[attr] = res.data.picIds
                         }
-                    };
-                };
-                var token = getMemberToken();
-                //表单数据
-                var fd = new FormData();
-                fd.append("token", token);
-                fd.append("file", file);
-                //执行发送
-                result = xhr.send(fd);
-            } catch (e) {
-                console.log(e);
-                // alert(e);
-            }
-        },
-        showModelOne(i){
-            let _this = this
-                
-            let showBankDom = document.querySelector('#showGeneral'+i);
-            let bankIdDom = document.querySelector('#suId'+i);
-            
-            let bankId = showBankDom.dataset['id'];
-            let bankName = showBankDom.dataset['value'];
-            
-            setTimeout(function(){
-                let bankSelect = new IosSelect(1, 
-                    [_this.questionList[i]],
-                    {
-                        container: '.container'+i,
-                        itemHeight: 35,
-                        itemShowCount:5,
-                        oneLevelId: bankId,
-                        callback(selectOneObj) {
-                            _this[i] = selectOneObj.value;
-                            bankIdDom.value = selectOneObj.id;
-                            showBankDom.innerText = selectOneObj.value;
-                            showBankDom.dataset['id'] = selectOneObj.id;
-                            showBankDom.dataset['value'] = selectOneObj.value;
-                        },
-                        fallback(){
-                            
-                        }
-                });
-            },20)
-        },
-        showModelTwo(){
-            let _this = this
-            var showContactDom = document.querySelector('#show_contact');
-            var contactProvinceCodeDom = document.querySelector('#contact_province_code');
-            var contactCityCodeDom =  document.querySelector('#contact_city_code');
-            var oneLevelId = showContactDom.dataset['province-code'];
-            var twoLevelId = showContactDom.dataset['city-code'];
-            var iosSelect = new IosSelect(2, 
-                [_this.map.iosProvinces, _this.map.iosCitys],
-                {
-                    title: '地址选择',
-                    itemHeight: 35,
-                    relation: [1, 1],
-                    oneLevelId: oneLevelId,
-                    twoLevelId: twoLevelId,
-                    callback: function (selectOneObj, selectTwoObj, selectThreeObj) {
-                        contactProvinceCodeDom.value = selectOneObj.id; 
-                        contactCityCodeDom.value = selectTwoObj.id;
-                        showContactDom.innerText = selectOneObj.value + ' ' + selectTwoObj.value;
-                        _this.bankplace = selectOneObj.value + ' ' + selectTwoObj.value;
+                    }else{
+                        _this.loading = false
                     }
-            });
+                })
+            }
         }
     }
 };

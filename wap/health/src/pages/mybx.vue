@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="bx-type">
-            <input type="hidden" :name="'su_id'+'bxtype'" :id="'suId'+'bxtype'" v-model="street" />
+            <input type="hidden" :name="'su_id'+'bxtype'" :id="'suId'+'bxtype'" />
             <div class="answer-list" :id="'showGeneral'+'bxtype'" @click="showModelOne('bxtype')">{{curbxTxt || '全部报销'}}</div>
         </div>  
         <ul class="bx-list">
@@ -17,8 +17,8 @@
                     <div class="ifself">报销人:{{v.reimburseKind=='0'?'本人':v.reimbursePeople}}</div>
                     <div class="paymethod">报销支付方式:{{v.reimbursePayType=='0'?'社保卡':'银行卡'}}</div>
                 </div>
-                <div class="type">{{v.reimburseType=='0'?'居民':(v.reimburseType=='1'?'职工':'生育')}}医疗报销 - <span class="time">2021年1月1号</span></div>
-                <div class="state s1" v-if="verifyStatus=='0'">审核中</div>
+                <div class="type">{{v.reimburseType=='1'?'居民':(v.reimburseType=='0'?'职工':'生育')}}医疗报销 - <span class="time">2021年1月1号</span></div>
+                <div class="state s1" v-if="v.verifyStatus=='0' || v.verifyStatus=='1'">审核中</div>
                 <div class="state s2" v-else>已审核</div>
                 <!-- 未审核 0 初审成功 1 初审失败 2 复审成功 3 复审失败 4 -->
             </li>     
@@ -37,8 +37,8 @@ export default {
             curType:0,
             bxtype:[
                 {'id': '3', 'value': '全部报销'},
-                {'id': '0', 'value': '居民医疗报销'},
-                {'id': '1', 'value': '职工医疗报销'},
+                {'id': '1', 'value': '居民医疗报销'},
+                {'id': '0', 'value': '职工医疗报销'},
                 {'id': '2', 'value': '生育医疗报销'}
             ],
             curbx:'',
@@ -63,7 +63,7 @@ export default {
             var info = new Promise(function(resolve, reject) {
                 _this.$axios.get(`${_this.hosts.szjb1}/medical/reimburse/getReimburseList`,{       
                     params:{
-                        wechatId:'ceshixinxin',  //window.privateInfo.openid
+                        wechatId:window.privateInfo.openid,
                         status:i
                     }
                 }).then(res => {
@@ -81,6 +81,11 @@ export default {
         },
         diffType(i){
             this.curType = i
+            this.curbxTxt = ''
+            let showBankDom = document.querySelector('#showGeneralbxtype');
+            showBankDom.dataset['id'] = ''
+            showBankDom.dataset['value'] = ''
+            showBankDom.innerText='全部报销'
             if(i == '0'){
                 this.getList('').then((res)=>{
                     this.mybxList = res
@@ -94,39 +99,35 @@ export default {
         },
         showModelOne(i){
             let _this = this
-                
             let showBankDom = document.querySelector('#showGeneral'+i);
             let bankIdDom = document.querySelector('#suId'+i);
-            
             let bankId = showBankDom.dataset['id'];
             let bankName = showBankDom.dataset['value'];
             let temp = _this.mybxListTem
-            setTimeout(function(){
-                let bankSelect = new IosSelect(1, 
-                    [_this[i]],
-                    {
-                        container: '.container'+i,
-                        itemHeight: 35,
-                        itemShowCount:5,
-                        oneLevelId: bankId,
-                        callback(selectOneObj) {
-                            _this.curbx = selectOneObj.id;
-                            _this.curbxTxt = selectOneObj.value;
-                            if(selectOneObj.id!=3){
-                                _this.mybxList = temp.filter((k)=>k.reimburseType==selectOneObj.id)
-                            }else{
-                                _this.mybxList = _this.mybxListTem
-                            }
-                            bankIdDom.value = selectOneObj.id;
-                            showBankDom.innerText = selectOneObj.value;
-                            showBankDom.dataset['id'] = selectOneObj.id;
-                            showBankDom.dataset['value'] = selectOneObj.value;
-                        },
-                        fallback(){
-                            
+            let bankSelect = new IosSelect(1, 
+                [_this[i]],
+                {
+                    container: '.container'+i,
+                    itemHeight: 35,
+                    itemShowCount:5,
+                    oneLevelId: bankId,
+                    callback(selectOneObj) {
+                        _this.curbx = selectOneObj.id;
+                        _this.curbxTxt = selectOneObj.value;
+                        if(selectOneObj.id!=3){
+                            _this.mybxList = temp.filter((k)=>k.reimburseType==selectOneObj.id)
+                        }else{
+                            _this.mybxList = _this.mybxListTem
                         }
-                });
-            },20)
+                        bankIdDom.value = selectOneObj.id;
+                        showBankDom.innerText = selectOneObj.value;
+                        showBankDom.dataset['id'] = selectOneObj.id;
+                        showBankDom.dataset['value'] = selectOneObj.value;
+                    },
+                    fallback(){
+                        
+                    }
+            });
         },
     },
 }
@@ -134,11 +135,11 @@ export default {
 <style lang='less'>
 
 .bx-type{
-    height:1.5rem;
+    height:1.6rem;
     width:14.04rem;
     margin:0 auto;
     font-size:0.48rem;
-    line-height:1.5rem;
+    line-height:1.6rem;
     .answer-list{
         position:relative;
         text-overflow: ellipsis;
@@ -163,6 +164,7 @@ export default {
 }
 .bx-list{
     background:#FFF;
+    border-top:0.24rem solid #F3F3F3;
     li{
         position:relative;
         width:14.04rem;
@@ -179,6 +181,7 @@ export default {
             margin-top:-0.38rem;
             text-align:center;
             line-height:0.76rem;
+            font-size:0.4rem;
         }
         .s1{
             background:rgba(238,132,53,0.2);
@@ -196,6 +199,9 @@ export default {
             color:#969696;
             font-size:0.48rem;
         }
+    }
+    li:last-child{
+        border-bottom:none;
     }
 }
 </style>
