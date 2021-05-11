@@ -15,18 +15,18 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="审核机构">
-                <el-select v-model="form.group" placeholder="请选择审核机构">
+            <el-form-item label="所属机构">
+                <el-select v-model="form.group" placeholder="请选择所属机构">
                     <el-option
-                        v-for="item in typeList"
-                        :key="item.name"
-                        :label="item.name"
-                        :value="item.value"
+                        v-for="item in orgList"
+                        :key="item.medicalOrganizationId"
+                        :label="item.orgName"
+                        :value="item.orgName"
                     ></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="审核结果" v-if="verifyStatus == 1">
-                <el-select v-model="form.group" placeholder="请选择审核结果">
+                <el-select v-model="form.result" placeholder="请选择审核结果">
                     <el-option
                         v-for="item in resultList"
                         :key="item.name"
@@ -37,15 +37,20 @@
             </el-form-item>
             <el-form-item label="关键词">
                 <el-input
-                    placeholder="查询申请人、报销人、报销人身份证号等关键词"
+                    placeholder="查询申请人、报销人、报销人身份证号等关键词" v-model="form.keywords"
                 ></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary">查询</el-button>
-                <el-button>重置</el-button>
+                <el-button type="primary" @click="search()">查询</el-button>
+                <el-button @click="reset()">重置</el-button>
             </el-form-item>
         </el-form>
-        <Table />
+        <Table 
+            ref="table"
+            :verifyList="verifyList"
+            :total="total"
+            :typs="verifyStatus"
+        />
     </div>
 </template>
 <script>
@@ -57,8 +62,9 @@
         },
         data() {
             return {
-                verifyStatus: 0,
+                verifyStatus: '0',
                 typeList: CONST.PAY_TYPE,
+                orgList:[],
                 resultList: CONST.AUDIT_RESULT,
                 form: {
                     type: "",
@@ -66,24 +72,57 @@
                     result: "",
                     keywords: "",
                 },
+                verifyList:[],
+                total:0,
+                limit:0
             };
         },
         created() {
+        },
+        mounted() {
+            this.queryOrgList()
             this.getAuditList()
         },
         methods: {
-            handleClick() {},
+            reset(){
+                this.form.type = ''
+                this.form.group = ''
+                this.form.result = ''
+                this.form.keywords = ''
+            },
+            search(){
+                this.getAuditList()
+            },
+            handleClick() {
+                this.reset()
+                this.getAuditList()
+            },
+            async queryOrgList() {
+                let param = {
+                    loginAccount: 'admin',//this.user.loginAccount,
+                    limit: 0,
+                    offset: 100
+                }
+                let res = await this.$http.queryOrgList(param);
+                if (res && res.orgList) {
+                    this.orgList = res.orgList;
+                }
+            },
             getAuditList() {
                 let param = {
                     loginAccount: 'admin',
                     verifyStatus: this.verifyStatus,
                     reimburseType: this.form.type,
-                    personStreet: '',
-                    limit: 1,
-                    offset: 10,
+                    personStreet: this.form.group,
+                    verifyResult: this.form.result,
+                    limit: this.limit,
+                    offset:  this.$refs.table.offset,
                     param: ''
                 }
-                this.$http.describeVerifyList(param)
+                this.$http.describeVerifyList(param).then((res)=>{
+                    this.vertifyList = res&&res.data&&res.data.reimburseList
+                    this.total = res.size;
+                })
             }
         },
     };

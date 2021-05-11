@@ -74,10 +74,10 @@ const PAY_TYPE = [{
 
 const AUDIT_RESULT = [{
   name: '不通过',
-  value: 0
+  value: '1'
 }, {
   name: '通过',
-  value: 1
+  value: '0'
 }]
 
 const PAGE_SIZE_LIST = [10, 20, 50, 100]

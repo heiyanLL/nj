@@ -25,7 +25,7 @@ const router = new VueRouter({
                     }
                 },
                 {
-                    path: 'audit/index/detail',
+                    path: 'audit/index/detail/:id',
                     name: 'auditDetails',
                     component: () => import(/* webpackChunkName: "audit" */ "@/view/audit/detail"),
                     meta: {

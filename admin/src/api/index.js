@@ -15,6 +15,20 @@ export default {
             params: param
         })
     },
+    // 提交审核接口
+    submitVeryfyData(param) {
+        return fetch({
+            url: '/medical/verify/verifyReimburse',
+            params: param
+        })
+    },
+    // 查询报销详情
+    getVerifyDetail(param) {
+        return fetch({
+            url: '/medical/reimburse/doGet',
+            params: param
+        })
+    },
     /** 报表 */
     // 周月年数据查询
     countVerifyDataOnPhase(param) {
