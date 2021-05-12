@@ -17,6 +17,7 @@
           placeholder="请输入密码"
           prefix-icon="el-icon-lock"
           type="password"
+          show-password
           v-model="form.passWord"
         >
         </el-input>
@@ -55,7 +56,7 @@ export default {
         this.SET_USER(res.accountList[0]);
         this.$router.push({ path: "/" });
       }else {
-        this.$message.error('登陆失败，请稍后')
+        this.$message.error(res.result && res.result.message || '登陆失败，请稍后')
       }
     },
   },
