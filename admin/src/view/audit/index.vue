@@ -120,7 +120,7 @@
                     param: ''
                 }
                 this.$http.describeVerifyList(param).then((res)=>{
-                    this.vertifyList = res&&res.data&&res.data.reimburseList
+                    this.verifyList = res&&res.reimburseList
                     this.total = res.size;
                 })
             }

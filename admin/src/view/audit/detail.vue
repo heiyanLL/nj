@@ -130,14 +130,16 @@
         },
         methods: {
             onSubmit() {
+                // http://localhost:8080/medical/verify/verifyReimburse?verifyType=0&verifyResult=2&receiptType=0&verifyRemark=11&verifyName=admin&verifyAccount=admin&reimburseId=1235
                 let param = {
-                    verifyType:this.objdata.verifyStatus,
+                    verifyType:'0',//this.objdata.verifyStatus,
                     verifyResult:this.form.auditResult,
                     receiptType:this.form.bill,
                     verifyRemark:this.form.remark,
-                    verifyName:'管理员',//this.user.accountName || '管理员',
-                    verifyAccount:'admin',//this.user.loginAccount || 'admin',
-                    reimburseId:this.detailId
+                    verifyName:'admin',//this.userInfo.accountName,
+                    verifyAccount:'admin',//this.userInfo.loginAccount,
+                    reimburseId:this.detailId,
+                    loginAccount:'admin'
                 }
                 this.$http.submitVeryfyData(param).then((res)=>{
                     this.objdata = res

@@ -146,8 +146,7 @@ export default {
         getbanner(num,newsType){
             let _this = this
             var info = new Promise(function(resolve, reject) {
-                // _this.$axios.get(`${_this.hosts.szjb1}/medical/news/describeNewsList`,{       
-                _this.$axios.get(`/medical/news/describeNewsList`,{       
+                _this.$axios.get(`${_this.hosts.szjb1}/medical/news/describeNewsList`,{       
                     params:{
                         newsNum:num,
                         newsType:newsType

@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-table :data="verifyList" stripe border style="width: 100%">
-            <el-table-column prop="index" label="序号" width="180">
+            <el-table-column type="index" label="序号" width="180">
             </el-table-column>
             <el-table-column prop="applyName" label="申请人" width="180">
             </el-table-column>
@@ -59,7 +59,7 @@
         },
         methods: {
             handleAudit(row) {
-                this.$router.push({path: '/audit/index/detail/'+row.client.id})
+                this.$router.push({path: '/audit/index/detail/'+row.medicalReimburseId})
             },
             handleListChange() {
                 this.$emit("handleListChange", this.currentPage);
