@@ -7,7 +7,8 @@
           <span>所属机构：{{ user.orgName }}</span>
           <el-dropdown @command="handleQuit">
             <span class="el-dropdown-link">
-              下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+              {{ user.accountName
+              }}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="edit">修改密码</el-dropdown-item>
@@ -31,20 +32,32 @@
       :visible.sync="dialogFormVisible"
       :close-on-click-modal="false"
     >
-      <el-form :model="form">
-        <el-form-item label="原密码" label-width="100px">
-          <el-input v-model="form.oldPass" autocomplete="off"></el-input>
+      <el-form ref="passForm" :model="form" :rules="rules">
+        <el-form-item label="原密码" label-width="100px" prop="oldPass">
+          <el-input
+            v-model="form.oldPass"
+            type="password"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="新密码" label-width="100px">
-          <el-input v-model="form.newPassC" autocomplete="off"></el-input>
+        <el-form-item label="新密码" label-width="100px" prop="newPass">
+          <el-input
+            v-model="form.newPass"
+            type="password"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="确认新密码" label-width="100px">
-          <el-input v-model="form.newPass" autocomplete="off"></el-input>
+        <el-form-item label="确认新密码" label-width="100px" prop="checkPass">
+          <el-input
+            v-model="form.checkPass"
+            type="password"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateAccountPass">确 定</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -53,6 +66,7 @@
 import Nav from "./nav";
 import breadCrumb from "./breadCrumb";
 import { mapState } from "vuex";
+import { encrypt } from "@/utils/tool";
 export default {
   components: {
     breadCrumb,
@@ -62,34 +76,68 @@ export default {
     ...mapState(["user"]),
   },
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入新密码"));
+      } else {
+        if (this.form.newPass !== "") {
+          this.$refs.passForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    const validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.form.newPass) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
       dialogFormVisible: false,
       form: {
         oldPass: "",
-        newPass: "",
-        newPassC: "",
+        newPass:'',
+        checkPass: "",
+      },
+      rules: {
+        oldPass: [{ required: true, message: "请输入旧密码", trigger: "blur" }],
+        newPass: [{ validator: validatePass, trigger: "blur" }],
+        checkPass: [{ validator: validatePass2, trigger: "blur" }],
       },
     };
   },
   methods: {
     handleQuit(command) {
       if (command == "quit") {
+        sessionStorage.removeItem("userInfo")
         this.$router.push({ path: "/login" });
       } else if (command == "edit") {
         this.dialogFormVisible = true;
       }
     },
+    submitForm() {
+      this.$refs["passForm"].validate((valid) => {
+        if (valid) {
+          this.updateAccountPass()
+        } else {
+          return false;
+        }
+      });
+    },
     async updateAccountPass() {
       let param = {
         loginAccount: this.user.loginAccount,
-        newPass: this.form.newPass,
+        newPass: encrypt(this.form.checkPass),
+        oldPass: encrypt(this.form.oldPass),
       };
       let res = await this.$http.updateAccountPass(param);
       if (res && res.result && res.result.success) {
-        this.$message({
-          message: "修改成功",
-          type: "success",
-        });
+        this.$message.success("修改成功");
+      }else {
+        this.$message.error(res.result && res.result.message || '修改失败')
       }
     },
   },

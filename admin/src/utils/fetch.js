@@ -18,7 +18,7 @@ Service.interceptors.request.use(config => {
 // 添加响应拦截器
 Service.interceptors.response.use(response => {
   loadingInstance.close()
-  if(response.data.result && response.data.result.code == '05') {
+  if(response.data.result && response.data.result.code == '99') {
     router.replace({path: '/login'})
   }
   return response.data

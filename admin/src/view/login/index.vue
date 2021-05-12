@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form :model="form">
       <el-form-item>
-        <h1>医保零星报销审批系统</h1>
+        <h1>江北医疗云报销</h1>
       </el-form-item>
       <el-form-item>
         <el-input
