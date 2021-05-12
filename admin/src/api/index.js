@@ -110,7 +110,7 @@ export default {
     // 资讯与banner列表查询
     describeNewsList(param) {
         return fetch({
-            url: '/medical/news/describeNewsList',
+            url: '/medical/news/queryNewsList',
             params: param
         })
     },

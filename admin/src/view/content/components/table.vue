@@ -6,8 +6,8 @@
       <el-table-column prop="newsLink" label="链接地址" width="180">
       </el-table-column>
       <el-table-column prop="image" label="缩略图">
-        <template>
-          <el-button type="text" size="small" @click="previewImage">查看</el-button>
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="previewImage(scope.row)">查看</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -91,8 +91,8 @@ export default {
     handleListChange() {
       this.$emit("handleListChange", this.currentPage);
     },
-    previewImage() {
-      this.$Preview()
+    previewImage(v) {
+      this.$Preview({src: v.newsPic})
     },
     handleTable(scope, type) {
       switch (type) {
@@ -140,7 +140,6 @@ export default {
           break;
         }
       }
-      console.log(scope, type);
     },
   },
 };

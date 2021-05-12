@@ -2,20 +2,20 @@
   <div>
     <el-form label-width="80px" :model="form">
       <el-form-item label="链接地址" prop="newsLink">
-        <el-input v-model="form.newsLink"></el-input>
+        <el-input v-model="form.newsLink" placeholder="当输入链接时，优先展示链接内容"></el-input>
       </el-form-item>
       <el-form-item label="标题名称" prop="newsTitle">
         <el-input v-model="form.newsTitle"></el-input>
       </el-form-item>
       <el-form-item>
-        <TinymceEditor @input="debounce"></TinymceEditor>
+        <TinymceEditor @input="debounce" :value="form.newsText"></TinymceEditor>
       </el-form-item>
       <el-form-item label="缩略图" prop="image">
         <el-upload
           class="upload-demo"
           action="/medical/help/uploadPictures"
           :file-list="fileList"
-          list-type="picture"
+          list-type="picture-card"
           :limit="1"
           name="files"
           accept="image/jpg, image/jpeg, image/png"
@@ -77,6 +77,7 @@ export default {
         this.form.newsLink = res.newsLink
         this.form.newsText = res.newsText
         this.form.newsPic = res.newsPic
+        this.fileList.push({name:'', url:res.newsPic})
       }
       console.log(res)
     },
