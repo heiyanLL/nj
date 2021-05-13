@@ -8,6 +8,10 @@ const router = new VueRouter({
     base: '/jiangbei-medical/mage/dist/',
     routes: [
         {
+            path: '*',
+            redirect: '/audit/index',
+        },
+        {
             path: '/',
             name: 'audit',
             redirect: '/audit/index',
@@ -137,6 +141,15 @@ const router = new VueRouter({
                     meta: {
                         bread: [{ title: '内容发布' }, { title: '帮助中心', src: '/content/help' }],
                         title: '添加帮助'
+                    }
+                },
+                {
+                    path: 'help/add/:id',
+                    name: 'helpAdd',
+                    component: () => import(/* webpackChunkName: "content" */ "@/view/content/helpAdd"),
+                    meta: {
+                        bread: [{ title: '内容发布' }, { title: '帮助中心', src: '/content/help' }],
+                        title: '修改帮助'
                     }
                 },
                 {

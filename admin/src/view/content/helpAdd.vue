@@ -33,13 +33,22 @@ export default {
         medicalHelpId: "",
         reimburseType: '0',
         normalQuestion: "",
-        answerQuestion: "",
-        ...this.$route.params,
+        answerQuestion: ""
       },
     };
   },
-  mounted() {},
+  mounted() {
+    this.helpGet();
+  },
   methods: {
+    async helpGet() {
+      const id = this.$route.params.id
+      if(!id) return
+      let res = await this.$http.helpGet({medicalHelpId: id})
+      if(res?.medicalHelp) {
+        this.form = {...this.form, ...res.medicalHelp}
+      }
+    },
     async updateOrInsertHelp() {
       let param = {
         medicalHelpId:this.form.medicalHelpId,

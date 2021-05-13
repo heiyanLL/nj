@@ -32,9 +32,11 @@
           @change="handleDate"
           v-model="date"
           type="daterange"
+          value-format="yyyy-MM-dd"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
+          :pickerOptions="pickerOptions"
         >
         </el-date-picker>
       </el-col>
@@ -51,24 +53,45 @@ export default {
     ...mapState(["user"]),
   },
   data() {
+    let _minTime = null;
+    let _maxTime = null;
     return {
       date: "",
       dateType: "0",
+      pickerOptions: {
+        onPick(time) {
+          // 如果选择了只选择了一个时间
+          if (!time.maxDate) {
+            let timeRange = 5 * 365 * 24 * 60 * 60 * 1000; // 5年
+            _minTime = time.minDate.getTime() - timeRange; // 最小时间
+            _maxTime = time.minDate.getTime() + timeRange; // 最大时间
+            // 如果选了两个时间，那就清空本次范围判断数据，以备重选
+          } else {
+            _minTime = _maxTime = null;
+          }
+        },
+        disabledDate(time) {
+          if (_minTime && _maxTime) {
+            return time.getTime() < _minTime || time.getTime() > _maxTime;
+          }
+        },
+      },
       option: {
         title: {
           text: "审批笔数",
         },
         xAxis: {
           type: "category",
-          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          data: [],
         },
         yAxis: {
           type: "value",
         },
         series: [
           {
-            data: [120, 200, 150, 80, 70, 110, 130],
+            data: [],
             type: "bar",
+            barMaxWidth: 40,
           },
         ],
       },
@@ -97,11 +120,7 @@ export default {
             labelLine: {
               show: false,
             },
-            data: [
-              { value: 1048, name: "居民医保报销" },
-              { value: 735, name: "职工医保报销" },
-              { value: 580, name: "生育医保报销" }
-            ],
+            data: [],
           },
         ],
       },
@@ -113,8 +132,6 @@ export default {
       document.getElementById("chart-amount")
     );
     this.chartType = this.$echarts.init(document.getElementById("chart-type"));
-    this.chartAmount.setOption(this.option);
-    this.chartType.setOption(this.optionType);
     this.countVerifyDataOnPhase();
   },
   methods: {
@@ -128,6 +145,20 @@ export default {
         this.countVerifyData();
       }
     },
+    setOptions(res) {
+      this.optionType.series[0].data = res?.monData || [];
+      let x = [],
+        y = [];
+      res?.reimburseTypeData &&
+        res.reimburseTypeData.map((item) => {
+          x.push(item.name);
+          y.push(item.value);
+        });
+      this.option.xAxis.data = x;
+      this.option.series[0].data = y;
+      this.chartAmount.setOption(this.option);
+      this.chartType.setOption(this.optionType);
+    },
     async countVerifyData() {
       let param = {
         loginAccount: this.user.loginAccount,
@@ -136,7 +167,7 @@ export default {
         endTime: this.date[1],
       };
       let res = await this.$http.countVerifyData(param);
-      console.log(res);
+      this.setOptions(res);
     },
     async countVerifyDataOnPhase() {
       let param = {
@@ -145,7 +176,7 @@ export default {
         timeType: this.dateType,
       };
       let res = await this.$http.countVerifyDataOnPhase(param);
-      console.log(res);
+      this.setOptions(res);
     },
   },
 };

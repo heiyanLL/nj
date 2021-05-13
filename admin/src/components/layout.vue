@@ -29,6 +29,7 @@
     </el-container>
     <el-dialog
       title="修改密码"
+      width="500px"
       :visible.sync="dialogFormVisible"
       :close-on-click-modal="false"
     >

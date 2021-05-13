@@ -39,11 +39,11 @@ export default {
     return {
       isCollapse: false,
       menuList: CONST.NAV,
-      active: ''
+      active: "",
     };
   },
   created() {
-      this.active = this.$route.path
+    this.active = this.$route.path;
     // this.menuList = this.$router.options.routes
   },
   methods: {
@@ -59,14 +59,30 @@ export default {
   /deep/ .el-menu {
     height: 100%;
   }
-  .el-menu-item.is-active{
+  .el-menu-item.is-active {
     color: #fff;
   }
-  /deep/ .el-icon-arrow-down:before{
+  /deep/ .el-icon-arrow-down:before {
     color: #fff;
   }
-  /deep/ .el-submenu__title i{
+  /deep/ .el-submenu__title {
+    padding: 0 50px;
     color: #fff;
+    i {
+      color: #fff;
+    }
+    span {
+      color: #fff;
+    }
+  }
+  .el-submenu [class^="el-icon-"] {
+    margin-right: 12px;
+  }
+  .el-submenu .el-menu-item{
+    padding: 0 35px;
+    &.is-active{
+      background: #2360d9!important;
+    }
   }
 }
 </style>

@@ -19,8 +19,7 @@
             size="small"
             @click="
               $router.push({
-                name: 'helpAdd',
-                params: scope.row ,
+                path: '/content/help/add/' + scope.row.medicalHelpId
               })
             "
             >修改</el-button

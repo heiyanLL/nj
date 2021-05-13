@@ -1,4 +1,4 @@
-const BASE_UPLOAD = 'http://121.196.42.224:8080/medical/help/downloadFile?medicalPicId='
+const BASE_UPLOAD = process.env.NODE_ENV == 'development' ? 'http://121.196.42.224:8080/medical/help/downloadFile?medicalPicId=' : 'http://121.196.42.224/medical/help/downloadFile?medicalPicId='
 const NAV = [
   {
     path: '/',
@@ -54,10 +54,10 @@ const NAV = [
         path: 'help',
         name: '帮助中心',
       },
-      {
-        path: 'public',
-        name: '公告'
-      }
+      // {
+      //   path: 'public',
+      //   name: '公告'
+      // }
     ]
   }
 ]

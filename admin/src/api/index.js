@@ -166,6 +166,13 @@ export default {
             data: param
         })
     },
+    // 帮助详情查询
+    helpGet(param) {
+        return fetch({
+            url: '/medical/help/get',
+            params: param
+        })
+    },
     // 删除帮助中心数据
     deleteHelp(param) {
         return fetch({

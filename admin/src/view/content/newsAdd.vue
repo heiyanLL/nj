@@ -77,18 +77,16 @@ export default {
         this.form.newsLink = res.newsLink
         this.form.newsText = res.newsText
         this.form.newsPic = res.newsPic
-        this.fileList.push({name:'', url:res.newsPic})
+        res.newsPic ? this.fileList.push({name:'', url:res.newsPic}) : ''
       }
-      console.log(res)
     },
     editorInput(v) {
       this.form.newsText = v;
     },
-    handleImageSuccess(response, file, fileList) {
+    handleImageSuccess(response) {
       if(response?.picIds) {
         this.form.newsPic = CONST.BASE_UPLOAD + response.picIds[0]
       }
-      console.log(response, file, fileList)
     },
     onSubmit() {
       this.updateOrInsertNews();
