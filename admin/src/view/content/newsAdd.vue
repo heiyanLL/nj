@@ -13,7 +13,7 @@
       <el-form-item label="缩略图" prop="image">
         <el-upload
           class="upload-demo"
-          action="/medical/help/uploadPictures"
+          action="/hy/medical/help/uploadPictures"
           :file-list="fileList"
           list-type="picture-card"
           :limit="1"
