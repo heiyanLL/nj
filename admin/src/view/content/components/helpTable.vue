@@ -12,7 +12,7 @@
         label="发布时间"
       >
       </el-table-column>
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="150" v-if="user.accountRole == '1'">
         <template slot-scope="scope">
           <el-button
             type="text"
@@ -48,12 +48,16 @@
 </template>
 <script>
 import CONST from "@/data/const";
+import { mapState } from "vuex";
 import { dateFormat } from "@/utils/tool";
 export default {
   name: "Table",
   props: {
     info: Array,
     total: Number
+  },
+  computed: {
+    ...mapState(["user"]),
   },
   data() {
     return {

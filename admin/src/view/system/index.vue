@@ -35,7 +35,7 @@
       <el-form-item>
         <el-button type="primary" @click="handleQuery">查询</el-button>
         <el-button type="info" @click="handleReset">重置</el-button>
-        <el-button @click="addAccount">添加账号</el-button>
+        <el-button @click="addAccount" v-if="user.accountRole == '1'">添加账号</el-button>
       </el-form-item>
     </el-form>
     <Table

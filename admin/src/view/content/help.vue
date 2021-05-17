@@ -24,7 +24,7 @@
       <el-form-item>
         <el-button type="primary">查询</el-button>
         <el-button type="info">重置</el-button>
-        <el-button @click="$router.push({ path: '/content/help/add' })"
+        <el-button v-if="user.accountRole == '1'" @click="$router.push({ path: '/content/help/add' })"
           >添加帮助</el-button
         >
       </el-form-item>
@@ -41,9 +41,13 @@
 <script>
 import CONST from "@/data/const";
 import Table from "./components/helpTable";
+import { mapState } from "vuex";
 export default {
   components: {
     Table,
+  },
+  computed: {
+    ...mapState(["user"]),
   },
   data() {
     return {

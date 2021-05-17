@@ -6,7 +6,7 @@
         </el-tabs>
         <el-form :inline="true" size="small" :model="form" class="demo-form-inline">
             <el-form-item label="报销类型">
-                <el-select v-model="form.type" placeholder="请选择报销类型">
+                <el-select v-model="form.type" placeholder="请选择报销类型" :clearable="true">
                     <el-option
                         v-for="item in typeList"
                         :key="item.name"
@@ -16,7 +16,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="所属机构">
-                <el-select v-model="form.group" placeholder="请选择所属机构">
+                <el-select v-model="form.group" placeholder="请选择所属机构" :clearable="true">
                     <el-option
                         v-for="item in orgList"
                         :key="item.medicalOrganizationId"
@@ -26,7 +26,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="审核结果" v-if="verifyStatus == 1">
-                <el-select v-model="form.result" placeholder="请选择审核结果">
+                <el-select v-model="form.result" placeholder="请选择审核结果" :clearable="true">
                     <el-option
                         v-for="item in resultList"
                         :key="item.name"

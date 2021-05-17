@@ -26,7 +26,7 @@
         <el-button type="info" @click="handleQuery($event, 'reset')"
           >重置</el-button
         >
-        <el-button @click="handleUpdateNews"
+        <el-button v-if="user.accountRole == '1'" @click="handleUpdateNews"
           >添加{{ newsType == "0" ? "资讯" : "banner" }}</el-button
         >
       </el-form-item>
@@ -42,9 +42,13 @@
 <script>
 import CONST from "@/data/const";
 import Table from "./components/table";
+import {mapState} from 'vuex';
 export default {
   components: {
     Table,
+  },
+  computed: {
+    ...mapState(["user"]),
   },
   data() {
     return {
