@@ -8,7 +8,7 @@
       <el-table-column prop="street" label="所属街道"> </el-table-column>
       <el-table-column prop="orgPhone" label="联系电话"> </el-table-column>
       <el-table-column prop="createTime" :formatter="formatter" label="创建时间"> </el-table-column>
-      <el-table-column label="操作" width="150">
+      <el-table-column label="操作" width="150" v-if="user.accountRole == '1'">
         <template slot-scope="scope">
           <el-button
             type="text"
@@ -41,11 +41,15 @@
 <script>
 import CONST from "@/data/const";
 import { dateFormat } from "@/utils/tool";
+import { mapState } from "vuex";
 export default {
   name: "Table",
   props: {
     orgList: Array,
     total: Number
+  },
+  computed: {
+    ...mapState(["user"]),
   },
   data() {
     return {
