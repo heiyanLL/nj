@@ -73,7 +73,7 @@
             <template v-if="declareType=='1'">
                 <div class="question-bar">
                     <div class="attr"><em>*</em>生育医院名称</div>
-                    <div class="answer-list ipt"><input type="text" placeholder="请输入生育医院名称" maxlength="10" v-model="birthHospitalName" /></div>
+                    <div class="answer-list ipt"><input type="text" placeholder="请输入生育医院名称" v-model="birthHospitalName" /></div>
                 </div>
                 <div class="question-bar">
                     <div class="attr"><em>*</em>生育胎儿数</div>
@@ -234,9 +234,11 @@
 
 <script>
 import hosts from "@/utils/hosts";
+import {banner} from "@/components/components";
 export default {
-    name: "jumin",
+    name: "shengyu",
     components: {
+        banner
     },
     filters: {
        
@@ -263,7 +265,9 @@ export default {
             pregnancyPermit:'',
             birthPaymenReceipt:'',
             birthHospitalName:'',
-            popbox2:false
+            popbox2:false,
+            exampleList:[],
+
         }
     },
     watch: {
@@ -273,55 +277,76 @@ export default {
         
     },
     created() {
-        
+        this.userInfo = JSON.parse(localStorage.getItem('privateInfo'))
     },
     mounted() {
         
     },
     methods: {
+        //查看示例
+        seeExample(arr){
+            if(arr.length){
+                let tem=[]
+                arr.forEach((v)=>{
+                    tem.push({
+                        newsPic:this.hosts.szjb1 + '/medical/help/downloadFile?medicalPicId=' + v
+                    })
+                })
+                this.exampleList = tem
+            }else{
+                Wap.AlertBox({
+                    type:"mini",
+                    msg:"暂未维护，敬请期待~"
+                })
+            }
+        },
         submit(){
-            let _this = this
-            _this.loading = true
-            _this.$axios.post(`${_this.hosts.szjb1}/medical/reimburse/reimburseSubmit`,{       
-                wechatId:window.privateInfo.openid,
-                reimburseCardNo:_this.reimburseCardNo,
-                reimbursePhone:_this.reimbursePhone,
-                reimburseRelate:_this.reimburseRelate,
-                reimburseType:'2',
-                reimburseKind:(_this.selfshenb?'0':'1'),   
-                reimbursePeople:_this.reimbursePeople,
-                visitHospitalArea:_this.visitHospitalArea&&(_this.visitHospitalArea-1),
-                visitHospitalName:_this.visitHospitalName,
-                paymentPic:_this.paymentPic&&_this.paymentPic.join(','),
-                visitEndRecord:_this.visitEndRecord&&_this.visitEndRecord.join(','),
-                visitType:_this.visitType&&(_this.visitType-1),
-                reimbursePayType:_this.reimbursePayType&&(_this.reimbursePayType-1),
-                bankCountry:_this.bankCountry,
-                bankCity:_this.bankCity,
-                bankName:_this.bankName,
-                backNo:_this.backNo
-            }).then(res => {
-                _this.loading = false
-                if(res&&res.data&&res.data.result&&res.data.result.code=='00' && res.data.medicalVerifyId){
-                    _this.$router.push({path:'/bxsuccess/'+res.data.medicalVerifyId})
-                }else{
+            if(this.btncurornot2()){
+                let _this = this
+                _this.loading = true
+                _this.$axios.post(`${_this.hosts.szjb1}/medical/reimburse/reimburseSubmit`,{       
+                    wechatId:_this.userInfo.openid,
+                    applyName:_this.applyName,
+                    applyCard:_this.applyCard,
+                    applyPhone:_this.applyPhone,
+                    reimburseUnit:_this.reimburseUnit,
+                    companySocialCode:_this.companySocialCode,
+                    reimbursePeople:_this.reimbursePeople,
+                    reimburseCardNo:_this.reimburseCardNo,
+                    reimbursePeopleSex:_this.reimbursePeopleSex&&(_this.reimbursePeopleSex-1),
+                    declareType:_this.declareType&&(_this.declareType-1),
+                    declareTypeTwo:_this.declareTypeTwo&&(_this.declareTypeTwo-1),
+                    birthHospitalName:_this.birthHospitalName,
+                    birthBabyNo:_this.birthBabyNo&&(_this.birthBabyNo-1),
+                    marriageCertificate:_this.marriageCertificate&&_this.marriageCertificate.join(','),
+                    medicalRecord:_this.medicalRecord&&_this.medicalRecord.join(','),
+                    childbirthReceipt:_this.childbirthReceipt&&_this.childbirthReceipt.join(','),
+                    womanCertificate:_this.womanCertificate&&_this.womanCertificate.join(','),
+                    pregnancyPermit:_this.pregnancyPermit&&_this.pregnancyPermit.join(','),
+                    birthPaymenReceipt:_this.birthPaymenReceipt&&_this.birthPaymenReceipt.join(',')
+                }).then(res => {
+                    _this.loading = false
+                    if(res&&res.data&&res.data.result&&res.data.result.code=='00' && res.data.medicalVerifyId){
+                        _this.$router.push({path:'/bxsuccess/'+res.data.medicalVerifyId})
+                    }else{
+                        Wap.AlertBox({
+                            type:"mini",
+                            msg:"网络异常，请稍后再试~"
+                        })
+                    }
+                }).catch(e => {
+                    _this.loading = false
+                    console.log(e)
                     Wap.AlertBox({
                         type:"mini",
                         msg:"网络异常，请稍后再试~"
                     })
-                }
-            }).catch(e => {
-                _this.loading = false
-                console.log(e)
-                Wap.AlertBox({
-                    type:"mini",
-                    msg:"网络异常，请稍后再试~"
                 })
-            })
+            }
         },
         btncurornot(){
             let str = ''
-            if(this.applyName && this.applyCard && this.applyPhone && this.reimbursePeople && this.reimbursePeopleSex && this.declareType){
+            if(this.applyName && this.applyCard && this.applyPhone && this.reimbursePeople && this.reimburseCardNo && this.reimbursePeopleSex && this.declareType){
                 if(this.reimbursePeopleSex == '2'){   //女
                     return 'cur' 
                 }else if(this.reimbursePeopleSex == '1'){  //男
@@ -330,7 +355,6 @@ export default {
                     }else if(this.declareType == '1' && this.declareTypeTwo){
                         return 'cur'
                     }
-                    
                 }
             }
             return str
@@ -369,6 +393,14 @@ export default {
           
             let formData = new FormData();
             for(var key in imgFile){
+                if(imgFile[key].size > 5 * 1024 * 1024){
+                    Wap.AlertBox({
+                        type:"mini",
+                        msg:"单张图片大小应不超过5M，请重新选择上传"
+                    })
+                    e.target.value = ''   //有一张不满足条件，就全部清空
+                    return false
+                }
                 formData.append('files', imgFile[key]);
             }
             if (imgFile){ 
@@ -384,6 +416,12 @@ export default {
                     }else{
                         _this.loading = false
                     }
+                }).catch((e)=>{
+                    _this.loading = false
+                    Wap.AlertBox({
+                        type:"mini",
+                        msg:"上传失败，稍后再试~"
+                    })
                 })
             }
         }

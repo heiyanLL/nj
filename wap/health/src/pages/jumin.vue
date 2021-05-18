@@ -67,6 +67,7 @@
             <template v-if="curstep=='2'">
                 <div class="question-bar" v-if="visitHospitalArea=='1'">
                     <div class="attr bottom-none"><em>*</em>上传缴费凭条</div>
+                    <a href="javascript:;" class="desctip" @click="seeExample(paymentPicTest)">缴费凭条实例</a>
                     <div class="upfile">
                         <div class="operation-div">
                             <div class="img-wrap" v-for="(v,i) in paymentPic" :key="i">
@@ -90,6 +91,7 @@
                 
                     <div class="question-bar">
                         <div class="attr bottom-none"><em>*</em>上传发票<span>（请确保上传的图像清晰）</span></div>
+                        <a href="javascript:;" class="desctip" @click="seeExample(visitReceiptTest)">发票实例</a>
                         <div class="upfile">
                             <div class="operation-div">
                                 <div class="img-wrap" v-for="(v,i) in visitReceipt" :key="i">
@@ -106,6 +108,7 @@
 
                     <div class="question-bar">
                         <div class="attr bottom-none"><em>*</em>上传费用说明<span>（请确保上传的图像清晰）</span></div>
+                        <a href="javascript:;" class="desctip" @click="seeExample(uploadPaymentDetailTest)">费用说明实例</a>
                         <div class="upfile">
                             <div class="operation-div">
                                 <div class="img-wrap" v-for="(v,i) in uploadPaymentDetail" :key="i">
@@ -122,6 +125,7 @@
 
                     <div class="question-bar" v-if="visitType=='1'">
                         <div class="attr bottom-none"><em>*</em>上传出院小结<span>（请确保上传的图像清晰）</span></div>
+                        <a href="javascript:;" class="desctip" @click="seeExample(visitEndRecordTest)">出院小结实例</a>
                         <div class="upfile">
                             <div class="operation-div">
                                 <div class="img-wrap" v-for="(v,i) in visitEndRecord" :key="i">
@@ -176,6 +180,7 @@
                     
                 </div>
             </div>
+            <div class="fixbanner-wrap" v-if="exampleList&&exampleList.length" @click="exampleList=[]"><div class="fixbanner"><banner :swipeData="exampleList" :swipeOpts="{name:'exampleList',auto:false}"></banner></div></div> 
 
         </template>
     </div>
@@ -183,9 +188,11 @@
 
 <script>
 import hosts from "@/utils/hosts";
+import {banner} from "@/components/components";
 export default {
     name: "jumin",
     components: {
+        banner
     },
     filters: {
        
@@ -222,19 +229,18 @@ export default {
                 ]
             },
             popbox:false,
-            
+            exampleList:[],
+            visitReceiptTest:['1620959476796i5Lm'],   //发票实例
+            visitEndRecordTest:[],   //出院小结
+            uploadPaymentDetailTest:[],   //费用说明
+            paymentPicTest:[]    //缴费凭证
         }
     },
     created() {
-        
+        this.userInfo = JSON.parse(localStorage.getItem('privateInfo'))
     },
     mounted() {
-        // if(this.selfshenb){
-        //     console.log(window.privateInfo.user_name,'----')
-        //     this.reimbursePeople = window.privateInfo.user_name
-        // }
         this.getStreetList(1,0,'').then((res)=>{
-            console.log(res)
             if(res&&res.length>0){
                 res.forEach((v)=>{
                     v.id = v.medicalStaticDataId
@@ -246,9 +252,27 @@ export default {
         })
     },
     methods: {
+        //查看示例
+        seeExample(arr){
+            if(arr.length){
+                let tem=[]
+                arr.forEach((v)=>{
+                    tem.push({
+                        newsPic:this.hosts.szjb1 + '/medical/help/downloadFile?medicalPicId=' + v
+                    })
+                })
+                this.exampleList = tem
+                console.log(this.exampleList)
+            }else{
+                Wap.AlertBox({
+                    type:"mini",
+                    msg:"暂未维护，敬请期待~"
+                })
+            }
+        },
         clickselfshenb(){
             this.selfshenb = true
-            this.reimbursePeople = window.privateInfo.user_name
+            this.reimbursePeople = this.userInfo.user_name
         },
         clickshebao(){
             if(this.reimbursePayType != '1'){
@@ -331,6 +355,14 @@ export default {
           
             let formData = new FormData();
             for(var key in imgFile){
+                if(imgFile[key].size > 5 * 1024 * 1024){
+                    Wap.AlertBox({
+                        type:"mini",
+                        msg:"单张图片大小应不超过5M，请重新选择上传"
+                    })
+                    e.target.value = ''   //有一张不满足条件，就全部清空
+                    return false
+                }
                 formData.append('files', imgFile[key]);
             }
             if (imgFile){ 
@@ -343,17 +375,15 @@ export default {
                         }else{
                             _this[attr] = res.data.picIds
                         }
-                    //     res.picIds.forEach((v)=>{
-                    //         _this.$axios.post(`${_this.hosts.szjb1}/medical/help/downloadFile`,{ 
-                    //             params:{
-                    //                 medicalPicId:v
-                    //             }
-                    //         }).then(res=>{
-                    //         })
-                    //     })
                     }else{
                         _this.loading = false
                     }
+                }).catch((e)=>{
+                    _this.loading = false
+                    Wap.AlertBox({
+                        type:"mini",
+                        msg:"上传失败，稍后再试~"
+                    })
                 })
             }
         },
@@ -375,26 +405,44 @@ export default {
             })
             return info;
         },
+        getOrgList(){
+            let _this = this
+            var info = new Promise(function(resolve, reject) {
+                _this.$axios.get(`${_this.hosts.szjb1}/medical/org/queryOrgList`,{       
+                    params:{
+                        loginAccount: 'admin',//this.user.loginAccount,
+                        limit: 0,
+                        offset: 100
+                    }
+                }).then(res => {
+                    resolve(res&&res.data&&res.data.orgList)
+                }).catch(e => {
+                    console.log(e)
+                    resolve([])
+                })
+            })
+            return info;
+        },
         showModelOne(i){
             let _this = this
             if(i == 'visitHospitalName'){
-                if(_this.personStreetId){
-                    _this.getStreetList('0','0',_this.personStreetId).then((res)=>{
+                // if(_this.personStreetId){
+                    _this.getOrgList().then((res)=>{
                         if(res&&res.length>0){
                             res.forEach((v)=>{
-                                v.id = v.medicalStaticDataId
-                                v.value = v.dataValue
+                                v.id = v.medicalOrganizationId
+                                v.value = v.orgName
                             })
                             this.questionList.visitHospitalName = res
                             hook()
                         }
                     })
-                }else{
-                    Wap.AlertBox({
-                        type:"mini",
-                        msg:"请先选择街道哦~"
-                    })
-                }
+                // }else{
+                //     Wap.AlertBox({
+                //         type:"mini",
+                //         msg:"请先选择街道哦~"
+                //     })
+                // }
                 
             }else{
                 hook()
@@ -415,7 +463,7 @@ export default {
                                 _this[i] = selectOneObj.value;
                                 _this[i+'Id'] = selectOneObj.datakey;
                                 bankIdDom.value = selectOneObj.id;
-                                showBankDom.innerText = selectOneObj.value;
+                                // showBankDom.innerText = selectOneObj.value;
                                 // showBankDom.dataset['id'] = selectOneObj.id;
                                 // showBankDom.dataset['value'] = selectOneObj.value;
                             },
@@ -424,9 +472,7 @@ export default {
                             }
                     });
                 }
-                
             }
-            
         },
         showModelTwo(){
             let _this = this
@@ -453,10 +499,11 @@ export default {
             });
         },
         submit(){
+            if(this.btncurornot2()){
             let _this = this
             _this.loading = true
             _this.$axios.post(`${_this.hosts.szjb1}/medical/reimburse/reimburseSubmit`,{       
-                    wechatId:window.privateInfo.openid,
+                    wechatId:_this.userInfo.openid,
                     reimburseType:'1',
                     reimburseKind:(_this.selfshenb?'0':'1'),   
                     uploadPaymentDetail:_this.uploadPaymentDetail&&_this.uploadPaymentDetail.join(','),
@@ -492,6 +539,7 @@ export default {
                     msg:"网络异常，请稍后再试~"
                 })
             })
+            }
         }
     }
 };

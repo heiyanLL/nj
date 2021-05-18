@@ -48,7 +48,7 @@ export default {
         }
     },
     created() {
-       
+        this.userInfo = JSON.parse(localStorage.getItem('privateInfo'))
     },
     mounted() {
        this.getList('').then((res)=>{
@@ -63,7 +63,7 @@ export default {
             var info = new Promise(function(resolve, reject) {
                 _this.$axios.get(`${_this.hosts.szjb1}/medical/reimburse/getReimburseList`,{       
                     params:{
-                        wechatId:window.privateInfo.openid,
+                        wechatId:_this.userInfo.openid,
                         status:i
                     }
                 }).then(res => {

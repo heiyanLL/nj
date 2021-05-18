@@ -449,7 +449,7 @@ body{
         position:absolute;
         right:0;
         top:0;
-        width:6rem;
+        width:8rem;
         height:1.8rem;
         overflow:hidden;
         text-overflow: ellipsis;
@@ -621,8 +621,9 @@ body{
         width:15rem;
         height:90%;
         margin:0 auto;
-        padding:0.4rem 0.48rem 0;
+        padding:0.8rem 0.48rem;
         background:#FFF;
+        overflow-y:scroll;
         .title{
             font-weight:bold;
             text-align: center;
@@ -631,7 +632,8 @@ body{
         .main{
             color:#666;
             font-size: 0.56rem;
-            margin-top: 1rem;
+            margin-top: 0.6rem;
+            padding-bottom:0.48rem;
         }
         .checkbox{
             width:15rem;
@@ -809,7 +811,7 @@ body{
     z-index:999;
 }
 .tab-list{
-    width:13.72rem;
+    width:14.04rem;
     margin:0 auto;
     overflow:hidden;
     height:1.6rem;
@@ -836,6 +838,22 @@ body{
     }
     
 } 
+.fixbanner-wrap{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    left: 0;
+    background: rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+.fixbanner{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    width:15rem;
+    height:auto;
+}
 .loagMask2 {
     position: fixed;
     top: 0;

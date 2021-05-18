@@ -2,8 +2,8 @@
     <div class="everydetail" v-if="title">
         <div class="name">{{title}}</div>
         <div class="time">{{time | getTime}}</div>
-        <div class="content">
-            {{content}}
+        <div class="content" v-html="content">
+            
         </div>
         
     </div>
@@ -49,7 +49,7 @@ export default {
                 }).then(res => {
                     console.log(id,'--帮助详情-->',res)
                     _this.title = res.data.medicalHelp.normalQuestion
-                    _this.time = res.data.medicalHelp.publishTime
+                    _this.time = res.data.medicalHelp.updateTime
                     _this.content = res.data.medicalHelp.answerQuestion
                     resolve(res)
                 }).catch(e => {
@@ -67,9 +67,8 @@ export default {
                         medicalNewsId:id
                     }
                 }).then(res => {
-                    console.log(id,'--资讯banner详情-->',res)
                     _this.title = res.data.medicalNew.newsTitle
-                    _this.time = res.data.medicalNew.publishTime
+                    _this.time = res.data.medicalNew.updateTime
                     _this.content = res.data.medicalNew.newsText
                     resolve(res)
                 }).catch(e => {

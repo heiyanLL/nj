@@ -18,7 +18,7 @@
                     <a href="javascript:;" class="hor-view" @click.stop.prevent="gotodetail(v)">
                         <div class="tit">
                             <div class="txt line-clamp-2">{{v.newsTitle}}</div>
-                            <div class="time">{{v.publishTime | getTime}}</div>
+                            <div class="time">{{v.updateTime | getTime}}</div>
                         </div>
                         <img :src="v.newsPic" alt="" />
                     </a>
@@ -27,9 +27,9 @@
         </div>
         <div class="play-info" v-if="protopop">
             <div class="content">
-                <div class="title">{{curBxTxt}}报销须知</div>
-                <div class="main">{{mainXzTxt}}</div>
-                <div class="checkbox" @click="readalready=!readalready"><em :class="['round',readalready?'cur':'']"></em>本人已认真阅读报销须知，并保证提供的报销信息真实、准确、有效。本人自愿承担因提供的个人信息不真实，不准确导致的一切后果。</div>
+                <div class="title" v-html="curBxTxt"></div>
+                <div class="main" v-html="mainXzTxt"></div>
+                <div class="checkbox" @click="readalready=!readalready"><em :class="['round',readalready?'cur':'']"></em>本人已阅读本须知内容，充分了解并清楚知晓相关要求。</div>
                 <div class="btn">
                     <a href="javascript:;" @click="readalready=false;protopop=false">取消</a>   
                     <a href="javascript:;" :class="[readalready?'cur':'']" @click="agree()">同意</a>   
@@ -41,6 +41,7 @@
 
 <script>
 import base64 from "@/utils/base64";
+import CONST from "@/data/const";
 import {banner} from "@/components/components";
 export default {
     name: "homepage",
@@ -96,10 +97,10 @@ export default {
                 }
             })
             // TODO:
-            window.privateInfo = {
+            localStorage.setItem('privateInfo',JSON.stringify({
                 openid:'ceshixinxin',
                 user_name:'张123'
-            }
+            }))
             // var openid = base64.decode(_this.utils.getQueryString('id')).slice(8)
             var openid = 'ceshixinxin'
             _this.getuserinfo(openid).then((res)=>{
@@ -124,7 +125,7 @@ export default {
             if(value.newsLink){
                 window.location.href = value.newsLink
             }else{
-                this.$router.push({path:'/everydetail/0_'+v.medicalNewsId})
+                this.$router.push({path:'/everydetail/0_'+value.medicalNewsId})
             }
         },
         getuserinfo(openid) {
@@ -180,20 +181,23 @@ export default {
         gotobaoxiao(str){
             this.curProto = str
             if(str == 'jumin'){
-                this.curBxTxt = '居民医保'
-                this.getStaticInfo(3,0,'').then((res)=>{
-                    this.mainXzTxt = res.dataList&&res.dataList.length&&res.dataList[0].dataValue
-                })
+                this.curBxTxt = '居民医保零星报销'
+                this.mainXzTxt = CONST.REMARK.JMBX
+                // this.getStaticInfo(3,0,'').then((res)=>{
+                //     this.mainXzTxt = res.data.dataList&&res.data.dataList.length&&res.data.dataList[0].dataValue
+                // })
             }else if(str == 'zhigong'){
-                this.curBxTxt = '职工医保'
-                this.getStaticInfo(3,1,'').then((res)=>{
-                    this.mainXzTxt = res.data.dataList&&res.data.dataList.length&&res.data.dataList[0].dataValue
-                })
+                this.curBxTxt = '职工医保电子票据零星报销<br/>申报须知'
+                this.mainXzTxt = CONST.REMARK.ZGBX
+                // this.getStaticInfo(3,1,'').then((res)=>{
+                //     this.mainXzTxt = res.data.dataList&&res.data.dataList.length&&res.data.dataList[0].dataValue
+                // })
             }else if(str == 'shengyu'){
-                this.curBxTxt = '生育医保'
-                this.getStaticInfo(3,2,'').then((res)=>{
-                    this.mainXzTxt = res.data.dataList&&res.data.dataList.length&&res.data.dataList[0].dataValue
-                })
+                this.curBxTxt = '生育保险零星报销<br/>申报须知'
+                this.mainXzTxt = CONST.REMARK.SYBX
+                // this.getStaticInfo(3,2,'').then((res)=>{
+                //     this.mainXzTxt = res.data.dataList&&res.data.dataList.length&&res.data.dataList[0].dataValue
+                // })
             }
             this.protopop = true
         },

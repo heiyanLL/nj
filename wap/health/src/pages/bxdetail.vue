@@ -148,7 +148,7 @@ export default {
     },
     mounted() {
         this.getDetail().then((res)=>{
-            this.objdata = res.data
+            this.objdata = res.data.medicalReimburse
         })
     },
     methods: {

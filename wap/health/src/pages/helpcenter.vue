@@ -11,7 +11,7 @@
         <ul class="bx-list">
             <li v-for="(v,i) in helpList" :key="i" @click="$router.push({path:'/everydetail/2_'+v.medicalHelpId})">
                 <div class="title">{{v.normalQuestion}}</div>
-                <div class="time">{{v.publishTime | getTime}}</div>
+                <div class="time">{{v.updateTime | getTime}}</div>
             </li>     
         </ul>    
     </div>
@@ -69,8 +69,13 @@ export default {
 </script>
 <style lang='less'>
 .helpcenter{
+    width:15rem;
     .item{
-        width:25%
+        width:25%;
+        font-size:0.52rem;
+        span{
+            padding:0 0.12rem;
+        }
     }
 }
 .bx-list{

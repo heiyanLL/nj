@@ -3,8 +3,8 @@
         <ul class="swipe-ul" autoexpo="true"> 
             <li v-for="(value,idx) in swipeData" :key="idx" class="lazybox">
                 <a href="javacript:;" @click.stop.prevent="gotodetail(value)">
-                    <img v-if="idx==0" :src="value.newsPic | imageUrl">
-                    <img v-if="idx!=0" :data-src2="value.newsPic | imageUrl">
+                    <img v-if="idx==0" :src="value.newsPic">
+                    <img v-if="idx!=0" :data-src2="value.newsPic">
                 </a>
             </li>
         </ul>
@@ -44,8 +44,10 @@ export default {
         gotodetail(value){
             if(value.newsLink){
                 window.location.href = value.newsLink
-            }else{
+            }else if(value.medicalNewsId){
                 this.$router.push({path:'/everydetail/1_'+value.medicalNewsId})
+            }else{
+                return false
             }
         },
 		swipe(el,auto) {
