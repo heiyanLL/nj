@@ -3,7 +3,8 @@
         <div :class="['bxde-name',objdata.verifyRemark?'bottom-none':''] ">
             <span class="bxde-type">{{objdata.reimburseType=='1'?'居民医疗报销':(objdata.reimburseType=='0'?'职工医疗报销':'职工生育报销')}}</span> 
             <span class="bxde-state s1" v-if="objdata.verifyStatus=='0'">未审核</span>
-            <span class="bxde-state s1" v-if="objdata.verifyStatus=='2' || objdata.verifyStatus=='4'">审核失败</span>
+            <span class="bxde-state s1" v-if="objdata.verifyStatus=='2'">审核失败</span>
+            <span class="bxde-state s2" v-if="objdata.verifyStatus=='1'">审核成功</span>
         </div>
         <div class="verifyRemark" v-if="objdata.verifyRemark">{{objdata.verifyRemark}}</div>
         <div class="bxde-info">
@@ -135,7 +136,7 @@
 <!-- "reimbursePeopleSex": null, -->
         </div>
         <!-- 如果是未审核或者审核失败状态，则出现以下按钮  -->
-        <div class="next-step cur" v-if="objdata.verifyStatus=='0' || objdata.verifyStatus=='2' || objdata.verifyStatus=='4'" @click="$router.push({path:`/${curProto}/${detailId}`})">重新编辑信息</div>
+        <div class="next-step cur" v-if="objdata.verifyStatus=='0' || objdata.verifyStatus=='2'" @click="$router.push({path:`/${curProto}/${detailId}`})">重新编辑信息</div>
     </div>
 </template>
 
@@ -191,6 +192,7 @@ export default {
     color:#969696;
     width:14.04rem;
     margin:0 auto;
+    padding-bottom:0.2rem;
 }
 .bxdetail{
     background:#FFF;
@@ -205,8 +207,8 @@ export default {
         position:absolute;
         top:50%;
         right:0.64rem;
-        width:2.24rem;
         height:0.76rem;
+        padding:0 0.2rem;
         border-radius:0.76rem;
         margin-top:-0.38rem;
         text-align:center;

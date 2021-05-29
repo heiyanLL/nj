@@ -394,7 +394,8 @@ export default {
             if(this.btncurornot2()){
                 let _this = this
                 _this.loading = true
-                _this.$axios.post(`${_this.hosts.szjb1}/medical/reimburse/reimburseSubmit`,{       
+                _this.$axios.post(`${_this.hosts.szjb1}/medical/reimburse/reimburseSubmit`,{ 
+                    reimburseType:'2',      
                     wechatId:_this.userInfo.openid,
                     applyName:_this.applyName,
                     applyCard:_this.applyCard,
@@ -454,12 +455,12 @@ export default {
         btncurornot2(){
             let str = ''
             if(this.declareType && this.declareType == '1'){
-                if(this.birthHospitalName && this.birthBabyNo && this.marriageCertificate && this.medicalRecord){
+                if(this.birthHospitalName && this.birthBabyNo && this.marriageCertificate &&this.marriageCertificate.length && this.medicalRecord&& this.medicalRecord.length){
                     if(this.reimbursePeopleSex == '2' && (this.birthBabyNo > 2 && this.pregnancyPermit&&this.pregnancyPermit.length || this.birthBabyNo < 3)){
                         str = 'cur'
                     }
                     if(this.reimbursePeopleSex=='1'){
-                        if(this.declareTypeTwo == '1' && this.womanCertificate && this.womanCertificate.length || this.declareTypeTwo == '2' && this.marriageCertificate && this.marriageCertificate.length && this.medicalRecord && this.medicalRecord.length){
+                        if((this.declareTypeTwo == '1' && this.womanCertificate && this.womanCertificate.length || this.declareTypeTwo == '2')&& (this.birthBabyNo > 2 && this.pregnancyPermit&&this.pregnancyPermit.length || this.birthBabyNo < 3)){
                             str = 'cur'
                         }
                     }

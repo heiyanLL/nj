@@ -347,7 +347,7 @@ export default {
         },
         btncurornot2(){
             let str = ''
-            if(this.visitHospitalArea == '1'){
+            if(this.visitHospitalArea == '1' && !this.njnotInnj){
                 if(this.paymentPic && this.paymentPic.length && this.reimbursePayType){
                     if(this.reimbursePayType == '1'){
                         str = 'cur'
@@ -357,9 +357,9 @@ export default {
                         }
                     }
                 }
-            }else if(this.visitHospitalArea == '2'){
+            }else if(this.visitHospitalArea == '2' || this.njnotInnj){
                 if(this.visitType && this.visitType == '2'){
-                    if(this.visitReceipt && this.visitReceipt.length && this.uploadPaymentDetail && this.uploadPaymentDetail.length){
+                    if(this.visitReceipt && this.visitReceipt.length){
                         if(this.reimbursePayType == '1'){
                             str = 'cur'
                         }else{

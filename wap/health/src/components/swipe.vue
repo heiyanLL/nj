@@ -38,7 +38,7 @@ export default {
         let _this = this
         setTimeout(()=>{
             _this.swipe(_this.swipeOpts.name,_this.swipeOpts.auto);
-        },100)
+        },1000)
 	},
 	methods: {
         gotodetail(value){
