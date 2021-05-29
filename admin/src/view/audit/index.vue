@@ -15,8 +15,8 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="所属机构">
-                <el-select v-model="form.group" placeholder="请选择所属机构" :clearable="true">
+            <el-form-item label="所属医院">
+                <el-select v-model="form.group" placeholder="请选择所属医院" :clearable="true">
                     <el-option
                         v-for="item in orgList"
                         :key="item.medicalOrganizationId"
@@ -56,9 +56,13 @@
 <script>
     import CONST from "@/data/const";
     import Table from "./components/auditTable";
+    import { mapState } from "vuex";
     export default {
         components: {
             Table,
+        },
+        computed: {
+            ...mapState(["user"]),
         },
         data() {
             return {
@@ -99,7 +103,7 @@
             },
             async queryOrgList() {
                 let param = {
-                    loginAccount: 'admin',//this.user.loginAccount,
+                    loginAccount: this.user.loginAccount,//this.user.loginAccount,
                     limit: 0,
                     offset: 100
                 }
@@ -110,7 +114,7 @@
             },
             getAuditList() {
                 let param = {
-                    loginAccount: 'admin',
+                    loginAccount: this.user.loginAccount,
                     verifyStatus: this.verifyStatus,
                     reimburseType: this.form.type,
                     personStreet: this.form.group,

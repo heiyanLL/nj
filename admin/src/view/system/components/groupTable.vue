@@ -4,9 +4,9 @@
       <el-table-column type="index" label="序号" width="80"> </el-table-column>
       <el-table-column prop="orgName" label="机构名称">
       </el-table-column>
-      <el-table-column prop="orgAddress" label="地址"> </el-table-column>
-      <el-table-column prop="street" label="所属街道"> </el-table-column>
-      <el-table-column prop="orgPhone" label="联系电话"> </el-table-column>
+      <!-- <el-table-column prop="orgAddress" label="地址"> </el-table-column> -->
+      <!-- <el-table-column prop="street" label="所属街道"> </el-table-column> -->
+      <!-- <el-table-column prop="orgPhone" label="联系电话"> </el-table-column> -->
       <el-table-column prop="createTime" :formatter="formatter" label="创建时间"> </el-table-column>
       <el-table-column label="操作" width="150" v-if="user.accountRole == '1'">
         <template slot-scope="scope">

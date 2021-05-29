@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="12"><div class="icon-header-box"></div></el-col>
         <el-col :span="12" class="user-info-box">
-          <span>所属机构：{{ user.orgName }}</span>
+          <span>所属街道：{{ user.street }}</span>
           <el-dropdown @command="handleQuit">
             <span class="el-dropdown-link">
               {{ user.accountName

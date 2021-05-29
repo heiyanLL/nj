@@ -34,7 +34,11 @@ const NAV = [
       {
         path: 'group',
         name: '机构管理',
-      }
+      },
+      {
+        path: 'street',
+        name: '街道管理',
+      },
     ]
   },
   {
@@ -68,7 +72,7 @@ const PAY_TYPE = [{
   name: '居民医保报销',
   value: '1'
 }, {
-  name: '生育报销',
+  name: '职工生育报销',
   value: '2'
 }]
 
@@ -91,9 +95,6 @@ const ROLE_LIST = [{
 }, {
   name: '街道',
   value: "2"
-}, {
-  name: '人社局',
-  value: "3"
 }]
 
 // 内容模块

@@ -1,11 +1,12 @@
 <template>
     <div>
         <div>
-            <h1>{{objdata.reimburseType=='1'?'居民':(objdata.reimburseType=='0'?'职工':'生育')}}医疗报销{{objdata.reimburseKind=='0'?'（本人报销）':''}}</h1>
+            <h1>{{objdata.reimburseType=='1'?'居民医疗报销':(objdata.reimburseType=='0'?'职工医疗报销':'职工生育报销')}}{{objdata.reimburseKind=='0'?'（本人报销）':''}}</h1>
+            <div class="toPDF el-button el-button--primary" v-if="objdata.verifyStatus == '1'||objdata.verifyStatus == '3'" @click="toPDF">生成PDF</div>
             <el-divider></el-divider>
             <div class="personinfo">
                 <div class="t1" v-if="objdata.reimbursePeople"><span class="t2">报销人：</span>{{objdata.reimbursePeople}}</div>
-                <div class="t1" v-if="objdata.reimbursePeopleSocial"><span class="t2">报销人社保卡：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.reimbursePeopleSocial"><span class="t2">报销人社保卡：</span><a @click="previewImage(objdata.reimbursePeopleSocial)">查看</a></div>
                 <!-- <div class="upfile" v-if="objdata.reimbursePeopleSocial">
                     <div class="operation-div">
                         <div class="img-wrap" v-for="(v,i) in objdata.reimbursePeopleSocial.split(',')" :key="i">
@@ -31,28 +32,28 @@
             <div class="dash-line"></div>
             <div class="htwo">报销材料</div>
             <div class="personinfo">
-                <div class="t1" v-if="objdata.marriageCertificate"><span class="t2">结婚证/离婚证：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.marriageCertificate"><span class="t2">结婚证/离婚证：</span><a @click="previewImage(objdata.marriageCertificate)">查看</a></div>
             
-                <div class="t1" v-if="objdata.medicalRecord"><span class="t2">出院小结/门诊病历：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.medicalRecord"><span class="t2">出院小结/门诊病历：</span><a @click="previewImage(objdata.medicalRecord)">查看</a></div>
             
-                <div class="t1" v-if="objdata.childbirthReceipt"><span class="t2">产检/分娩发票：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.childbirthReceipt"><span class="t2">产检/分娩发票：</span><a @click="previewImage(objdata.childbirthReceipt)">查看</a></div>
             
-                <div class="t1" v-if="objdata.womanCertificate"><span class="t2">女方无业证明/创就业登记证：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.womanCertificate"><span class="t2">女方无业证明/创就业登记证：</span><a @click="previewImage(objdata.womanCertificate)">查看</a></div>
             
-                <div class="t1" v-if="objdata.pregnancyPermit"><span class="t2">准生证：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.pregnancyPermit"><span class="t2">准生证：</span><a @click="previewImage(objdata.pregnancyPermit)">查看</a></div>
         
-                <div class="t1" v-if="objdata.birthPaymenReceipt"><span class="t2">计生费用发票：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.birthPaymenReceipt"><span class="t2">计生费用发票：</span><a @click="previewImage(objdata.birthPaymenReceipt)">查看</a></div>
 
-                <div class="t1" v-if="objdata.menMedicalRecords"><span class="t2">门慢门特病例：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.menMedicalRecords"><span class="t2">门慢门特病例：</span><a @click="previewImage(objdata.menMedicalRecords)">查看</a></div>
             
-                <div class="t1" v-if="objdata.uploadPaymentDetail"><span class="t2">上传费用明细：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.uploadPaymentDetail"><span class="t2">上传费用明细：</span><a @click="previewImage(objdata.uploadPaymentDetail)">查看</a></div>
                 
                 
-                <div class="t1" v-if="objdata.paymentPic"><span class="t2">缴费凭条：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.paymentPic"><span class="t2">缴费凭条：</span><a @click="previewImage(objdata.paymentPic)">查看</a></div>
                 
-                <div class="t1" v-if="objdata.visitReceipt"><span class="t2">就诊发票：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.visitReceipt"><span class="t2">就诊发票：</span><a @click="previewImage(objdata.visitReceipt)">查看</a></div>
                 
-                <div class="t1" v-if="objdata.visitEndRecord"><span class="t2">就诊出院记录：</span><a href="link-img">查看</a></div>
+                <div class="t1" v-if="objdata.visitEndRecord"><span class="t2">就诊出院记录：</span><a @click="previewImage(objdata.visitEndRecord)">查看</a></div>
             </div>
             <div class="dash-line"></div>
             <div class="htwo">报销支付方式</div>
@@ -72,8 +73,9 @@
                 ref="auditForm"
                 label-width="80px"
                 size="small"
-                v-if="objdata.verifyStatus == '0'|| objdata.verifyStatus == '1'||objdata.verifyStatus == null"
-            >
+                v-if="objdata.verifyStatus == '0' || objdata.verifyStatus == null"
+            > 
+            <!-- || objdata.verifyStatus == '1'  -->
                 <el-form-item label="审核结果">
                     <el-radio-group v-model="form.auditResult">
                         <el-radio label="2">通过</el-radio>
@@ -84,6 +86,16 @@
                     <el-radio-group v-model="form.bill">
                         <el-radio label="0">电子发票</el-radio>
                         <el-radio label="1">纸质发票</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="短信模板">
+                    <el-radio-group v-model="txtType" v-if="form.auditResult == '2'" @change="msgBtn">
+                        <el-radio label="msg1">通过模板1</el-radio>
+                        <el-radio label="msg2">通过模板2</el-radio>
+                    </el-radio-group>
+                    <el-radio-group v-model="txtType2" v-if="form.auditResult == '1'" @change="msgBtn">
+                        <el-radio label="msg3">不通过模板1</el-radio>
+                        <el-radio label="msg4">不通过模板2</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="备注">
@@ -102,7 +114,12 @@
                 </el-form-item>
             </el-form>
             <div class="verify-result" v-else>
-                <div class="t1" >审核结果：<span v-if="objdata.verifyStatus=='1'">初审成功</span><span v-if="objdata.verifyStatus=='2'">初审失败</span><span v-if="objdata.verifyStatus=='3'">复审成功</span><span v-if="objdata.verifyStatus=='4'">复审失败</span></div>
+                <div class="t1" >审核结果：
+                    <span v-if="objdata.verifyStatus=='1'">初审成功</span>
+                    <span v-if="objdata.verifyStatus=='2'">初审失败</span>
+                    <span v-if="objdata.verifyStatus=='3'">复审成功</span>
+                    <span v-if="objdata.verifyStatus=='4'">复审失败</span>
+                </div>
                 <div class="t1" v-if="objdata.verifyName&&objdata.street">{{objdata.verifyName}}-{{objdata.street}}</div>
                 <div class="t1" v-if="objdata.receiptType">发票类型：{{objdata.receiptType == '0'?'电子发票':'普通发票'}}</div>
                 <div class="t1" v-if="objdata.verifyRemark">审核意见：{{objdata.verifyRemark}}</div>
@@ -113,6 +130,8 @@
 </template>
 <script>
     import { dateFormat } from "@/utils/tool";
+    import { mapState } from "vuex";
+    import CONST from "./data/index";
     export default {
         data() {
             return {
@@ -122,24 +141,35 @@
                     bill: "0",
                     remark: "",
                 },
+                txtType:'',
+                txtType2:'',
                 objdata:{}
             };
         },
         mounted(){
             this.getBxDetail()
         },
+        computed: {
+            ...mapState(["user"]),
+        },
         methods: {
+            msgBtn(val){
+                this.form.remark = CONST.REMARK[val]
+            },
+            previewImage(v) {
+                this.$Preview({src: v})
+            },
             onSubmit() {
                 // http://localhost:8080/medical/verify/verifyReimburse?verifyType=0&verifyResult=2&receiptType=0&verifyRemark=11&verifyName=admin&verifyAccount=admin&reimburseId=1235
                 let param = {
-                    verifyType:'0',//this.objdata.verifyStatus,
+                    verifyType:this.objdata.verifyStatus,
                     verifyResult:this.form.auditResult,
                     receiptType:this.form.bill,
                     verifyRemark:this.form.remark,
-                    verifyName:'admin',//this.userInfo.accountName,
-                    verifyAccount:'admin',//this.userInfo.loginAccount,
+                    verifyName:this.user.accountName,
+                    verifyAccount:this.user.loginAccount,
                     reimburseId:this.detailId,
-                    loginAccount:'admin'
+                    loginAccount:this.user.accountName
                 }
                 this.$http.submitVeryfyData(param).then((res)=>{
                     this.objdata = res
@@ -151,11 +181,14 @@
                     medicalReimburseId:this.detailId
                 }
                 this.$http.getVerifyDetail(param).then((res)=>{
-                    this.objdata = res
+                    this.objdata = res.medicalReimburse
                 })
             },
             formatter(row) {
                 return dateFormat("YYYY-mm-dd HH:MM", row);
+            },
+            toPDF(){
+                
             }
         }
     };
@@ -191,6 +224,9 @@
             float:left;
             margin-bottom:15px;
         }
+        a{
+            color:#409EFF
+        }
     }
     .htwo{
         margin-bottom:20px;
@@ -202,5 +238,10 @@
         .t1{
             margin-bottom:15px;
         }
+    }
+    .toPDF{
+        position: absolute;
+        right:45px;
+        top:105px;
     }
 </style>

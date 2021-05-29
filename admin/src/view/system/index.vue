@@ -1,17 +1,17 @@
 <template>
   <div>
     <el-form :inline="true" size="small" :model="form">
-      <el-form-item label="所属机构">
+      <el-form-item label="所属街道">
         <el-select
-          v-model="form.orgName"
+          v-model="form.streetName"
           :clearable="true"
-          placeholder="请选择所属机构"
+          placeholder="请选择所属街道"
         >
           <el-option
             v-for="item in orgList"
-            :key="item.medicalOrganizationId"
-            :label="item.orgName"
-            :value="item.medicalOrganizationId"
+            :key="item.medicalStreetId"
+            :label="item.streetName"
+            :value="item.medicalStreetId"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -108,9 +108,9 @@ export default {
         offset: this.offset,
         param: "",
       };
-      let res = await this.$http.queryOrgList(param);
-      if (res && res.orgList) {
-        this.orgList = res.orgList;
+      let res = await this.$http.queryStreet(param);
+      if (res && res.streetList) {
+        this.orgList = res.streetList;
       }
     },
     handleQuery(e, reset) {

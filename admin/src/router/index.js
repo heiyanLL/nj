@@ -95,6 +95,15 @@ const router = new VueRouter({
                         bread: [{ title: '系统管理' }],
                         title: '机构管理'
                     }
+                },
+                {
+                    path: 'street',
+                    name: 'street',
+                    component: () => import(/* webpackChunkName: "system" */ '@/view/system/street'),
+                    meta: {
+                        bread: [{ title: '系统管理' }],
+                        title: '街道管理'
+                    }
                 }
             ]
         },

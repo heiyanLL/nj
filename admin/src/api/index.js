@@ -90,6 +90,13 @@ export default {
             params: param
         })
     },
+    // 查询街道列表
+    queryStreet(param) {
+        return fetch({
+            url: '/medical/street/queryStreetList',
+            params: param
+        })
+    },
     // 新增修改机构
     updateOrInsertOrg(param) {
         return fetch({
@@ -98,10 +105,24 @@ export default {
             data: param
         })
     },
+    updateOrInsertStreet(param) {
+        return fetch({
+            url: '/medical/street/updateOrInsertStreet',
+            method: 'post',
+            data: param
+        })
+    },
     // 删除机构
     deleteOrg(param) {
         return fetch({
             url: '/medical/org/deleteOrg',
+            params: param
+        })
+    },
+    // 删除街道
+    deleteStreet(param) {
+        return fetch({
+            url: '/medical/street/deleteStreet',
             params: param
         })
     },

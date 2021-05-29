@@ -10,13 +10,13 @@
         <el-form-item label="登录账号">
           <el-input v-model="form.loginAccount" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属机构">
-          <el-select v-model="form.medicalOrganizationId" placeholder="请选择所属机构">
+        <el-form-item label="所属街道">
+          <el-select v-model="form.medicalStreetId" placeholder="请选择所属街道">
             <el-option
               v-for="item in orgList"
-              :key="item.medicalOrganizationId"
-              :label="item.orgName"
-              :value="item.medicalOrganizationId"
+              :key="item.medicalStreetId"
+              :label="item.streetName"
+              :value="item.medicalStreetId"
             ></el-option>
           </el-select>
         </el-form-item>

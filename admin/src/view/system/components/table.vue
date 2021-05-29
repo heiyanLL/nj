@@ -4,7 +4,7 @@
       <el-table-column type="index" label="序号" width="80"></el-table-column>
       <el-table-column prop="loginAccount" label="登录账号"> </el-table-column>
       <el-table-column prop="accountName" label="姓名"> </el-table-column>
-      <el-table-column prop="orgName" label="所属机构"> </el-table-column>
+      <el-table-column prop="streetName" label="所属街道"> </el-table-column>
       <el-table-column
         prop="accountRole"
         :formatter="formatter"
