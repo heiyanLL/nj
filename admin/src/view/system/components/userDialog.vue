@@ -61,7 +61,7 @@ export default {
         orgList: [],
         accountName: "",
         accountRole: "1",
-        medicalOrganizationId: ''
+        medicalStreetId: ''
       },
     };
   },
@@ -89,13 +89,15 @@ export default {
         medicalAccountId: this.form.medicalAccountId || "",
         loginAccount: this.form.loginAccount,
         accountName: this.form.accountName,
-        orgId: this.form.medicalOrganizationId,
+        orgId: this.form.medicalStreetId,
         orgName: this.form.orgName,
         accountRole: this.form.accountRole,
       };
       let res = await this.$http.updateOrInsertAccount(param)
       if(res && res.result && res.result.success) {
         this.$emit('updateOrInsertAccount')
+      }else {
+        this.$message.error(res?.result?.message || '服务异常，请稍后')
       }
     },
   },

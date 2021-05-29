@@ -50,6 +50,7 @@
             :verifyList="verifyList"
             :total="total"
             :typs="verifyStatus"
+            @handleListChange="handleListChange"
         />
     </div>
 </template>
@@ -127,6 +128,10 @@
                     this.verifyList = res&&res.reimburseList
                     this.total = res.size;
                 })
+            },
+            handleListChange(v) {
+                this.limit = v
+                this.getAuditList()
             }
         },
     };
