@@ -906,6 +906,9 @@ body{
         -webkit-transform: rotate(360deg)
     }
 }
+.alert-btn a.alert-confirm{
+    color:#4873DD!important;
+}
 /* layer begin */
 .ios-select-widget-box.olay {
     position: fixed;

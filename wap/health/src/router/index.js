@@ -15,12 +15,12 @@ export default new VueRouter({
             component: resolve => require(['@/pages/homepage'], resolve)
         },
         {
-            path: '/jumin',
+            path: '/jumin/:id',
             name: 'jumin',
             component: resolve => require(['@/pages/jumin'], resolve)
         },
         {
-            path: '/zhigong',
+            path: '/zhigong/:id',
             name: 'zhigong',
             component: resolve => require(['@/pages/zhigong'], resolve)
         },
@@ -30,7 +30,7 @@ export default new VueRouter({
             component: resolve => require(['@/pages/mybx'], resolve)
         },
         {
-            path: '/shengyu',
+            path: '/shengyu/:id',
             name: 'shengyu',
             component: resolve => require(['@/pages/shengyu'], resolve)
         },{

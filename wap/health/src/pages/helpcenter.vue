@@ -24,7 +24,7 @@ export default {
     },
     data() {
         return {
-            typeList:['全部','职工医保报销','居民医保报销','生育医保报销'],
+            typeList:['全部','职工医保报销','居民医保报销','职工生育报销'],
             curType:0,
             helpList:[]
         }

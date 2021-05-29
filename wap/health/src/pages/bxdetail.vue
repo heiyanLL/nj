@@ -1,6 +1,10 @@
 <template>
     <div class="bxdetail">
-        <div :class="['bxde-name',objdata.verifyRemark?'bottom-none':''] "><span class="bxde-type">{{objdata.reimburseType=='1'?'居民':(objdata.reimburseType=='0'?'职工':'生育')}}医疗报销</span> <span class="bxde-state s1">审核中</span></div>
+        <div :class="['bxde-name',objdata.verifyRemark?'bottom-none':''] ">
+            <span class="bxde-type">{{objdata.reimburseType=='1'?'居民医疗报销':(objdata.reimburseType=='0'?'职工医疗报销':'职工生育报销')}}</span> 
+            <span class="bxde-state s1" v-if="objdata.verifyStatus=='0'">未审核</span>
+            <span class="bxde-state s1" v-if="objdata.verifyStatus=='2' || objdata.verifyStatus=='4'">审核失败</span>
+        </div>
         <div class="verifyRemark" v-if="objdata.verifyRemark">{{objdata.verifyRemark}}</div>
         <div class="bxde-info">
             <div class="attr-wrap"><div class="bxde-attr gray6">报销人信息</div></div>
@@ -14,6 +18,7 @@
                 </div>
             </div>
             <div class="t1" v-if="objdata.reimburseRelate"><span class="t2">与报销人关系</span>{{objdata.reimburseRelate}}</div>
+            <div class="t1" v-if="objdata.reimburseCardNo"><span class="t2">报销人身份证号</span>{{objdata.reimburseCardNo}}</div>
 
             <div class="t1" v-if="objdata.personStreet"><span class="t2">所在街道</span>{{objdata.personStreet}}</div>
             <div class="t1" v-if="objdata.visitHospitalArea != null"><span class="t2">就诊地</span>{{objdata.visitHospitalArea=='1'?'异地':'南京'}}</div>
@@ -104,7 +109,7 @@
                     </div>
                 </div>
             </div>
-            <div class="t1" v-if="objdata.visitReceipt"><span class="t2">就诊发票</span></div>
+            <div class="t1 bottom-none" v-if="objdata.visitReceipt"><span class="t2">就诊发票</span></div>
             <div class="upfile" v-if="objdata.visitReceipt">
                 <div class="operation-div">
                     <div class="img-wrap" v-for="(v,i) in objdata.visitReceipt.split(',')" :key="i">
@@ -129,6 +134,8 @@
 "reimbursePhone": null, -->
 <!-- "reimbursePeopleSex": null, -->
         </div>
+        <!-- 如果是未审核或者审核失败状态，则出现以下按钮  -->
+        <div class="next-step cur" v-if="objdata.verifyStatus=='0' || objdata.verifyStatus=='2' || objdata.verifyStatus=='4'" @click="$router.push({path:`/${curProto}/${detailId}`})">重新编辑信息</div>
     </div>
 </template>
 
@@ -140,7 +147,8 @@ export default {
     data() {
         return {
             detailId: this.$route.params.id,
-            objdata:{}
+            objdata:{},
+            curProto:''
         }
     },
     created() {
@@ -149,6 +157,13 @@ export default {
     mounted() {
         this.getDetail().then((res)=>{
             this.objdata = res.data.medicalReimburse
+            if(this.objdata.reimburseType=='1'){
+                this.curProto = 'jumin'
+            }else if(this.objdata.reimburseType=='0'){
+                this.curProto = 'zhigong'
+            }else if(this.objdata.reimburseType=='2'){
+                this.curProto = 'shengyu'
+            }
         })
     },
     methods: {

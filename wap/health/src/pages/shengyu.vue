@@ -25,13 +25,12 @@
                 <div class="attr"><em>*</em>手机号码</div>
                 <div class="answer-list ipt"><input type="tel" placeholder="请输入手机号" maxlength="11" v-model="applyPhone" /></div>
             </div>
-            <div class="toptitle">生育或计生手术当月所在参保单位</div>
             <div class="question-bar">
                 <div class="attr"><em>*</em>参保单位</div>
-                <div class="answer-list ipt"><input type="text" placeholder="请输入参保单位" v-model="reimburseUnit"/></div>
+                <div class="answer-list ipt"><input type="text" placeholder="生育或计生手术当月所在参保单位" v-model="reimburseUnit"/></div>
             </div>
             <div class="question-bar">
-                <div class="attr"><em>*</em>单位社保代码</div>
+                <div class="attr">单位社保代码</div>
                 <div class="answer-list ipt"><input type="text" placeholder="请输入单位社保代码" v-model="companySocialCode" /></div>
             </div>
             <div class="question-bar">
@@ -118,11 +117,12 @@
                     </div>
                 </div>
                 <div class="question-bar" v-if="reimbursePeopleSex=='1'&&declareTypeTwo=='1' || reimbursePeopleSex=='2'">
-                    <div class="attr bottom-none"><em>*</em>上传产检及分娩发票</div>
+                    <div class="attr bottom-none">上传产检及分娩发票</div>
                     <div class="twotips">
-                        1、如在江北新区17家医疗机构就诊，可上传缴费凭条；<br/>
+                        如果需要报销产检和分娩费用，此项必填<br/>
+                        如在江北新区17家医疗机构就诊，可上传缴费凭条；
                         <!-- 2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a> -->
-                        2、查看<a href="" class="desctip">缴费凭证示例</a>
+                        <!-- 2、查看<a href="" class="desctip" @click="seeExample(childbirthReceiptTest)">缴费凭证示例</a> -->
                     </div>
                     <div class="upfile">
                         <div class="operation-div">
@@ -152,7 +152,7 @@
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr bottom-none">上传准生证</div>
+                    <div class="attr bottom-none"><em v-if="birthBabyNo == '3'">*</em>上传准生证（三胎及以上必须提供）</div>
                     <div class="upfile">
                         <div class="operation-div">
                             <div class="img-wrap" v-for="(v,i) in pregnancyPermit" :key="i">
@@ -162,6 +162,21 @@
                         </div>
                         <div class="file-wrap">
                             <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'pregnancyPermit')"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="question-bar">
+                    <div class="attr bottom-none">其他上传</div>
+                    <div class="twotips">异地生育可上传《异地生育申报表》</div>
+                    <div class="upfile">
+                        <div class="operation-div">
+                            <div class="img-wrap" v-for="(v,i) in allopatricBirth" :key="i">
+                                <em class="close" @click="deletesth('allopatricBirth',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
+                        </div>
+                        <div class="file-wrap">
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'allopatricBirth')"/>
                         </div>
                     </div>
                 </div>
@@ -202,7 +217,7 @@
                     <div class="twotips">
                         1、如在江北新区17家医疗机构就诊，可上传缴费凭条；<br/>
                         <!-- 2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a> -->
-                        2、查看<a href="" class="desctip">缴费凭证示例</a>
+                        <!-- 2、查看<a href="" class="desctip" @click="seeExample(birthPaymenReceiptTest)">缴费凭证示例</a> -->
                     </div>
                     <div class="upfile">
                         <div class="operation-div">
@@ -215,6 +230,22 @@
                             <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'birthPaymenReceipt')"/>
                         </div>
                     </div>
+                </div>
+                <div class="question-bar">
+                    <div class="attr bottom-none">上传费用明细<span></span></div>
+                    <a href="javascript:;" class="desctip" @click="seeExample(uploadPaymentDetailTest)">费用明细实例</a>
+                    <div class="upfile">
+                        <div class="operation-div">
+                            <div class="img-wrap" v-for="(v,i) in uploadPaymentDetail" :key="i">
+                                <em class="close" @click="deletesth('uploadPaymentDetail',i)"></em>
+                                <img class="shoImg" :src="v | imageUrl">
+                            </div>
+                        </div>
+                        <div class="file-wrap">
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'uploadPaymentDetail')"/>
+                        </div>
+                    </div>
+                    <!-- <div class="twotips" style="margin-top:0;">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div> -->
                 </div>
             </template>
             
@@ -264,9 +295,12 @@ export default {
             womanCertificate:'',
             pregnancyPermit:'',
             birthPaymenReceipt:'',
+            allopatricBirth:'',
             birthHospitalName:'',
             popbox2:false,
             exampleList:[],
+            detailId: this.$route.params.id,
+            uploadPaymentDetailTest:['费用明细.jpg']
 
         }
     },
@@ -280,7 +314,47 @@ export default {
         this.userInfo = JSON.parse(localStorage.getItem('privateInfo'))
     },
     mounted() {
-        
+        if(this.detailId != 'nothing'){
+            this.getDetail().then((res)=>{
+                let obj = res.data.medicalReimburse
+                this.applyName = obj.applyName
+                this.applyPhone = obj.applyPhone
+                this.applyCard = obj.applyCard
+                this.reimburseUnit = obj.reimburseUnit
+                this.companySocialCode = obj.companySocialCode
+                this.reimbursePeople = obj.reimbursePeople
+                this.reimburseCardNo = obj.reimburseCardNo
+                this.reimbursePeopleSex = +obj.reimbursePeopleSex+1
+                this.declareType = +obj.declareType+1
+                this.declareTypeTwo = +obj.declareTypeTwo+1
+                this.birthHospitalName = obj.birthHospitalName
+                this.birthBabyNo = +obj.birthBabyNo+1
+                this.allopatricBirth = obj.allopatricBirth&&obj.allopatricBirth.split(',')
+                this.marriageCertificate = obj.marriageCertificate&&obj.marriageCertificate.split(',')
+                this.medicalRecord = obj.medicalRecord&&obj.medicalRecord.split(',')
+                this.childbirthReceipt = obj.childbirthReceipt&&obj.childbirthReceipt.split(',')
+                this.womanCertificate = obj.womanCertificate&&obj.womanCertificate.split(',')
+                this.pregnancyPermit = obj.pregnancyPermit&&obj.pregnancyPermit.split(',')
+                this.birthPaymenReceipt = obj.birthPaymenReceipt&&obj.birthPaymenReceipt.split(',')
+                this.uploadPaymentDetail = obj.uploadPaymentDetail&&obj.uploadPaymentDetail.split(',')
+            })
+        }
+    },
+    beforeRouteLeave(to, from, next) {
+        if(to.path.indexOf('bxsuccess') == -1){
+            Wap.AlertBox({
+                type: 'doubleBtn',
+                title: "确认返回吗，你所填写的内容将丢失",
+                alertType: "fixed",
+                cancel: function () {
+                },
+                confirm: function () {
+                    next(true);
+                }
+            })
+        }else{
+            next(true);
+        }
     },
     methods: {
         //查看示例
@@ -289,7 +363,7 @@ export default {
                 let tem=[]
                 arr.forEach((v)=>{
                     tem.push({
-                        newsPic:this.hosts.szjb1 + '/medical/help/downloadFile?medicalPicId=' + v
+                        newsPic:'//jnhpublic.gzspiral.com/Lwt/' + v
                     })
                 })
                 this.exampleList = tem
@@ -299,6 +373,22 @@ export default {
                     msg:"暂未维护，敬请期待~"
                 })
             }
+        },
+        getDetail(){
+            let _this = this
+            var info = new Promise(function(resolve, reject) {
+                _this.$axios.get(`${_this.hosts.szjb1}/medical/reimburse/doGet`,{       
+                    params:{
+                        medicalReimburseId:_this.detailId
+                    }
+                }).then(res => {
+                    resolve(res)
+                }).catch(e => {
+                    console.log(e)
+                    resolve([])
+                })
+            })
+            return info;
         },
         submit(){
             if(this.btncurornot2()){
@@ -323,7 +413,9 @@ export default {
                     childbirthReceipt:_this.childbirthReceipt&&_this.childbirthReceipt.join(','),
                     womanCertificate:_this.womanCertificate&&_this.womanCertificate.join(','),
                     pregnancyPermit:_this.pregnancyPermit&&_this.pregnancyPermit.join(','),
-                    birthPaymenReceipt:_this.birthPaymenReceipt&&_this.birthPaymenReceipt.join(',')
+                    birthPaymenReceipt:_this.birthPaymenReceipt&&_this.birthPaymenReceipt.join(','),
+                    uploadPaymentDetail:_this.uploadPaymentDetail&&_this.uploadPaymentDetail.join(','),
+                    allopatricBirth:_this.allopatricBirth&&_this.allopatricBirth.join(',')
                 }).then(res => {
                     _this.loading = false
                     if(res&&res.data&&res.data.result&&res.data.result.code=='00' && res.data.medicalVerifyId){
@@ -346,7 +438,7 @@ export default {
         },
         btncurornot(){
             let str = ''
-            if(this.applyName && this.applyCard && this.applyPhone && this.reimbursePeople && this.reimburseCardNo && this.reimbursePeopleSex && this.declareType){
+            if(this.applyName && this.applyCard && this.applyPhone && this.reimbursePeople && this.reimburseCardNo && this.reimbursePeopleSex && this.declareType && this.reimburseUnit){
                 if(this.reimbursePeopleSex == '2'){   //女
                     return 'cur' 
                 }else if(this.reimbursePeopleSex == '1'){  //男
@@ -363,11 +455,11 @@ export default {
             let str = ''
             if(this.declareType && this.declareType == '1'){
                 if(this.birthHospitalName && this.birthBabyNo && this.marriageCertificate && this.medicalRecord){
-                    if(this.reimbursePeopleSex == '2' && this.childbirthReceipt && this.childbirthReceipt.length){
+                    if(this.reimbursePeopleSex == '2' && (this.birthBabyNo > 2 && this.pregnancyPermit&&this.pregnancyPermit.length || this.birthBabyNo < 3)){
                         str = 'cur'
                     }
                     if(this.reimbursePeopleSex=='1'){
-                        if(this.declareTypeTwo == '1' && this.childbirthReceipt && this.childbirthReceipt.length && this.womanCertificate && this.womanCertificate.length || this.declareTypeTwo == '2'){
+                        if(this.declareTypeTwo == '1' && this.womanCertificate && this.womanCertificate.length || this.declareTypeTwo == '2' && this.marriageCertificate && this.marriageCertificate.length && this.medicalRecord && this.medicalRecord.length){
                             str = 'cur'
                         }
                     }

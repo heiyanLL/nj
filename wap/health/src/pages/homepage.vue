@@ -5,14 +5,14 @@
         <div class="baoxiao-list hor-view">
             <a href="javascript:;" class="bx1" @click.stop.prevent="gotobaoxiao('jumin')">居民医保报销</a>
             <a href="javascript:;" class="bx2" @click.stop.prevent="gotobaoxiao('zhigong')">职工医保报销</a>
-            <a href="javascript:;" class="bx3" @click.stop.prevent="gotobaoxiao('shengyu')">生育医保报销</a>
+            <a href="javascript:;" class="bx3" @click.stop.prevent="gotobaoxiao('shengyu')">职工生育报销</a>
         </div> 
         <div class="bx-help">
             <a href="" @click.stop.prevent="$router.push({path:'/mybx'})">我的报销<span v-if="reimburseNum!=''">（{{reimburseNum}}）</span></a>
             <a href="" @click.stop.prevent="$router.push({path:'/helpcenter'})">帮助中心</a>
         </div>
         <div class="news-list">
-            <div class="title">新闻资讯</div>
+            <div class="title">政策指南</div>
             <ul>
                 <li v-for="(v,i) in newsData" :key="i">
                     <a href="javascript:;" class="hor-view" @click.stop.prevent="gotodetail(v)">
@@ -181,7 +181,7 @@ export default {
         gotobaoxiao(str){
             this.curProto = str
             if(str == 'jumin'){
-                this.curBxTxt = '居民医保零星报销'
+                this.curBxTxt = '居民医保零星报销<br/>申报须知'
                 this.mainXzTxt = CONST.REMARK.JMBX
                 // this.getStaticInfo(3,0,'').then((res)=>{
                 //     this.mainXzTxt = res.data.dataList&&res.data.dataList.length&&res.data.dataList[0].dataValue
@@ -193,7 +193,7 @@ export default {
                 //     this.mainXzTxt = res.data.dataList&&res.data.dataList.length&&res.data.dataList[0].dataValue
                 // })
             }else if(str == 'shengyu'){
-                this.curBxTxt = '生育保险零星报销<br/>申报须知'
+                this.curBxTxt = '职工生育保险零星报销<br/>申报须知'
                 this.mainXzTxt = CONST.REMARK.SYBX
                 // this.getStaticInfo(3,2,'').then((res)=>{
                 //     this.mainXzTxt = res.data.dataList&&res.data.dataList.length&&res.data.dataList[0].dataValue
@@ -224,7 +224,7 @@ export default {
         agree(){
             if(this.readalready){
                 this.readalready = false
-                this.$router.push({path:'/'+this.curProto})
+                this.$router.push({path:'/'+this.curProto+'/nothing'})
             }   
         }
     }

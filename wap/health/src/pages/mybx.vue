@@ -17,8 +17,9 @@
                     <div class="ifself">报销人:{{v.reimburseKind=='0'?'本人':v.reimbursePeople}}</div>
                     <div class="paymethod">报销支付方式:{{v.reimbursePayType=='0'?'社保卡':'银行卡'}}</div>
                 </div>
-                <div class="type">{{v.reimburseType=='1'?'居民':(v.reimburseType=='0'?'职工':'生育')}}医疗报销 - <span class="time">2021年1月1号</span></div>
-                <div class="state s1" v-if="v.verifyStatus=='0' || v.verifyStatus=='1'">审核中</div>
+                <div class="type">{{v.reimburseType=='1'?'居民医疗报销':(v.reimburseType=='0'?'职工医疗报销':'职工生育报销')}} - <span class="time">{{v.createTime | getTime}}</span></div>
+                <div class="state s1" v-if="v.verifyStatus=='0'">未审核</div>
+                <!-- <div class="state s1" v-if="v.verifyStatus=='1'">审核中</div> -->
                 <div class="state s2" v-else>已审核</div>
                 <!-- 未审核 0 初审成功 1 初审失败 2 复审成功 3 复审失败 4 -->
             </li>     
@@ -33,13 +34,13 @@ export default {
     },
     data() {
         return {
-            typeList:['全部','审核中','已审核'],
+            typeList:['全部','未审核','已审核'],
             curType:0,
             bxtype:[
                 {'id': '3', 'value': '全部报销'},
                 {'id': '1', 'value': '居民医疗报销'},
                 {'id': '0', 'value': '职工医疗报销'},
-                {'id': '2', 'value': '生育医疗报销'}
+                {'id': '2', 'value': '职工生育报销'}
             ],
             curbx:'',
             curbxTxt:'',

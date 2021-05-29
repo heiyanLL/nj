@@ -1,11 +1,11 @@
 <template>
     <div class="jumin">
         <div class="loagMask2" v-if="loading"><div class="mask-loading fixedLoading"></div></div>
-        <div class="ifself" v-if="!selfshenb && !othershenb">
-            <a href="javascript:;" @click="clickselfshenb()">自己申报</a>
-            <a href="javascript:;" @click="othershenb=true">帮别人申报</a>
+        <div class="ifself" v-if="!selfshenb && !othershenb && detailId=='nothing'">
+            <a href="javascript:;" @click="clickselfshenb()">本人申报</a>
+            <a href="javascript:;" @click="othershenb=true">代他人申报</a>
         </div>
-        <template v-if="selfshenb || othershenb">
+        <template v-if="selfshenb || othershenb || detailId != 'nothing'">
             <div class="toptitle">居民医保报销</div>
             <div class="step-list">
                 <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div><span></span>
@@ -65,7 +65,7 @@
 
             </template>
             <template v-if="curstep=='2'">
-                <div class="question-bar" v-if="visitHospitalArea=='1'">
+                <div class="question-bar" v-if="visitHospitalArea=='1' && !njnotInnj">
                     <div class="attr bottom-none"><em>*</em>上传缴费凭条</div>
                     <a href="javascript:;" class="desctip" @click="seeExample(paymentPicTest)">缴费凭条实例</a>
                     <div class="upfile">
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                 </div>
-                <template v-if="visitHospitalArea=='2'">
+                <template v-if="visitHospitalArea=='2' || njnotInnj">
                     <div class="question-bar">
                         <div class="attr border-1px"><em>*</em>就医类型</div>
                         <div class="answer-list ipt">
@@ -102,12 +102,11 @@
                             <div class="file-wrap">
                                 <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'visitReceipt')"/>
                             </div>
-                        
                         </div>
                     </div>
-
+                    <template v-if="visitType=='1'">
                     <div class="question-bar">
-                        <div class="attr bottom-none"><em>*</em>上传费用说明<span>（请确保上传的图像清晰）</span></div>
+                        <div class="attr bottom-none"><em>*</em>上传住院明细<span>（请确保上传的图像清晰）</span></div>
                         <a href="javascript:;" class="desctip" @click="seeExample(uploadPaymentDetailTest)">费用说明实例</a>
                         <div class="upfile">
                             <div class="operation-div">
@@ -123,7 +122,7 @@
                         </div>
                     </div>    
 
-                    <div class="question-bar" v-if="visitType=='1'">
+                    <div class="question-bar">
                         <div class="attr bottom-none"><em>*</em>上传出院小结<span>（请确保上传的图像清晰）</span></div>
                         <a href="javascript:;" class="desctip" @click="seeExample(visitEndRecordTest)">出院小结实例</a>
                         <div class="upfile">
@@ -136,10 +135,9 @@
                             <div class="file-wrap">
                                 <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'visitEndRecord')"/>
                             </div>
-                         
-                            
                         </div>
                     </div>
+                    </template>
                 </template>
                 
                 <div class="question-bar mb24">
@@ -212,6 +210,7 @@ export default {
             visitHospitalName:'',
             paymentPic:'',
             visitType:'',  //1门诊2住院
+            njnotInnj:false,
             visitReceipt:'',
             uploadPaymentDetail:'',
             visitEndRecord:'',
@@ -230,16 +229,39 @@ export default {
             },
             popbox:false,
             exampleList:[],
-            visitReceiptTest:['1620959476796i5Lm'],   //发票实例
-            visitEndRecordTest:[],   //出院小结
+            visitReceiptTest:['发票1.jpg','发票2.jpg','门诊发票.jpg','门诊发票2.jpg'],   //发票实例
+            visitEndRecordTest:['出院小结.jpg'],   //出院小结
             uploadPaymentDetailTest:[],   //费用说明
-            paymentPicTest:[]    //缴费凭证
+            paymentPicTest:[],    //缴费凭证
+            detailId: this.$route.params.id,
         }
     },
     created() {
         this.userInfo = JSON.parse(localStorage.getItem('privateInfo'))
     },
     mounted() {
+        if(this.detailId != 'nothing'){
+            this.getDetail().then((res)=>{
+                let obj = res.data.medicalReimburse
+                this.reimbursePeople = obj.reimbursePeople
+                this.reimbursePeopleSocial = obj.reimbursePeopleSocial&&obj.reimbursePeopleSocial.split(',')
+                this.reimburseRelate = obj.reimburseRelate
+                this.othershenb = obj.reimburseRelate?true:false
+                this.personStreet = obj.personStreet
+                this.visitHospitalArea = +obj.visitHospitalArea+1
+                this.visitType = +obj.visitType+1
+                this.visitHospitalName = obj.visitHospitalName
+                this.paymentPic = obj.paymentPic && obj.paymentPic.split(',')
+                this.visitReceipt = obj.visitReceipt && obj.visitReceipt.split(',')
+                this.uploadPaymentDetail = obj.uploadPaymentDetail&&obj.uploadPaymentDetail.split(',')
+                this.visitEndRecord = obj.visitEndRecord&&obj.visitEndRecord.split(',')
+                this.reimbursePayType = +obj.reimbursePayType+1
+                this.bankCountry = obj.bankCountry
+                this.bankCity = obj.bankCity
+                this.bankName = obj.bankName
+                this.backNo = obj.backNo
+            })
+        }
         this.getStreetList(1,0,'').then((res)=>{
             if(res&&res.length>0){
                 res.forEach((v)=>{
@@ -251,6 +273,22 @@ export default {
             }
         })
     },
+    beforeRouteLeave(to, from, next) {
+        if(to.path.indexOf('bxsuccess') == -1){
+            Wap.AlertBox({
+                type: 'doubleBtn',
+                title: "确认返回吗，你所填写的内容将丢失",
+                alertType: "fixed",
+                cancel: function () {
+                },
+                confirm: function () {
+                    next(true);
+                }
+            })
+        }else{
+            next(true);
+        }
+    },
     methods: {
         //查看示例
         seeExample(arr){
@@ -258,7 +296,7 @@ export default {
                 let tem=[]
                 arr.forEach((v)=>{
                     tem.push({
-                        newsPic:this.hosts.szjb1 + '/medical/help/downloadFile?medicalPicId=' + v
+                        newsPic:'//jnhpublic.gzspiral.com/Lwt/' + v
                     })
                 })
                 this.exampleList = tem
@@ -284,7 +322,7 @@ export default {
         },
         btncurornot(){
             let str = ''
-            if(this.selfshenb){
+            if(this.selfshenb || this.detailId != 'nothing'){
                 if(this.reimbursePeople&&this.personStreet){
                     if(this.visitHospitalArea == '1'){
                         if(this.visitHospitalName){
@@ -294,7 +332,7 @@ export default {
                         str = 'cur'
                     }
                 }
-            }else if(this.othershenb){
+            }else if(this.othershenb || this.detailId != 'nothing'){
                 if(this.reimbursePeople&&this.reimbursePeopleSocial&&this.reimburseRelate){
                     if(this.visitHospitalArea == '1'){
                         if(this.visitHospitalName){
@@ -387,6 +425,22 @@ export default {
                 })
             }
         },
+        getDetail(){
+            let _this = this
+            var info = new Promise(function(resolve, reject) {
+                _this.$axios.get(`${_this.hosts.szjb1}/medical/reimburse/doGet`,{       
+                    params:{
+                        medicalReimburseId:_this.detailId
+                    }
+                }).then(res => {
+                    resolve(res)
+                }).catch(e => {
+                    console.log(e)
+                    resolve([])
+                })
+            })
+            return info;
+        },
         getStreetList(type,key,pkey){
             let _this = this
             var info = new Promise(function(resolve, reject) {
@@ -426,24 +480,19 @@ export default {
         showModelOne(i){
             let _this = this
             if(i == 'visitHospitalName'){
-                // if(_this.personStreetId){
-                    _this.getOrgList().then((res)=>{
-                        if(res&&res.length>0){
-                            res.forEach((v)=>{
-                                v.id = v.medicalOrganizationId
-                                v.value = v.orgName
-                            })
-                            this.questionList.visitHospitalName = res
-                            hook()
-                        }
-                    })
-                // }else{
-                //     Wap.AlertBox({
-                //         type:"mini",
-                //         msg:"请先选择街道哦~"
-                //     })
-                // }
-                
+                _this.getOrgList().then((res)=>{
+                    if(res&&res.length>0){
+                        res.forEach((v)=>{
+                            v.id = v.medicalOrganizationId
+                            v.value = v.orgName
+                        })
+                        this.questionList.visitHospitalName = res.concat([{
+                            id : 'other',
+                            value : '其他医院'
+                        }])
+                        hook()
+                    }
+                })
             }else{
                 hook()
             }
@@ -463,9 +512,13 @@ export default {
                                 _this[i] = selectOneObj.value;
                                 _this[i+'Id'] = selectOneObj.datakey;
                                 bankIdDom.value = selectOneObj.id;
-                                // showBankDom.innerText = selectOneObj.value;
-                                // showBankDom.dataset['id'] = selectOneObj.id;
-                                // showBankDom.dataset['value'] = selectOneObj.value;
+                               if(i == 'visitHospitalName'){
+                                   if(selectOneObj.id == 'other'){
+                                       _this.njnotInnj = true
+                                   }else{
+                                       _this.njnotInnj = false
+                                   }
+                               }
                             },
                             fallback(){
                                 
@@ -520,7 +573,8 @@ export default {
                     bankCountry:_this.bankCountry,
                     bankCity:_this.bankCity,
                     bankName:_this.bankName,
-                    backNo:_this.backNo
+                    backNo:_this.backNo,
+                    medicalReimburseId:_this.detailId=='nothing'?'':_this.detailId
             }).then(res => {
                 _this.loading = false
                 if(res&&res.data&&res.data.result&&res.data.result.code=='00' && res.data.medicalVerifyId){

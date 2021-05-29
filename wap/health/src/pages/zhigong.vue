@@ -1,11 +1,11 @@
 <template>
     <div class="jumin">
         <div class="loagMask2" v-if="loading"><div class="mask-loading fixedLoading"></div></div>
-        <div class="ifself" v-if="!selfshenb && !othershenb">
-            <a href="javascript:;" @click="clickselfshenb()">自己申报</a>
-            <a href="javascript:;" @click="othershenb=true">帮别人申报</a>
+        <div class="ifself" v-if="!selfshenb && !othershenb && detailId=='nothing'">
+            <a href="javascript:;" @click="clickselfshenb()">本人申报</a>
+            <a href="javascript:;" @click="othershenb=true">代他人申报</a>
         </div>
-        <template v-if="selfshenb || othershenb">
+        <template v-if="selfshenb || othershenb || detailId != 'nothing'">
             <div class="toptitle">职工医保报销</div>
             <div class="step-list">
                 <div class="step cur" @click="curstep='1'"><em>1</em>填写报销人信息</div><span></span>
@@ -26,11 +26,11 @@
                         <input type="text" placeholder="请输入报销人身份证号" v-model="reimburseCardNo" />
                     </div>
                 </div>
-                <div class="question-bar" v-if="selfshenb">
+                <div class="question-bar" v-if="selfshenb || detailId != 'nothing'&&reimbursePhone">
                     <div class="attr"><em>*</em>手机号</div>
                     <div class="answer-list ipt"><input type="tel" placeholder="请输入手机号" maxlength="11" v-model="reimbursePhone" /></div>
                 </div>
-                <div class="question-bar" v-if="othershenb">
+                <div class="question-bar" v-if="othershenb || detailId != 'nothing'&&reimburseRelate">
                     <div class="attr"><em>*</em>与报销人关系</div>
                     <div class="answer-list ipt"><input type="text" placeholder="请输入与报销人关系" maxlength="10" v-model="reimburseRelate" /></div>
                 </div>
@@ -60,61 +60,115 @@
                         <div class="radio-btn" @click="visitType='1'"><em :class="['round',visitType=='1'?'cur':'']"></em>门诊</div>
                     </div>
                 </div>
-                <template v-if="visitType=='1'">
-                    <div class="question-bar">
-                        <div class="attr bottom-none"><em>*</em>上传缴费凭条<span>（请确保上传的图像清晰）</span></div>
-                        <a href="javascript:;" class="desctip" @click="seeExample(paymentPicTest)">缴费凭条实例</a>
-                        <div class="upfile">
-                            <div class="operation-div">
-                                <div class="img-wrap" v-for="(v,i) in paymentPic" :key="i">
-                                    <em class="close" @click="deletesth('paymentPic',i)"></em>
-                                    <img class="shoImg" :src="v | imageUrl">
+                <template v-if="visitHospitalArea == '1'">
+                    <template v-if="visitType=='1'">
+                        <div class="question-bar">
+                            <div class="attr bottom-none"><em>*</em>上传缴费凭条或者电子发票<span>（请确保上传的图像清晰）</span></div>
+                            <a href="javascript:;" class="desctip" @click="seeExample(paymentPicTest)">缴费凭条实例</a>
+                            <div class="upfile">
+                                <div class="operation-div">
+                                    <div class="img-wrap" v-for="(v,i) in paymentPic" :key="i">
+                                        <em class="close" @click="deletesth('paymentPic',i)"></em>
+                                        <img class="shoImg" :src="v | imageUrl">
+                                    </div>
+                                </div>
+                                <div class="file-wrap">
+                                    <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'paymentPic')"/>
                                 </div>
                             </div>
-                            <div class="file-wrap">
-                                <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'paymentPic')"/>
-                            </div>
+                            
+                            <div class="twotips" style="margin-top:0;">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div>
                         </div>
-                        
-                        <div class="twotips" style="margin-top:0;">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div>
-                    </div>
-                    <div class="question-bar">
-                        <div class="attr bottom-none">如门慢门特需上传病例<span>（请确保上传的图像清晰）</span></div>
-                        <a href="javascript:;"  class="desctip" @click="seeExample(menMedicalRecordsTest)">病例实例</a>
-                        <div class="upfile">
-                            <div class="operation-div">
-                                <div class="img-wrap" v-for="(v,i) in menMedicalRecords" :key="i">
-                                    <em class="close" @click="deletesth('menMedicalRecords',i)"></em>
-                                    <img class="shoImg" :src="v | imageUrl">
+                        <div class="question-bar">
+                            <div class="attr bottom-none">如门慢门特需上传病例<span>（请确保上传的图像清晰）</span></div>
+                            <a href="javascript:;"  class="desctip" @click="seeExample(menMedicalRecordsTest)">病例实例</a>
+                            <div class="upfile">
+                                <div class="operation-div">
+                                    <div class="img-wrap" v-for="(v,i) in menMedicalRecords" :key="i">
+                                        <em class="close" @click="deletesth('menMedicalRecords',i)"></em>
+                                        <img class="shoImg" :src="v | imageUrl">
+                                    </div>
+                                </div>
+                                <div class="file-wrap">
+                                    <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'menMedicalRecords')"/>
                                 </div>
                             </div>
-                            <div class="file-wrap">
-                                <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'menMedicalRecords')"/>
-                            </div>
+                            
                         </div>
-                        
-                    </div>
-                </template>
-                <template v-if="visitType=='2'">
-                    <div class="question-bar">
-                        <div class="attr bottom-none"><em>*</em>上传缴费凭条<span>（请确保上传的图像清晰）</span></div>
-                        <a href="javascript:;" class="desctip" @click="seeExample(paymentPicTest)">缴费凭条实例</a>
-                        <div class="upfile">
-                            <div class="operation-div">
-                                <div class="img-wrap" v-for="(v,i) in paymentPic" :key="i">
-                                    <em class="close" @click="deletesth('paymentPic',i)"></em>
-                                    <img class="shoImg" :src="v | imageUrl">
+                    </template>
+                    <template v-if="visitType=='2'">
+                        <div class="question-bar">
+                            <div class="attr bottom-none"><em>*</em>上传缴费凭条或者电子发票<span>（请确保上传的图像清晰）</span></div>
+                            <a href="javascript:;" class="desctip" @click="seeExample(paymentPicTest)">缴费凭条实例</a>
+                            <div class="upfile">
+                                <div class="operation-div">
+                                    <div class="img-wrap" v-for="(v,i) in paymentPic" :key="i">
+                                        <em class="close" @click="deletesth('paymentPic',i)"></em>
+                                        <img class="shoImg" :src="v | imageUrl">
+                                    </div>
+                                </div>
+                                <div class="file-wrap">
+                                    <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'paymentPic')"/>
                                 </div>
                             </div>
-                            <div class="file-wrap">
-                                <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'paymentPic')"/>
-                            </div>
+                            <div class="twotips" style="margin-top:0;">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div>
                         </div>
-                        <div class="twotips" style="margin-top:0;">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div>
-                    </div>
 
+                        <div class="question-bar">
+                            <div class="attr bottom-none"><em v-if="njnotInnj">*</em>上传出院记录<span>（请确保上传的图像清晰）</span></div>
+                            <a href="javascript:;" class="desctip" @click="seeExample(visitEndRecordTest)">出院记录实例</a>
+                            <div class="upfile">
+                                <div class="operation-div">
+                                    <div class="img-wrap" v-for="(v,i) in visitEndRecord" :key="i">
+                                        <em class="close" @click="deletesth('visitEndRecord',i)"></em>
+                                        <img class="shoImg" :src="v | imageUrl">
+                                    </div>
+                                </div>
+                                <div class="file-wrap">
+                                    <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'visitEndRecord')"/>
+                                </div>
+                                <div class="operation-div">
+                                    <img class="shoImg" :src="imgDefault">
+                                </div>
+                            </div>
+                        </div>    
+                    </template>
+                </template>
+                <template v-if="visitHospitalArea == '2'">
                     <div class="question-bar">
-                        <div class="attr bottom-none"><em>*</em>上传出院记录<span>（请确保上传的图像清晰）</span></div>
+                        <div class="attr bottom-none"><em>*</em>上传电子发票<span>（请确保上传的图像清晰）</span></div>
+                        <a href="javascript:;" class="desctip" @click="seeExample(paymentPicTest)">缴费凭条实例</a>
+                        <div class="upfile">
+                            <div class="operation-div">
+                                <div class="img-wrap" v-for="(v,i) in paymentPic" :key="i">
+                                    <em class="close" @click="deletesth('paymentPic',i)"></em>
+                                    <img class="shoImg" :src="v | imageUrl">
+                                </div>
+                            </div>
+                            <div class="file-wrap">
+                                <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'paymentPic')"/>
+                            </div>
+                        </div>
+                        <!-- <div class="twotips" style="margin-top:0;">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div> -->
+                    </div>
+                    <div class="question-bar">
+                        <div class="attr bottom-none"><em v-if="visitType=='2'">*</em>上传费用明细<span>（请确保上传的图像清晰）</span></div>
+                        <a href="javascript:;" class="desctip" @click="seeExample(uploadPaymentDetailTest)">费用明细实例</a>
+                        <div class="upfile">
+                            <div class="operation-div">
+                                <div class="img-wrap" v-for="(v,i) in uploadPaymentDetail" :key="i">
+                                    <em class="close" @click="deletesth('uploadPaymentDetail',i)"></em>
+                                    <img class="shoImg" :src="v | imageUrl">
+                                </div>
+                            </div>
+                            <div class="file-wrap">
+                                <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'uploadPaymentDetail')"/>
+                            </div>
+                        </div>
+                        <!-- <div class="twotips" style="margin-top:0;">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div> -->
+                    </div>
+                    <div class="question-bar" v-if="visitType=='2'">
+                        <div class="attr bottom-none">上传出院记录<span>（请确保上传的图像清晰）</span></div>
                         <a href="javascript:;" class="desctip" @click="seeExample(visitEndRecordTest)">出院记录实例</a>
                         <div class="upfile">
                             <div class="operation-div">
@@ -130,9 +184,8 @@
                                 <img class="shoImg" :src="imgDefault">
                             </div>
                         </div>
-                    </div>    
+                    </div> 
                 </template>
-                
                 <div class="question-bar">
                     <div class="attr"><em>*</em>报销支付方式</div>
                     <div class="pay-method">
@@ -204,6 +257,7 @@ export default {
             menMedicalRecords:'',
             visitType:'',  //1门诊2住院
             paymentPic:'',
+            uploadPaymentDetail:'',
             visitEndRecord:'',
             reimbursePayType:'',   //1社保卡2银行卡
             bankCountry:'',
@@ -218,9 +272,11 @@ export default {
             },
             popbox:false,
             exampleList:[],
-            visitEndRecordTest:['1620959066562bGi4'],  //出院记录
+            visitEndRecordTest:['出院记录.jpg'],  //出院记录
             paymentPicTest:[],  //缴费实例
-            menMedicalRecordsTest:[], //病例
+            menMedicalRecordsTest:['门诊病历.jpg'], //病例
+            uploadPaymentDetailTest:['费用明细.jpg'],  //费用明细实例
+            detailId: this.$route.params.id,
 
         }
     },
@@ -234,24 +290,81 @@ export default {
         this.userInfo = JSON.parse(localStorage.getItem('privateInfo'))
     },
     mounted() {
+        if(this.detailId != 'nothing'){
+            this.getDetail().then((res)=>{
+                let obj = res.data.medicalReimburse
+                this.reimbursePeople = obj.reimbursePeople
+                this.reimburseCardNo = obj.reimburseCardNo
+                this.reimbursePhone = obj.reimbursePhone
+                this.reimburseRelate = obj.reimburseRelate
+                this.visitHospitalArea = +obj.visitHospitalArea+1
+                this.reimbursePayType = +obj.reimbursePayType+1
+                this.visitHospitalName = obj.visitHospitalName
+                this.visitType = +obj.visitType+1
+                this.paymentPic = obj.paymentPic&&obj.paymentPic.split(',')
+                this.menMedicalRecords = obj.menMedicalRecords&&obj.menMedicalRecords.split(',')
+                this.visitEndRecord = obj.visitEndRecord&&obj.visitEndRecord.split(',')
+                this.uploadPaymentDetail = obj.uploadPaymentDetail&&obj.uploadPaymentDetail.split(',')
+                this.bankCountry = obj.bankCountry
+                this.bankCity = obj.bankCity
+                this.bankName = obj.bankName
+                this.backNo = obj.backNo
+            })
+        }
         this.getOrgList().then((res)=>{
             if(res&&res.length>0){
                 res.forEach((v)=>{
                     v.id = v.medicalOrganizationId
                     v.value = v.orgName
                 })
-                this.questionList.visitHospitalName = res
+                this.questionList.visitHospitalName = res.concat([{
+                    id : 'other',
+                    value : '其他医院'
+                }])
             }
         })
     },
+    beforeRouteLeave(to, from, next) {
+        let _this = this
+        if(to.path.indexOf('bxsuccess') == -1){
+            Wap.AlertBox({
+                type: 'doubleBtn',
+                title: "确认返回吗，你所填写的内容将丢失",
+                alertType: "fixed",
+                cancel: function () {
+                },
+                confirm: function () {
+                    next(true);
+                }
+            })
+        }else{
+            next(true);
+        }
+    },
     methods: {
+        getDetail(){
+            let _this = this
+            var info = new Promise(function(resolve, reject) {
+                _this.$axios.get(`${_this.hosts.szjb1}/medical/reimburse/doGet`,{       
+                    params:{
+                        medicalReimburseId:_this.detailId
+                    }
+                }).then(res => {
+                    resolve(res)
+                }).catch(e => {
+                    console.log(e)
+                    resolve([])
+                })
+            })
+            return info;
+        },
         //查看示例
         seeExample(arr){
             if(arr.length){
                 let tem=[]
                 arr.forEach((v)=>{
                     tem.push({
-                        newsPic:this.hosts.szjb1 + '/medical/help/downloadFile?medicalPicId=' + v
+                        newsPic:'//jnhpublic.gzspiral.com/Lwt/' + v
                     })
                 })
                 this.exampleList = tem
@@ -294,7 +407,7 @@ export default {
         },
         btncurornot2(){
             let str = ''
-            if(this.visitType && this.visitType == '1'){
+            if(this.visitType && this.visitType == '1'){   //门诊
                 if(this.paymentPic && this.paymentPic.length){
                     if(this.reimbursePayType == '1'){
                         str =  'cur'
@@ -304,8 +417,8 @@ export default {
                         }
                     }
                 }
-            }else if(this.visitType && this.visitType == '2'){
-                if(this.paymentPic && this.paymentPic.length && this.visitEndRecord && this.visitEndRecord.length){
+            }else if(this.visitType && this.visitType == '2'){   //住院
+                if(this.paymentPic && this.paymentPic.length && (this.visitEndRecord && this.visitEndRecord.length && this.visitHospitalName == '其他医院' || this.visitHospitalName&&this.visitHospitalName!='其他医院' || this.visitHospitalArea == '2' && this.uploadPaymentDetail && this.uploadPaymentDetail.length)){
                     if(this.reimbursePayType == '1'){
                         str =  'cur'
                     }else if(this.reimbursePayType == '2'){
@@ -319,7 +432,7 @@ export default {
         },
         btncurornot(){
             let str = ''
-            if(this.selfshenb){
+            if(this.selfshenb || this.detailId != 'nothing'&&this.reimbursePhone){
                 if(this.reimbursePeople&&this.reimburseCardNo&&this.reimbursePhone){
                     if(this.visitHospitalArea == '1'){
                         if(this.visitHospitalName){
@@ -329,7 +442,7 @@ export default {
                         str = 'cur'
                     }
                 }
-            }else if(this.othershenb){
+            }else if(this.othershenb || this.detailId != 'nothing'&&this.reimburseRelate){
                 if(this.reimbursePeople&&this.reimburseCardNo&&this.reimburseRelate){
                     if(this.visitHospitalArea == '1'){
                         if(this.visitHospitalName){
@@ -407,6 +520,11 @@ export default {
                         showBankDom.innerText = selectOneObj.value;
                         // showBankDom.dataset['id'] = selectOneObj.id;
                         // showBankDom.dataset['value'] = selectOneObj.value;
+                        if(selectOneObj.id == 'other'){
+                            _this.njnotInnj = true
+                        }else{
+                            _this.njnotInnj = false
+                        }
                     },
                     fallback(){
                         
@@ -453,13 +571,15 @@ export default {
                 visitHospitalName:_this.visitHospitalName,
                 paymentPic:_this.paymentPic&&_this.paymentPic.join(','),
                 visitEndRecord:_this.visitEndRecord&&_this.visitEndRecord.join(','),
-                menMedicalRecordsTest:_this.menMedicalRecordsTest&&_this.menMedicalRecordsTest.join(','),
+                menMedicalRecords:_this.menMedicalRecords&&_this.menMedicalRecords.join(','),
+                uploadPaymentDetail:_this.uploadPaymentDetail&&_this.uploadPaymentDetail.join(','),
                 visitType:_this.visitType&&(_this.visitType-1),
                 reimbursePayType:_this.reimbursePayType&&(_this.reimbursePayType-1),
                 bankCountry:_this.bankCountry,
                 bankCity:_this.bankCity,
                 bankName:_this.bankName,
-                backNo:_this.backNo
+                backNo:_this.backNo,
+                medicalReimburseId:_this.detailId=='nothing'?'':_this.detailId
             }).then(res => {
                 _this.loading = false
                 if(res&&res.data&&res.data.result&&res.data.result.code=='00' && res.data.medicalVerifyId){
