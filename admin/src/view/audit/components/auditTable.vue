@@ -47,7 +47,6 @@
       @current-change="handleListChange"
     >
     </el-pagination>
-    {{user.accountRole}}---{{typs}}
   </div>
 </template>
 <script>

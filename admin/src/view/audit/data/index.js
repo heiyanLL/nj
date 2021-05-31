@@ -4,6 +4,8 @@ const REMARK = {
   msg3: '尊敬的用户，您于xxxx年xx月xx日提交的线上报销缺少材料：1、xxx，2、xxx，请您尽快补充并上传（数字江北-医保云服务-医保报销-我的报销），如有疑问，请联系xxxxxxx。【江北新区医保为您的健康保驾护航】',
   msg4: '尊敬的用户，您于xxxx年xx月xx日提交的线上报销审核不通过，如有疑问，请联系xxxxxxx。【江北新区医保为您的健康保驾护航】'
 }
+const BASE_WORD = 'http://121.196.42.224/hy/medical/help/downloadReimbursePdf'
 export default{
-  REMARK
+  REMARK,
+  BASE_WORD
 }
