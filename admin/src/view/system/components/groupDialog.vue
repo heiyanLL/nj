@@ -4,20 +4,18 @@
       width="500px"
       :title="title"
       :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
       @close="handleClose"
     >
-      <el-form :model="form" label-width="80px" size="small">
+      <el-form :model="form" label-width="80px" size="small" :rules="rules">
         <el-form-item label="机构名称">
-          <el-input v-model="form.orgName"></el-input>
+          <el-input v-model="form.orgName" placeholder="请输入机构名称"></el-input>
         </el-form-item>
         <el-form-item label="地址">
-          <el-input v-model="form.orgAddress"></el-input>
-        </el-form-item>
-        <el-form-item label="所属街道">
-          <el-input v-model="form.street"></el-input>
+          <el-input v-model="form.orgAddress" placeholder="请输入机构地址"></el-input>
         </el-form-item>
         <el-form-item label="联系电话">
-          <el-input v-model="form.orgPhone"></el-input>
+          <el-input v-model="form.orgPhone" placeholder="请输入机构电话"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -43,6 +41,9 @@ export default {
         street: '',
         orgPhone: '',
       },
+      rules:{
+        orgName :[{required: true, message: '请输入机构名称', trigger: 'blur'}]
+      }
     };
   },
   watch: {

@@ -14,7 +14,7 @@
         <ul class="bx-list">
             <li @click="$router.push({path:'/bxdetail/'+v.medicalReimburseId})" v-for="(v,i) in mybxList" :key="i">
                 <div class="info">
-                    <div class="ifself">报销人:{{v.reimburseKind=='0'?'本人':v.reimbursePeople}}</div>
+                    <div class="ifself">报销人:{{v.reimburseKind=='0'?userInfo.user_name:v.reimbursePeople}}</div>
                     <div class="paymethod">报销支付方式:{{v.reimbursePayType=='0'?'社保卡':'银行卡'}}</div>
                 </div>
                 <div class="type">{{v.reimburseType=='1'?'居民医疗报销':(v.reimburseType=='0'?'职工医疗报销':'职工生育报销')}} - <span class="time">{{v.createTime | getTime}}</span></div>
@@ -45,7 +45,8 @@ export default {
             curbx:'',
             curbxTxt:'',
             mybxList:[],
-            mybxListTem:[]
+            mybxListTem:[],
+            userInfo:{}
         }
     },
     created() {

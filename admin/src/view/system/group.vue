@@ -47,7 +47,7 @@ export default {
       },
       orgList: [],
       groupInfo: {},
-      limit: 0,
+      limit: 1,
     };
   },
   computed: {
@@ -76,7 +76,7 @@ export default {
           param: "",
         };
       }
-      this.limit = 0;
+      this.limit = 1;
       this.$refs.table.offset = CONST.PAGE_SIZE;
       this.queryOrgList();
     },
@@ -84,7 +84,7 @@ export default {
       this.handleQuery(e, "reset");
     },
     handleListChange(limit) {
-      this.limit = limit - 1;
+      this.limit = limit;
       this.queryOrgList();
     },
     addOrg() {
@@ -93,7 +93,7 @@ export default {
     },
     updateOrInsertOrg() {
       this.dialogFormVisible = false
-      this.limit = 0;
+      this.limit = 1;
       this.$refs.table.offset = CONST.PAGE_SIZE;
       this.queryOrgList();
     },

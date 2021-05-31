@@ -4,23 +4,18 @@
       width="500px"
       :title="title"
       :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
       @close="handleClose"
     >
-      <el-form :model="form" label-width="80px" size="small">
+      <el-form :model="form" label-width="80px" size="small" :rules="rules">
         <el-form-item label="街道名称">
-          <el-input v-model="form.streetName"></el-input>
+          <el-input v-model="form.streetName" placeholder="请输入街道名称"></el-input>
         </el-form-item>
         <el-form-item label="街道电话">
-          <el-input v-model="form.streetPhone"></el-input>
+          <el-input v-model="form.streetPhone" placeholder="请输入街道办事处电话"></el-input>
         </el-form-item>
         <el-form-item label="街道地址">
-          <el-input v-model="form.streetAddress"></el-input>
-        </el-form-item>
-        <el-form-item label="所属街道">
-          <el-input v-model="form.street"></el-input>
-        </el-form-item>
-        <el-form-item label="备注">
-          <el-input v-model="form.remark"></el-input>
+          <el-input v-model="form.streetAddress" placeholder="请输入街道办事处地址"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -43,10 +38,11 @@ export default {
       form: {
         streetName: '',
         streetPhone: '',
-        streetAddress: '',
-        street: '',
-        remark: ''
+        streetAddress: ''
       },
+      rules:{
+        streetName :[{required: true, message: '请输入街道名称', trigger: 'blur'}]
+      }
     };
   },
   watch: {

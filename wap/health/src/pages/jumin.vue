@@ -44,7 +44,7 @@
                 <div class="question-bar">
                     <div class="attr"><em>*</em>所在街道</div>
                     <input type="hidden" name="su_idpersonStreet" id="suIdpersonStreet" v-model="personStreet" />
-                    <div class="answer-list" id="showGeneralpersonStreet" @click="showModelOne('personStreet')">{{personStreet || '请输入所在街道'}}</div>
+                    <div class="answer-list" id="showGeneralpersonStreet" @click="showModelOne('personStreet')">{{personStreet || '请输入报销人所在街道'}}</div>
                 </div>
 
                 <div class="question-bar">
@@ -65,6 +65,13 @@
 
             </template>
             <template v-if="curstep=='2'">
+                <div class="question-bar">
+                    <div class="attr border-1px"><em>*</em>就医类型</div>
+                    <div class="answer-list ipt">
+                        <div class="radio-btn" @click="visitType='1'"><em :class="['round',visitType=='1'?'cur':'']"></em>住院</div>
+                        <div class="radio-btn" @click="visitType='2'"><em :class="['round',visitType=='2'?'cur':'']"></em>门诊</div>
+                    </div>
+                </div>
                 <div class="question-bar" v-if="visitHospitalArea=='1' && !njnotInnj">
                     <div class="attr bottom-none"><em>*</em>上传缴费凭条</div>
                     <a href="javascript:;" class="desctip" @click="seeExample(paymentPicTest)">缴费凭条实例</a>
@@ -81,14 +88,6 @@
                     </div>
                 </div>
                 <template v-if="visitHospitalArea=='2' || njnotInnj">
-                    <div class="question-bar">
-                        <div class="attr border-1px"><em>*</em>就医类型</div>
-                        <div class="answer-list ipt">
-                            <div class="radio-btn" @click="visitType='1'"><em :class="['round',visitType=='1'?'cur':'']"></em>住院</div>
-                            <div class="radio-btn" @click="visitType='2'"><em :class="['round',visitType=='2'?'cur':'']"></em>门诊</div>
-                        </div>
-                    </div>
-                
                     <div class="question-bar">
                         <div class="attr bottom-none"><em>*</em>上传发票<span>（请确保上传的图像清晰）</span></div>
                         <a href="javascript:;" class="desctip" @click="seeExample(visitReceiptTest)">发票实例</a>
@@ -265,8 +264,8 @@ export default {
         this.getStreetList(1,0,'').then((res)=>{
             if(res&&res.length>0){
                 res.forEach((v)=>{
-                    v.id = v.medicalStaticDataId
-                    v.value = v.dataValue
+                    v.id = v.medicalStreetId
+                    v.value = v.streetName
                 })
                 
                 this.questionList.personStreet = res
@@ -444,14 +443,15 @@ export default {
         getStreetList(type,key,pkey){
             let _this = this
             var info = new Promise(function(resolve, reject) {
-                _this.$axios.get(`${_this.hosts.szjb1}/medical/data/getData`,{       
+                _this.$axios.get(`${_this.hosts.szjb1}/medical/street/queryStreetList`,{       
                     params:{
-                        dataType:type,
-                        dataKey:key,
-                        parentKey:pkey
+                        limit:0,
+                        offset:100,
+                        loginAccount:'',
+                        param:''
                     }
                 }).then(res => {
-                    resolve(res&&res.data&&res.data.dataList)
+                    resolve(res&&res.data&&res.data.streetList)
                 }).catch(e => {
                     console.log(e)
                     resolve([])
