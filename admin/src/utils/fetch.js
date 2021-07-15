@@ -4,7 +4,7 @@ import { Message, Loading } from 'element-ui'
 let loadingInstance = null //这里是loading
 //使用create方法创建axios实例
 export const Service = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? 'http://121.196.42.224/hy/' : '',
+  baseURL: process.env.NODE_ENV === 'production' ? 'http://medical.nanjingdata.cn/' : '',
   timeout: 7000, // 请求超时时间
 })
 // 添加请求拦截器
