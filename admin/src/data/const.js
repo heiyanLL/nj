@@ -1,4 +1,4 @@
-const BASE_UPLOAD = process.env.NODE_ENV == 'development' ? 'http://121.196.42.224:8080/medical/help/downloadFile?medicalPicId=' : 'http://121.196.42.224/hy/medical/help/downloadFile?medicalPicId='
+const BASE_UPLOAD = process.env.NODE_ENV == 'development' ? 'http://121.196.42.224:8080/medical/help/downloadFile?medicalPicId=' : 'http://medical.nanjingdata.cn:10180/hy/medical/help/downloadFile?medicalPicId='
 const NAV = [
   {
     path: '/',
