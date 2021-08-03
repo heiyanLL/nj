@@ -4,7 +4,7 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/jiangbei-medical/mage/dist/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' || process.env.NODE_ENV == 'test' ? '/jiangbei-medical/mage/dist/' : '/',
   devServer: {
     proxy: {
       '/medical': {
