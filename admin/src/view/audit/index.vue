@@ -105,6 +105,7 @@ export default {
       this.form.type = "";
       this.form.result = "";
       this.form.keywords = "";
+      this.form.personStreet = "";
     },
     search() {
       this.getAuditList();
