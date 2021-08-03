@@ -13,7 +13,7 @@
       <el-form-item label="缩略图" prop="image">
         <el-upload
           class="upload-demo"
-          action="/hy/medical/help/uploadPictures"
+          :action="uploadUrl"
           :file-list="fileList"
           list-type="picture-card"
           :limit="1"
@@ -49,6 +49,7 @@ export default {
         newsText: "",
         newsPic: "",
       },
+      uploadUrl: process.env.NODE_ENV == 'production' ? "/hy/medical/help/uploadPictures" : "/medical/help/uploadPictures",
       fileList: [],
       debounce: _debounce(this.editorInput, 300),
     };
@@ -84,7 +85,7 @@ export default {
       this.form.newsText = v;
     },
     handleImageSuccess(response) {
-      if(response?.picIds) {
+      if(response && response.picIds) {
         this.form.newsPic = CONST.BASE_UPLOAD + response.picIds[0]
       }
     },

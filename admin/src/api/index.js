@@ -29,6 +29,13 @@ export default {
             params: param
         })
     },
+    // 查询街道列表
+    queryStreetList(param) {
+        return fetch({
+            url: '/medical/street/queryStreetList',
+            params: param
+        })
+    },
     /** 报表 */
     // 周月年数据查询
     countVerifyDataOnPhase(param) {

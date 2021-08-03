@@ -146,10 +146,10 @@ export default {
       }
     },
     setOptions(res) {
-      this.optionType.series[0].data = res?.monData || [];
+      this.optionType.series[0].data = res && res.monData || [];
       let x = [],
         y = [];
-      res?.reimburseTypeData &&
+      res && res.reimburseTypeData &&
         res.reimburseTypeData.map((item) => {
           x.push(item.name);
           y.push(item.value);

@@ -97,7 +97,7 @@ export default {
       if(res && res.result && res.result.success) {
         this.$emit('updateOrInsertAccount')
       }else {
-        this.$message.error(res?.result?.message || '服务异常，请稍后')
+        this.$message.error('服务异常，请稍后')
       }
     },
   },

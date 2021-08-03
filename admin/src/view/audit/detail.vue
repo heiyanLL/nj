@@ -267,10 +267,9 @@ export default {
       this.form.remark = CONST.REMARK[val];
     },
     previewImage(v) {
-      this.$Preview({ src: v });
+      this.$Preview({ src: `${process.env.VUE_APP_STATIC}${v}` });
     },
     onSubmit() {
-      // http://localhost:8080/medical/verify/verifyReimburse?verifyType=0&verifyResult=2&receiptType=0&verifyRemark=11&verifyName=admin&verifyAccount=admin&reimburseId=1235
       let param = {
         verifyType: this.objdata.verifyStatus,
         verifyResult: this.form.auditResult,

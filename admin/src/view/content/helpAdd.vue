@@ -45,7 +45,7 @@ export default {
       const id = this.$route.params.id
       if(!id) return
       let res = await this.$http.helpGet({medicalHelpId: id})
-      if(res?.medicalHelp) {
+      if(res && res.medicalHelp) {
         this.form = {...this.form, ...res.medicalHelp}
       }
     },
