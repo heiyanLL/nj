@@ -10,7 +10,13 @@
 		created() {
 			// this.utils.rem()
 		}
-	}
+    }
+    var UA = window.navigator.userAgent
+    window.device = { 
+        isAndroid : UA.match(/android/i) ? true : false, 
+        isIOS : UA.match(/(iPhone|iPod|iPad);?/i) ? true : false, 
+        isWX : UA.match(/MicroMessenger/i) ? true : false
+    }
 </script>
 
 <style lang="less">
@@ -614,15 +620,19 @@ body{
     height:100%;
     background: rgba(0, 0, 0, 0.3);
     z-index:1000;
-    .content{
+    .content-wrap{
         position: absolute;
         bottom:0;
         left:0;
-        width:15rem;
+        width:100%;
         height:90%;
         margin:0 auto;
-        padding:0.8rem 0.48rem;
+        padding:0.8rem 0;
         background:#FFF;
+    }
+    .content{
+        height:100%;
+        padding:0 0.48rem;
         overflow-y:scroll;
         .title{
             font-weight:bold;
@@ -908,6 +918,16 @@ body{
 }
 .alert-btn a.alert-confirm{
     color:#4873DD!important;
+}
+.warm-tip{
+    color:#323232;
+    font-size:0.48rem;
+    margin-left:0.6rem;
+    line-height:1.8rem;
+    font-size:bold;
+    em{
+        color:#FF4400
+    }
 }
 /* layer begin */
 .ios-select-widget-box.olay {

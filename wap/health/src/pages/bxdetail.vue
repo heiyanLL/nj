@@ -10,6 +10,7 @@
         <div class="bxde-info">
             <div class="attr-wrap"><div class="bxde-attr gray6">报销人信息</div></div>
             <div class="t1" v-if="objdata.reimbursePeople"><span class="t2">报销人</span>{{objdata.reimbursePeople}}</div>
+            <div class="t1" v-if="objdata.primaryContactTelephone"><span class="t2">申请人联系方式</span>{{objdata.primaryContactTelephone}}</div>
             <div class="t1 bottom-none" v-if="objdata.reimbursePeopleSocial"><span class="t2">报销人社保卡</span></div>
             <div class="upfile" v-if="objdata.reimbursePeopleSocial">
                 <div class="operation-div">
@@ -17,6 +18,10 @@
                         <img class="shoImg" :src="v | imageUrl">
                     </div>
                 </div>
+            </div>
+            <div class="t1" v-if="objdata.reimbursePhone || objdata.applyPhone">
+                <template v-if="objdata.applyPhone"><span class="t2">手机号：</span>{{objdata.applyPhone}}</template>
+                <template v-else><span class="t2">手机号：</span>{{objdata.reimbursePhone}}</template>
             </div>
             <div class="t1" v-if="objdata.reimburseRelate"><span class="t2">与报销人关系</span>{{objdata.reimburseRelate}}</div>
             <div class="t1" v-if="objdata.reimburseCardNo"><span class="t2">报销人身份证号</span>{{objdata.reimburseCardNo}}</div>
@@ -131,7 +136,7 @@
             <div class="t1" v-if="objdata.bankName"><span class="t2">银行名称</span>{{objdata.bankName}}</div>
             <div class="t1" v-if="objdata.backNo"><span class="t2">卡号</span>{{objdata.backNo}}</div>
             <div class="t1"><span class="t2">申请日期</span>{{objdata.createTime | getTime}}</div>
-<!-- "reimburseCardNo": null,
+<!-- 
 "reimbursePhone": null, -->
 <!-- "reimbursePeopleSex": null, -->
         </div>

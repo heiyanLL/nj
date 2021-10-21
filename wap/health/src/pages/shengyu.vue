@@ -7,6 +7,7 @@
             <div :class="['step',curstep=='2'?'cur':'']"><em>2</em>提交报销资料</div><span></span>
             <div class="step"><em>3</em>申报完成</div>
         </div>
+        <div class="warm-tip">加<em>*</em>号为必填项，其他为选填项目</div>
         <template v-if="curstep == '1'">
             <div class="question-bar">
                 <div class="attr"><em>*</em>申请人</div>
@@ -14,7 +15,12 @@
                     <input type="text" placeholder="请输入申请人姓名" maxlength="10" v-model="applyName" />
                 </div>
             </div>
-
+            <div class="question-bar">
+                <div class="attr"><em>*</em>申请人联系方式</div>
+                <div class="answer-list ipt">
+                    <input type="text" placeholder="请输入申请人联系方式" maxlength="11" v-model="primaryContactTelephone" />
+                </div>
+            </div>
             <div class="question-bar">
                 <div class="attr"><em>*</em>申请人身份证号</div>
                 <div class="answer-list ipt">
@@ -84,8 +90,8 @@
                 </div>
                 <!-- 男，生育 -->
                 <!-- 配偶无保险 -->
-                <div class="midtitle" v-if="reimbursePeopleSex=='1'&&declareTypeTwo=='1'">护理假津贴、男职工配偶分娩报销</div>   
-                <div class="midtitle" v-if="reimbursePeopleSex=='1'&&declareTypeTwo=='2'">护理假津贴</div>
+                <div class="midtitle" v-if="reimbursePeopleSex=='1'&&declareTypeTwo=='1'">友情提醒：您可以报销护理假津贴及配偶产检、分娩费用</div>   
+                <div class="midtitle" v-if="reimbursePeopleSex=='1'&&declareTypeTwo=='2'">友情提醒：您可以报销护理假津贴</div>
                 <div class="midtitle" v-if="reimbursePeopleSex=='2'">津贴及营养费、分娩费用报销</div>
             
                 <div class="question-bar">
@@ -98,12 +104,13 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'marriageCertificate')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'marriageCertificate')"/>
+                           
                         </div>
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr bottom-none"><em>*</em>上传出院小结或者门诊病历</div>
+                    <div class="attr bottom-none"><em>*</em>上传出院小结</div>
                     <div class="upfile">
                         <div class="operation-div">
                             <div class="img-wrap" v-for="(v,i) in medicalRecord" :key="i">
@@ -112,7 +119,8 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'medicalRecord')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'medicalRecord')"/>
+                            
                         </div>
                     </div>
                 </div>
@@ -132,7 +140,8 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'childbirthReceipt')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'childbirthReceipt')"/>
+                           
                         </div>
                     </div>
                 </div>
@@ -147,7 +156,8 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'womanCertificate')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'womanCertificate')"/>
+                            
                         </div>
                     </div>
                 </div>
@@ -161,11 +171,12 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'pregnancyPermit')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'pregnancyPermit')"/>
+                            
                         </div>
                     </div>
                 </div>
-                <div class="question-bar">
+                <div class="question-bar" v-if="!(reimbursePeopleSex=='1'&&declareTypeTwo=='2')">
                     <div class="attr bottom-none">其他上传</div>
                     <div class="twotips">异地生育可上传《异地生育申报表》</div>
                     <div class="upfile">
@@ -176,14 +187,15 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'allopatricBirth')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'allopatricBirth')"/>
+                           
                         </div>
                     </div>
                 </div>
             </template>
             <!-- 计生相关 -->
             <template v-if="declareType=='2'">
-                <div class="midtitle">计生手术报销</div>
+                <div class="midtitle">友情提醒：您可以报销津贴及计生手术费用</div>
                 <div class="question-bar">
                     <div class="attr bottom-none"><em>*</em>上传结婚证或离婚证</div>
                     <div class="upfile">
@@ -194,7 +206,8 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'marriageCertificate')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'marriageCertificate')"/>
+                            
                         </div>
                     </div>
                 </div>
@@ -208,14 +221,16 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'medicalRecord')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'medicalRecord')"/>
+                            
                         </div>
                     </div>
                 </div>
                 <div class="question-bar">
-                    <div class="attr bottom-none"><em>*</em>计生费用发票</div>
+                    <div class="attr bottom-none">计生费用发票</div>
                     <div class="twotips">
-                        1、如在江北新区17家医疗机构就诊，可上传缴费凭条；<br/>
+                        1、需要报销计生手术费用，此项必填<br/>
+                        2、如在江北新区17家医疗机构就诊，可上传缴费凭条
                         <!-- 2、查看<a href="" class="desctip">17家医疗机构</a>和<a href="" class="desctip">缴费凭证示例</a> -->
                         <!-- 2、查看<a href="" class="desctip" @click="seeExample(birthPaymenReceiptTest)">缴费凭证示例</a> -->
                     </div>
@@ -227,7 +242,8 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'birthPaymenReceipt')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'birthPaymenReceipt')"/>
+                           
                         </div>
                     </div>
                 </div>
@@ -242,7 +258,8 @@
                             </div>
                         </div>
                         <div class="file-wrap">
-                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/gif,image/jpeg,image/jpg,image/png" @change="selectImg($event,'uploadPaymentDetail')"/>
+                            <input ref="uploadInput" type="file" multiple class='upinp' name="file" value="" accept="image/*" @change="selectImg($event,'uploadPaymentDetail')"/>
+                            
                         </div>
                     </div>
                     <!-- <div class="twotips" style="margin-top:0;">说明：如果凭条过长可分段拍摄，同一凭条切勿多次上传</div> -->
@@ -312,6 +329,7 @@ export default {
     },
     created() {
         this.userInfo = JSON.parse(localStorage.getItem('privateInfo'))
+        this.primaryContactTelephone = this.userInfo.user_phone
     },
     mounted() {
         if(this.detailId != 'nothing'){
@@ -322,6 +340,7 @@ export default {
                 this.applyCard = obj.applyCard
                 this.reimburseUnit = obj.reimburseUnit
                 this.companySocialCode = obj.companySocialCode
+                this.primaryContactTelephone = obj.primaryContactTelephone
                 this.reimbursePeople = obj.reimbursePeople
                 this.reimburseCardNo = obj.reimburseCardNo
                 this.reimbursePeopleSex = +obj.reimbursePeopleSex+1
@@ -416,7 +435,8 @@ export default {
                     pregnancyPermit:_this.pregnancyPermit&&_this.pregnancyPermit.join(','),
                     birthPaymenReceipt:_this.birthPaymenReceipt&&_this.birthPaymenReceipt.join(','),
                     uploadPaymentDetail:_this.uploadPaymentDetail&&_this.uploadPaymentDetail.join(','),
-                    allopatricBirth:_this.allopatricBirth&&_this.allopatricBirth.join(',')
+                    allopatricBirth:_this.allopatricBirth&&_this.allopatricBirth.join(','),
+                    primaryContactTelephone:_this.primaryContactTelephone
                 }).then(res => {
                     _this.loading = false
                     if(res&&res.data&&res.data.result&&res.data.result.code=='00' && res.data.medicalVerifyId){
@@ -466,7 +486,7 @@ export default {
                     }
                 }
             }else if(this.declareType && this.declareType == '2'){
-                if(this.marriageCertificate && this.marriageCertificate.length && this.medicalRecord && this.medicalRecord.length && this.birthPaymenReceipt && this.birthPaymenReceipt.length){
+                if(this.marriageCertificate && this.marriageCertificate.length && this.medicalRecord && this.medicalRecord.length){
                     str = 'cur'
                 }
             }
@@ -483,41 +503,68 @@ export default {
         selectImg(e,attr){
             let _this = this
             let imgFile = e.target.files;
-          
-            let formData = new FormData();
-            for(var key in imgFile){
-                if(imgFile[key].size > 5 * 1024 * 1024){
+            for(var i=0;i<imgFile.length;i++){
+                if(imgFile[i].size > 15 * 1024 * 1024){
                     Wap.AlertBox({
                         type:"mini",
-                        msg:"单张图片大小应不超过5M，请重新选择上传"
+                        msg:"单张图片大小应不超过15M，请重新选择上传"
                     })
                     e.target.value = ''   //有一张不满足条件，就全部清空
                     return false
-                }
-                formData.append('files', imgFile[key]);
-            }
-            if (imgFile){ 
-                _this.loading = true
-                _this.$axios.post(`${_this.hosts.szjb1}/medical/help/uploadPictures`,formData).then(res => {
-                    if(res&&res.data.picIds&&res.data.picIds.length){
-                        _this.loading = false
-                        if(_this[attr]){
-                            _this[attr] = _this[attr].concat(res.data.picIds)
-                        }else{
-                            _this[attr] = res.data.picIds
+                }else{   // if(imgFile[i].size >= 1024 * 1024 && imgFile[i].size <= 15 * 1024 * 1024)
+                    _this.loading = true
+                    let formData = new FormData()
+                    let ready = new FileReader()
+                    var file = imgFile[i]
+                    ready.readAsDataURL(file)
+                    ready.onload = function(res){
+                        var img = new Image();
+                        img.src = this.result;
+                        img.onload = function () {
+                            var w;
+                            var h;
+                            if (this.width > this.height) {
+                                w = 1000;
+                                h = 1000 / (this.width / this.height);
+                            } else {
+                                w = 1000 * (this.width / this.height);
+                                h = 1000;
+                            }
+                            var canvas = document.createElement('canvas');
+                            var ctx = canvas.getContext('2d');
+                            var anw = document.createAttribute("width");
+                            anw.nodeValue = w;
+                            var anh = document.createAttribute("height");
+                            anh.nodeValue = h;
+                            canvas.setAttributeNode(anw);
+                            canvas.setAttributeNode(anh);
+                            ctx.drawImage(this, 0, 0, w, h)
+                            canvas.toBlob(function (blob) {
+                                formData.append("files", blob, file.name);
+                                _this.$axios.post(`${_this.hosts.szjb1}/medical/help/uploadPictures`,formData).then(res => {
+                                    if(res&&res.data.picIds&&res.data.picIds.length){
+                                        _this.loading = false
+                                        if(_this[attr]){
+                                            _this[attr] = _this[attr].concat(res.data.picIds)
+                                        }else{
+                                            _this[attr] = res.data.picIds
+                                        }
+                                    }else{
+                                        _this.loading = false
+                                    }
+                                }).catch((e)=>{
+                                    _this.loading = false
+                                    Wap.AlertBox({
+                                        type:"mini",
+                                        msg:"上传失败，稍后再试~"
+                                    })
+                                })
+                            }, file.type);
                         }
-                    }else{
-                        _this.loading = false
                     }
-                }).catch((e)=>{
-                    _this.loading = false
-                    Wap.AlertBox({
-                        type:"mini",
-                        msg:"上传失败，稍后再试~"
-                    })
-                })
+                }
             }
-        }
+        },
     }
 };
 </script>

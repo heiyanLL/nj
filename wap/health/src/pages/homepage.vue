@@ -26,6 +26,7 @@
             </ul>
         </div>
         <div class="play-info" v-if="protopop">
+            <div class="content-wrap">
             <div class="content">
                 <div class="title" v-html="curBxTxt"></div>
                 <div class="main" v-html="mainXzTxt"></div>
@@ -35,12 +36,12 @@
                     <a href="javascript:;" :class="[readalready?'cur':'']" @click="agree()">同意</a>   
                 </div>
             </div>
+            </div>
         </div>
     </div>
 </template> 
 
 <script>
-import base64 from "@/utils/base64";
 import CONST from "@/data/const";
 import {banner} from "@/components/components";
 export default {
@@ -96,25 +97,28 @@ export default {
                     this.bannerData = res.data.newsList.slice(0.5)
                 }
             })
-            // TODO:
-            localStorage.setItem('privateInfo',JSON.stringify({
-                openid:'ceshixinxin',
-                user_name:'张123'
-            }))
-            // var openid = base64.decode(_this.utils.getQueryString('id')).slice(8)
-            var openid = 'ceshixinxin'
-            _this.getuserinfo(openid).then((res)=>{
-                if(res&&res.data){
-                    console.log('用户信息---->',res)
-                    window.privateInfo = res  
-                    
-                    _this.getselfNum(res.data.openid).then((num)=>{
-                        _this.reimburseNum = num
-                    })
-                }
-                
-            })
-
+            if(localStorage.getItem('privateInfo')){
+                let useInfo = JSON.parse(localStorage.getItem('privateInfo'))
+                _this.getselfNum(useInfo.openid).then((num)=>{
+                    _this.reimburseNum = num
+                })
+            }else{
+                var openid = _this.utils.decode64(_this.utils.getQueryString('id')).slice(8)
+                _this.getuserinfo(openid).then((res)=>{
+                    if(res&&res.data){
+                        console.log('用户信息---->',res)
+                        window.privateInfo = res  
+                        localStorage.setItem('privateInfo',JSON.stringify({
+                            openid:res.data.openid,
+                            user_name:res.data.user_name,
+                            user_phone:res.data.phone
+                        }))
+                        _this.getselfNum(res.data.openid).then((num)=>{
+                            _this.reimburseNum = num
+                        })
+                    }
+                })
+            }
             this.getbanner('',0).then((res)=>{
                 if(res.data&&res.data.newsList&&res.data.newsList.length){
                     this.newsData = res.data.newsList
@@ -233,7 +237,7 @@ export default {
 
 <style lang="less">
 .homepage{
-    width: 15rem;
+    width: 100%;
     background: #FFF;
     overflow: hidden;
     position: relative;
@@ -286,8 +290,8 @@ export default {
         float:left;
         display:block;
         width:50%;
-        text-align: center;
-        text-indent:1.4rem;
+        text-align: left;
+        text-indent: 3.3rem;
         line-height:2.8rem;
         font-size:0.48rem;
         span{
